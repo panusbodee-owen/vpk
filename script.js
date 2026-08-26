@@ -17,7 +17,12 @@ const categoryTopics = {
     'เล่าเรื่องหนึ่งอย่างที่คุณเปลี่ยนใจหลังจากได้ลองทำจริง',
     'ถ้าต้องอธิบายตัวเองด้วยสิ่งของหนึ่งชิ้น จะเลือกอะไร',
     'กฎหนึ่งข้อที่คุณอยากเพิ่มให้โลกนี้มีคืออะไร',
-    'อะไรคือคำชมที่คุณจำได้จนถึงวันนี้'
+    'อะไรคือคำชมที่คุณจำได้จนถึงวันนี้',
+    'ถ้าคุณต้องสอนเรื่องหนึ่งให้คนทั้งโลก จะสอนอะไร',
+    'ความเข้าใจผิดเกี่ยวกับตัวคุณที่คนมักมีคืออะไร',
+    'หนึ่งนิสัยที่คุณอยากเริ่มในเดือนนี้คืออะไร',
+    'เล่าเหตุผลที่คุณยังอยากตื่นขึ้นมาในวันพรุ่งนี้',
+    'ถ้าความสุขเป็นเมนูอาหาร มันจะประกอบด้วยอะไรบ้าง'
   ],
   daily: [
     'อาหารจานหนึ่งที่คุณกินได้ซ้ำ ๆ โดยไม่เบื่อคืออะไร',
@@ -25,7 +30,12 @@ const categoryTopics = {
     'สถานที่ธรรมดา ๆ ที่ทำให้คุณรู้สึกสบายใจ',
     'ของใช้ชิ้นไหนที่คุณอยากออกแบบใหม่ให้ดีขึ้น',
     'วันที่เหนื่อยมาก คุณมีวิธีรีเซ็ตตัวเองอย่างไร',
-    'ถ้าชีวิตมีปุ่ม Undo หนึ่งครั้ง คุณจะใช้กับเรื่องอะไร'
+    'ถ้าชีวิตมีปุ่ม Undo หนึ่งครั้ง คุณจะใช้กับเรื่องอะไร',
+    'รีวิวห้องนอนของคุณเหมือนเป็นโรงแรมห้าดาว',
+    'อะไรคือสิ่งที่คุณซื้อแล้วคุ้มที่สุด',
+    'ถ้าต้องอยู่โดยไม่มีอินเทอร์เน็ตหนึ่งสัปดาห์จะทำอะไร',
+    'เพลงไหนเหมาะกับซาวด์แทร็กชีวิตช่วงนี้',
+    'อธิบายวันหยุดในฝันของคุณแบบละเอียด'
   ],
   creative: [
     'ตั้งชื่อหนังเกี่ยวกับชีวิตของคุณ พร้อมเล่าเรื่องย่อใน 3 ประโยค',
@@ -33,7 +43,12 @@ const categoryTopics = {
     'สร้างกฎของโลกที่ทุกคนต้องพูดความจริงวันละหนึ่งครั้ง',
     'ถ้าความคิดมีสี วันนี้หัวคุณจะเป็นสีอะไร',
     'ออกแบบแอปที่ไม่มีใครรู้ว่าตัวเองต้องการ แต่พอเห็นแล้วขาดไม่ได้',
-    'อธิบายความรักโดยห้ามใช้คำว่า “ความรู้สึก”'
+    'อธิบายความรักโดยห้ามใช้คำว่า “ความรู้สึก”',
+    'ออกแบบเทศกาลสำหรับคนที่ไม่ชอบงานเทศกาล',
+    'เล่าเรื่องจากมุมมองของเก้าอี้ในห้องนี้',
+    'ถ้าคุณสร้างสีใหม่ได้ จะตั้งชื่อว่าอะไร',
+    'เปลี่ยนปัญหาน่ารำคาญหนึ่งอย่างให้กลายเป็นเกม',
+    'เขียนพาดหัวข่าวเกี่ยวกับตัวคุณในอีก 20 ปี'
   ],
   future: [
     'ทักษะอะไรจะสำคัญที่สุดในโลกการทำงานอีก 10 ปีข้างหน้า',
@@ -41,12 +56,23 @@ const categoryTopics = {
     'บริษัทในฝันของคุณควรมีวัฒนธรรมการทำงานแบบไหน',
     'เล่าโปรเจกต์หนึ่งอย่างที่คุณอยากสร้างให้สำเร็จ',
     'ความสำเร็จในแบบของคุณวัดจากอะไร',
-    'ถ้าได้เริ่มอาชีพใหม่พรุ่งนี้ คุณจะเลือกทำอะไร'
+    'ถ้าได้เริ่มอาชีพใหม่พรุ่งนี้ คุณจะเลือกทำอะไร',
+    'ทีมที่ดีควรมีคนแบบไหนบ้าง',
+    'อะไรคือความแตกต่างระหว่างงานที่ดีและงานที่ใช่',
+    'เล่าเป้าหมายหนึ่งอย่างที่คุณกำลังค่อย ๆ สร้าง',
+    'ถ้าได้ส่งข้อความถึงตัวเองในอีก 5 ปี จะเขียนว่าอะไร',
+    'ทักษะหนึ่งอย่างที่คุณอยากเก่งขึ้นก่อนสิ้นปีคืออะไร'
   ]
+};
+const categoryTopicsEn = {
+  general: ['If you had one extra hour every day, how would you use it?', 'What small thing makes an ordinary day better?', 'What is something you changed your mind about after trying it?', 'If one object could describe you, what would it be?', 'What rule would you add to the world?', 'What compliment do you still remember?', 'What would you teach the whole world?', 'What do people often misunderstand about you?', 'What habit do you want to start this month?', 'Why are you looking forward to tomorrow?', 'If happiness were a meal, what would be in it?', 'What does success mean to you today?'],
+  daily: ['What food could you eat every week without getting bored?', 'Turn your morning routine into a commercial.', 'What ordinary place makes you feel comfortable?', 'What everyday object would you redesign?', 'How do you reset after a difficult day?', 'If life had one Undo button, when would you use it?', 'Review your bedroom like a five-star hotel.', 'What purchase has been most worth it?', 'What would you do without the internet for one week?', 'What song fits the soundtrack of your life right now?', 'Describe your perfect day off.', 'What daily ritual would you never give up?'],
+  creative: ['Name a movie about your life and pitch the plot in three sentences.', 'Sell one cloud to someone who has never seen the sky.', 'Create a world where everyone must tell the truth once a day.', 'If your thoughts had a color today, what color would they be?', 'Design an app nobody knows they need yet.', 'Explain love without using the word “feeling”.', 'Design a festival for people who dislike festivals.', 'Tell a story from the point of view of a chair.', 'If you could create a new color, what would you call it?', 'Turn one annoying problem into a game.', 'Write a headline about your life 20 years from now.', 'Invent a product that solves a completely silly problem.'],
+  future: ['What skill will matter most in the workplace ten years from now?', 'If AI joined your team, what would you ask it to handle?', 'What culture should your dream company have?', 'What project do you want to build one day?', 'How do you measure success for yourself?', 'If you could start a new career tomorrow, what would it be?', 'What makes a great team?', 'What is the difference between a good job and the right job?', 'What goal are you slowly building toward?', 'What would you write to your future self five years from now?', 'What skill do you want to improve before the end of this year?', 'What should schools teach that they often do not?']
 };
 let mode = 'random', language = 'th', selectedCategory = 'general', timerId, seconds = 60, slotTimer, slotInterval, caseTimer;
 const topicEl = document.querySelector('#topic');
-function getTopicList() { return categoryTopics[selectedCategory] || categoryTopics.general; }
+function getTopicList() { const bank = language === 'en' ? categoryTopicsEn : categoryTopics; return bank[selectedCategory] || bank.general; }
 function pickTopic() {
   const list = getTopicList();
   const card = document.querySelector('.topic-card');
@@ -95,7 +121,7 @@ document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
   });
   dropdown.querySelectorAll('.dropdown-menu button').forEach(option => option.addEventListener('click', () => {
     document.querySelector(`#${option.dataset.target}`).textContent = option.dataset.value;
-    if (option.dataset.target === 'langLabel') language = option.dataset.value === 'ไทย' ? 'th' : 'en';
+    if (option.dataset.target === 'langLabel') { language = option.dataset.value === 'ไทย' ? 'th' : 'en'; pickTopic(); }
     if (option.dataset.category) { selectedCategory = option.dataset.category; pickTopic(); }
     dropdown.classList.remove('open');
     trigger.setAttribute('aria-expanded', 'false');
@@ -113,5 +139,6 @@ document.querySelectorAll('.select-chip').forEach((chip, index) => chip.addEvent
 }));
 document.querySelector('#analysisBtn').addEventListener('click', () => alert('โหมดปั่นกำลังอุ่นเครื่องอยู่! ตอนนี้กดสุ่มแล้วพูดไปก่อนเลย ✨'));
 function renderTimer(){ document.querySelector('#timerValue').textContent = `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`; }
-document.querySelector('#timerBtn').addEventListener('click', () => { document.querySelector('#timer').hidden = false; clearInterval(timerId); seconds = 60; renderTimer(); timerId = setInterval(() => { seconds--; renderTimer(); if(seconds <= 0){ clearInterval(timerId); alert('หมดเวลาแล้ว! ทำได้ดีมาก'); } }, 1000); });
+document.querySelector('#timerBtn').addEventListener('click', () => { document.querySelector('#timer').hidden = false; clearInterval(timerId); seconds = 60; renderTimer(); timerId = setInterval(() => { seconds--; renderTimer(); if(seconds <= 0){ clearInterval(timerId); alert(language === 'en' ? 'Time is up! Great job.' : 'หมดเวลาแล้ว! ทำได้ดีมาก'); } }, 1000); });
+document.querySelector('#stopTimer').addEventListener('click', () => { clearInterval(timerId); timerId = null; });
 document.querySelector('#resetTimer').addEventListener('click', () => { clearInterval(timerId); seconds = 60; renderTimer(); document.querySelector('#timer').hidden = true; });
