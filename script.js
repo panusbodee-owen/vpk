@@ -92,7 +92,11 @@ function pickTopic() {
   card.classList.remove('slot-spin', 'case-active');
   void card.offsetWidth;
   card.classList.add('shuffle', 'slot-spin', 'case-active');
-  const winner = Math.floor(Math.random() * list.length);
+  const previousTopic = topicEl.textContent.trim();
+  let winner = Math.floor(Math.random() * list.length);
+  if (list.length > 1) {
+    while (list[winner] === previousTopic) winner = Math.floor(Math.random() * list.length);
+  }
   const items = Array.from({length: 31}, (_, index) => list[index === 25 ? winner : Math.floor(Math.random() * list.length)]);
   track.innerHTML = items.map((item, index) => `<div class="case-item ${index === 25 ? 'winner' : ''}"><small>${String(index + 1).padStart(2, '0')}</small><span>${item}</span></div>`).join('');
   track.style.transition = 'none';
