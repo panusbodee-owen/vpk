@@ -20,6 +20,7 @@
   <link rel="stylesheet" href="timer-fix.css" />
   <link rel="stylesheet" href="profile-link.css" />
   <link rel="stylesheet" href="feedback.css?v=42cdc46" />
+  <link rel="stylesheet" href="duration.css" />
 </head>
 <body>
   <div class="grain"></div>
@@ -59,6 +60,7 @@
       </div>
       <div class="actions">
         <button class="spin" id="spinBtn"><span>↻</span> สุ่มหัวข้อ</button>
+        <select class="duration-select" id="mainDuration" aria-label="เลือกเวลาพูด"><option value="30">⏱ 00:30</option><option value="60" selected>⏱ 01:00</option><option value="120">⏱ 02:00</option><option value="180">⏱ 03:00</option></select>
         <button class="timer-link" id="timerBtn">เริ่มจับเวลา <span>→</span></button>
       </div>
       <div class="timer" id="timer" hidden><span id="timerValue">01:00</span><div class="timer-actions"><button id="stopTimer">หยุด</button><button id="resetTimer">รีเซ็ต</button></div></div>
