@@ -128,9 +128,11 @@ document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
   });
   dropdown.querySelectorAll('.dropdown-menu button').forEach(option => option.addEventListener('click', () => {
     document.querySelector(`#${option.dataset.target}`).textContent = option.dataset.value;
-    if (option.dataset.target === 'langLabel') { language = option.dataset.value === 'ไทย' ? 'th' : 'en'; pickTopic(); }
-    if (option.dataset.level) { selectedLevel = option.dataset.level; pickTopic(); }
-    if (option.dataset.category) { selectedCategory = option.dataset.category; pickTopic(); }
+    if (option.dataset.target === 'langLabel') language = option.dataset.value === 'ไทย' ? 'th' : 'en';
+    if (option.dataset.level) selectedLevel = option.dataset.level;
+    if (option.dataset.category) selectedCategory = option.dataset.category;
+    document.querySelector('#previousTopic').textContent = language === 'en' ? 'Settings saved. Ready when you are.' : 'ตั้งค่าแล้ว พร้อมเมื่อคุณพร้อม';
+    document.querySelector('#nextTopic').textContent = language === 'en' ? 'Press Spin to draw a new topic' : 'กดสุ่มหัวข้อเพื่อเริ่มคำถามใหม่';
     dropdown.classList.remove('open');
     trigger.setAttribute('aria-expanded', 'false');
   }));
