@@ -159,7 +159,7 @@ const feedbackResult = document.querySelector('#feedbackResult');
 let recognition, isListening = false, speechStartedAt = 0, finalTranscript = '';
 let feedbackTimerId, feedbackSeconds = 60;
 const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-document.querySelector('#analysisBtn').addEventListener('click', () => { feedbackModal.hidden = false; feedbackResult.hidden = true; document.querySelector('#feedbackTopic').textContent = topicEl.textContent; });
+document.querySelector('#analysisBtn').addEventListener('click', () => { feedbackModal.hidden = false; feedbackResult.hidden = true; document.querySelector('#feedbackTopic').textContent = topicEl.textContent; renderScoreHistory(); });
 document.querySelector('#closeFeedback').addEventListener('click', () => { if (recognition && isListening) recognition.stop(); feedbackModal.hidden = true; });
 feedbackModal.addEventListener('click', event => { if (event.target === feedbackModal) { if (recognition && isListening) recognition.stop(); feedbackModal.hidden = true; } });
 function showFeedback() {
@@ -176,8 +176,11 @@ function showFeedback() {
   document.querySelector('#clarityScore').textContent = clarity;
   document.querySelector('#confidenceScore').textContent = confidence;
   document.querySelector('#feedbackComment').textContent = total >= 80 ? 'ลื่นไหลมาก! ลองเพิ่มตัวอย่างหรือมุมมองส่วนตัวให้คมขึ้นอีกนิด' : total >= 60 ? 'ทำได้ดีแล้ว ลองพูดให้ต่อเนื่องขึ้นและลดคำฟุ่มเฟือยลงอีกนิด' : 'เริ่มต้นได้ดี ลองพูดให้ยาวขึ้นอีกนิด แล้วค่อย ๆ เพิ่มรายละเอียด';
+  saveScore({ topic: topicEl.textContent, score: total, flow, clarity, confidence, language, category: selectedCategory, level: selectedLevel, date: new Date().toISOString() });
   feedbackResult.hidden = false;
 }
+function saveScore(entry) { const history = JSON.parse(localStorage.getItem('poodThammaiScores') || '[]'); history.unshift(entry); localStorage.setItem('poodThammaiScores', JSON.stringify(history.slice(0, 20))); renderScoreHistory(); }
+function renderScoreHistory() { const history = JSON.parse(localStorage.getItem('poodThammaiScores') || '[]'); const target = document.querySelector('#scoreHistory'); if (!history.length) { target.textContent = 'ยังไม่มีประวัติการพูด'; return; } target.innerHTML = history.slice(0, 8).map(item => `<div class="history-row"><span>${item.topic}<small>${new Date(item.date).toLocaleDateString('th-TH')} · ${item.language === 'en' ? 'English' : 'ไทย'}</small></span><strong>${item.score}</strong></div>`).join(''); }
 function setupRecognition() {
   if (!SpeechRecognitionAPI) { transcriptEl.textContent = 'เบราว์เซอร์นี้ยังไม่รองรับการฟังเสียง ลองใช้ Google Chrome หรือ Microsoft Edge'; return false; }
   recognition = new SpeechRecognitionAPI(); recognition.continuous = true; recognition.interimResults = true; recognition.lang = language === 'en' ? 'en-US' : 'th-TH';
@@ -196,6 +199,7 @@ feedbackDuration.addEventListener('change', () => { clearInterval(feedbackTimerI
 mainDuration.addEventListener('change', () => { clearInterval(timerId); syncDuration(mainDuration.value); });
 document.querySelector('#feedbackTimerBtn').addEventListener('click', event => { clearInterval(feedbackTimerId); if (event.currentTarget.dataset.running === 'true') { event.currentTarget.dataset.running = 'false'; event.currentTarget.textContent = 'เริ่มจับเวลา'; return; } event.currentTarget.dataset.running = 'true'; event.currentTarget.textContent = 'หยุดเวลา'; feedbackTimerId = setInterval(() => { feedbackSeconds--; renderFeedbackTimer(); if (feedbackSeconds <= 0) { clearInterval(feedbackTimerId); event.currentTarget.dataset.running = 'false'; event.currentTarget.textContent = 'เริ่มจับเวลา'; } }, 1000); });
 document.querySelector('#feedbackTimerReset').addEventListener('click', () => { clearInterval(feedbackTimerId); feedbackSeconds = Number(feedbackDuration.value); renderFeedbackTimer(); const button = document.querySelector('#feedbackTimerBtn'); button.dataset.running = 'false'; button.textContent = 'เริ่มจับเวลา'; });
+document.querySelector('#clearHistory').addEventListener('click', () => { localStorage.removeItem('poodThammaiScores'); renderScoreHistory(); });
 function renderTimer(){ document.querySelector('#timerValue').textContent = `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`; }
 document.querySelector('#timerBtn').addEventListener('click', () => { document.querySelector('#timer').hidden = false; clearInterval(timerId); seconds = Number(mainDuration.value); renderTimer(); timerId = setInterval(() => { seconds--; renderTimer(); if(seconds <= 0){ clearInterval(timerId); alert(language === 'en' ? 'Time is up! Great job.' : 'หมดเวลาแล้ว! ทำได้ดีมาก'); } }, 1000); });
 document.querySelector('#stopTimer').addEventListener('click', () => { clearInterval(timerId); timerId = null; });
