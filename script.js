@@ -119,29 +119,29 @@ function stopCaseSound() {
 function playCaseSound() {
   stopCaseSound();
   // A small layered “case latch” made with Web Audio: metallic click + low mechanical thump.
-  playNoise(.08, .035, 2400);
-  playTone(115, .13, .055, 'sawtooth');
-  caseSoundTimers.push(setTimeout(() => playTone(230, .08, .035, 'square'), 105));
-  caseSoundTimers.push(setTimeout(() => playNoise(.12, .022, 900), 185));
+  playNoise(.08, .018, 2400);
+  playTone(115, .13, .032, 'sawtooth');
+  caseSoundTimers.push(setTimeout(() => playTone(230, .08, .022, 'square'), 105));
+  caseSoundTimers.push(setTimeout(() => playNoise(.12, .012, 900), 185));
 
   let tick = 0;
   const tickSound = () => {
     const progress = Math.min(tick / 25, 1);
-    playTone(285 + tick * 14, .035, .014 + progress * .012, 'square');
-    if (tick % 3 === 0) playNoise(.018, .008 + progress * .008, 3200);
+    playTone(285 + tick * 14, .028, .007 + progress * .006, 'square');
+    if (tick % 4 === 0) playNoise(.014, .003 + progress * .004, 3200);
     tick += 1;
     if (tick < 26) {
-      const delay = 155 - progress * 92;
+      const delay = 180 - progress * 90;
       soundInterval = setTimeout(tickSound, delay);
     }
   };
   caseSoundTimers.push(setTimeout(tickSound, 360));
   caseSoundTimers.push(setTimeout(() => {
     stopCaseSound();
-    playNoise(.18, .04, 1200);
-    playTone(410, .13, .05, 'triangle');
-    caseSoundTimers.push(setTimeout(() => playTone(610, .18, .045, 'triangle'), 95));
-    caseSoundTimers.push(setTimeout(() => playTone(920, .28, .035, 'sine'), 210));
+    playNoise(.18, .022, 1200);
+    playTone(410, .13, .032, 'triangle');
+    caseSoundTimers.push(setTimeout(() => playTone(610, .18, .028, 'triangle'), 95));
+    caseSoundTimers.push(setTimeout(() => playTone(920, .28, .022, 'sine'), 210));
   }, 3050));
 }
 function pickTopic() {
