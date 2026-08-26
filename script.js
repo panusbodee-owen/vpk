@@ -157,6 +157,7 @@ const recordStatus = document.querySelector('#recordStatus');
 const transcriptEl = document.querySelector('#transcript');
 const feedbackResult = document.querySelector('#feedbackResult');
 let recognition, isListening = false, speechStartedAt = 0, finalTranscript = '';
+let feedbackTimerId, feedbackSeconds = 60;
 const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
 document.querySelector('#analysisBtn').addEventListener('click', () => { feedbackModal.hidden = false; feedbackResult.hidden = true; });
 document.querySelector('#closeFeedback').addEventListener('click', () => { if (recognition && isListening) recognition.stop(); feedbackModal.hidden = true; });
@@ -187,6 +188,9 @@ function setupRecognition() {
   return true;
 }
 recordBtn.addEventListener('click', () => { if (isListening) { recognition.stop(); return; } finalTranscript = ''; transcriptEl.textContent = 'กำลังเตรียมไมโครโฟน...'; if (setupRecognition()) recognition.start(); });
+function renderFeedbackTimer() { document.querySelector('#feedbackTimerValue').textContent = `${String(Math.floor(feedbackSeconds / 60)).padStart(2, '0')}:${String(feedbackSeconds % 60).padStart(2, '0')}`; }
+document.querySelector('#feedbackTimerBtn').addEventListener('click', event => { clearInterval(feedbackTimerId); if (event.currentTarget.dataset.running === 'true') { event.currentTarget.dataset.running = 'false'; event.currentTarget.textContent = 'เริ่มจับเวลา'; return; } event.currentTarget.dataset.running = 'true'; event.currentTarget.textContent = 'หยุดเวลา'; feedbackTimerId = setInterval(() => { feedbackSeconds--; renderFeedbackTimer(); if (feedbackSeconds <= 0) { clearInterval(feedbackTimerId); event.currentTarget.dataset.running = 'false'; event.currentTarget.textContent = 'เริ่มจับเวลา'; } }, 1000); });
+document.querySelector('#feedbackTimerReset').addEventListener('click', () => { clearInterval(feedbackTimerId); feedbackSeconds = 60; renderFeedbackTimer(); const button = document.querySelector('#feedbackTimerBtn'); button.dataset.running = 'false'; button.textContent = 'เริ่มจับเวลา'; });
 function renderTimer(){ document.querySelector('#timerValue').textContent = `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`; }
 document.querySelector('#timerBtn').addEventListener('click', () => { document.querySelector('#timer').hidden = false; clearInterval(timerId); seconds = 60; renderTimer(); timerId = setInterval(() => { seconds--; renderTimer(); if(seconds <= 0){ clearInterval(timerId); alert(language === 'en' ? 'Time is up! Great job.' : 'หมดเวลาแล้ว! ทำได้ดีมาก'); } }, 1000); });
 document.querySelector('#stopTimer').addEventListener('click', () => { clearInterval(timerId); timerId = null; });
