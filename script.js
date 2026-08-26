@@ -70,7 +70,7 @@ const categoryTopicsEn = {
   creative: ['Name a movie about your life and pitch the plot in three sentences.', 'Sell one cloud to someone who has never seen the sky.', 'Create a world where everyone must tell the truth once a day.', 'If your thoughts had a color today, what color would they be?', 'Design an app nobody knows they need yet.', 'Explain love without using the word “feeling”.', 'Design a festival for people who dislike festivals.', 'Tell a story from the point of view of a chair.', 'If you could create a new color, what would you call it?', 'Turn one annoying problem into a game.', 'Write a headline about your life 20 years from now.', 'Invent a product that solves a completely silly problem.'],
   future: ['What skill will matter most in the workplace ten years from now?', 'If AI joined your team, what would you ask it to handle?', 'What culture should your dream company have?', 'What project do you want to build one day?', 'How do you measure success for yourself?', 'If you could start a new career tomorrow, what would it be?', 'What makes a great team?', 'What is the difference between a good job and the right job?', 'What goal are you slowly building toward?', 'What would you write to your future self five years from now?', 'What skill do you want to improve before the end of this year?', 'What should schools teach that they often do not?']
 };
-let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, soundInterval, caseSoundTimers = [];
+let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, caseSoundTimers = [];
 const topicEl = document.querySelector('#topic');
 function getTopicList() {
   const bank = language === 'en' ? categoryTopicsEn : categoryTopics;
@@ -114,34 +114,21 @@ function playNoise(duration = .04, volume = .018, filterFrequency = 1800) {
 function stopCaseSound() {
   caseSoundTimers.forEach(timer => clearTimeout(timer));
   caseSoundTimers = [];
-  clearInterval(soundInterval);
 }
 function playCaseSound() {
   stopCaseSound();
-  // A small layered “case latch” made with Web Audio: metallic click + low mechanical thump.
-  playNoise(.08, .018, 2400);
-  playTone(115, .13, .032, 'sawtooth');
-  caseSoundTimers.push(setTimeout(() => playTone(230, .08, .022, 'square'), 105));
-  caseSoundTimers.push(setTimeout(() => playNoise(.12, .012, 900), 185));
+  // A softer, original case-opening sound: latch, rolling clicks, then a gentle reveal.
+  playNoise(.06, .009, 2100);
+  playTone(105, .11, .018, 'triangle');
+  caseSoundTimers.push(setTimeout(() => playTone(190, .07, .012, 'sine'), 110));
+  caseSoundTimers.push(setTimeout(() => playNoise(.08, .007, 850), 180));
 
-  let tick = 0;
-  const tickSound = () => {
-    const progress = Math.min(tick / 25, 1);
-    playTone(285 + tick * 14, .028, .007 + progress * .006, 'square');
-    if (tick % 4 === 0) playNoise(.014, .003 + progress * .004, 3200);
-    tick += 1;
-    if (tick < 26) {
-      const delay = 180 - progress * 90;
-      soundInterval = setTimeout(tickSound, delay);
-    }
-  };
-  caseSoundTimers.push(setTimeout(tickSound, 360));
   caseSoundTimers.push(setTimeout(() => {
     stopCaseSound();
-    playNoise(.18, .022, 1200);
-    playTone(410, .13, .032, 'triangle');
-    caseSoundTimers.push(setTimeout(() => playTone(610, .18, .028, 'triangle'), 95));
-    caseSoundTimers.push(setTimeout(() => playTone(920, .28, .022, 'sine'), 210));
+    playNoise(.12, .009, 1050);
+    playTone(300, .1, .018, 'triangle');
+    caseSoundTimers.push(setTimeout(() => playTone(520, .14, .016, 'triangle'), 95));
+    caseSoundTimers.push(setTimeout(() => playTone(780, .22, .012, 'sine'), 210));
   }, 3050));
 }
 function pickTopic() {
