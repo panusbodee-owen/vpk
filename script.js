@@ -10,10 +10,45 @@ const topics = {
   vocab: ['ความกล้าหาญ — อธิบายความหมายพร้อมยกตัวอย่าง', 'ความอยากรู้อยากเห็น — ใช้ในประโยคให้ได้ 3 แบบ', 'ความยืดหยุ่น — เล่าเหตุการณ์ที่คำนี้มีความหมายกับคุณ'],
   research: ['เทคโนโลยีจะเปลี่ยนวิธีเรียนรู้ของคนในอีก 10 ปีอย่างไร', 'เมืองควรออกแบบอย่างไรให้คนมีความสุขมากขึ้น', 'เราจะสร้างสมดุลระหว่างความเป็นส่วนตัวกับ AI ได้อย่างไร']
 };
-let mode = 'random', language = 'th', timerId, seconds = 60, slotTimer, slotInterval, caseTimer;
+const categoryTopics = {
+  general: [
+    'ถ้าคุณมีเวลาเพิ่มวันละหนึ่งชั่วโมง จะเอาไปทำอะไร',
+    'สิ่งเล็ก ๆ ที่ทำให้วันธรรมดาของคุณดีขึ้นคืออะไร',
+    'เล่าเรื่องหนึ่งอย่างที่คุณเปลี่ยนใจหลังจากได้ลองทำจริง',
+    'ถ้าต้องอธิบายตัวเองด้วยสิ่งของหนึ่งชิ้น จะเลือกอะไร',
+    'กฎหนึ่งข้อที่คุณอยากเพิ่มให้โลกนี้มีคืออะไร',
+    'อะไรคือคำชมที่คุณจำได้จนถึงวันนี้'
+  ],
+  daily: [
+    'อาหารจานหนึ่งที่คุณกินได้ซ้ำ ๆ โดยไม่เบื่อคืออะไร',
+    'กิจวัตรตอนเช้าของคุณถ้าเล่าเป็นโฆษณาจะเป็นอย่างไร',
+    'สถานที่ธรรมดา ๆ ที่ทำให้คุณรู้สึกสบายใจ',
+    'ของใช้ชิ้นไหนที่คุณอยากออกแบบใหม่ให้ดีขึ้น',
+    'วันที่เหนื่อยมาก คุณมีวิธีรีเซ็ตตัวเองอย่างไร',
+    'ถ้าชีวิตมีปุ่ม Undo หนึ่งครั้ง คุณจะใช้กับเรื่องอะไร'
+  ],
+  creative: [
+    'ตั้งชื่อหนังเกี่ยวกับชีวิตของคุณ พร้อมเล่าเรื่องย่อใน 3 ประโยค',
+    'ขายก้อนเมฆหนึ่งก้อนให้คนที่ไม่เคยเห็นท้องฟ้า',
+    'สร้างกฎของโลกที่ทุกคนต้องพูดความจริงวันละหนึ่งครั้ง',
+    'ถ้าความคิดมีสี วันนี้หัวคุณจะเป็นสีอะไร',
+    'ออกแบบแอปที่ไม่มีใครรู้ว่าตัวเองต้องการ แต่พอเห็นแล้วขาดไม่ได้',
+    'อธิบายความรักโดยห้ามใช้คำว่า “ความรู้สึก”'
+  ],
+  future: [
+    'ทักษะอะไรจะสำคัญที่สุดในโลกการทำงานอีก 10 ปีข้างหน้า',
+    'ถ้า AI เป็นเพื่อนร่วมทีมของคุณ คุณอยากให้มันช่วยเรื่องอะไร',
+    'บริษัทในฝันของคุณควรมีวัฒนธรรมการทำงานแบบไหน',
+    'เล่าโปรเจกต์หนึ่งอย่างที่คุณอยากสร้างให้สำเร็จ',
+    'ความสำเร็จในแบบของคุณวัดจากอะไร',
+    'ถ้าได้เริ่มอาชีพใหม่พรุ่งนี้ คุณจะเลือกทำอะไร'
+  ]
+};
+let mode = 'random', language = 'th', selectedCategory = 'general', timerId, seconds = 60, slotTimer, slotInterval, caseTimer;
 const topicEl = document.querySelector('#topic');
+function getTopicList() { return categoryTopics[selectedCategory] || categoryTopics.general; }
 function pickTopic() {
-  const list = topics[mode];
+  const list = getTopicList();
   const card = document.querySelector('.topic-card');
   const track = document.querySelector('#caseTrack');
   clearTimeout(slotTimer);
@@ -61,6 +96,7 @@ document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
   dropdown.querySelectorAll('.dropdown-menu button').forEach(option => option.addEventListener('click', () => {
     document.querySelector(`#${option.dataset.target}`).textContent = option.dataset.value;
     if (option.dataset.target === 'langLabel') language = option.dataset.value === 'ไทย' ? 'th' : 'en';
+    if (option.dataset.category) { selectedCategory = option.dataset.category; pickTopic(); }
     dropdown.classList.remove('open');
     trigger.setAttribute('aria-expanded', 'false');
   }));
