@@ -159,7 +159,7 @@ const feedbackResult = document.querySelector('#feedbackResult');
 let recognition, isListening = false, speechStartedAt = 0, finalTranscript = '';
 let feedbackTimerId, feedbackSeconds = 60;
 const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
-document.querySelector('#analysisBtn').addEventListener('click', () => { feedbackModal.hidden = false; feedbackResult.hidden = true; });
+document.querySelector('#analysisBtn').addEventListener('click', () => { feedbackModal.hidden = false; feedbackResult.hidden = true; document.querySelector('#feedbackTopic').textContent = topicEl.textContent; });
 document.querySelector('#closeFeedback').addEventListener('click', () => { if (recognition && isListening) recognition.stop(); feedbackModal.hidden = true; });
 feedbackModal.addEventListener('click', event => { if (event.target === feedbackModal) { if (recognition && isListening) recognition.stop(); feedbackModal.hidden = true; } });
 function showFeedback() {
