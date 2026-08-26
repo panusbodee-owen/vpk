@@ -70,7 +70,7 @@ const categoryTopicsEn = {
   creative: ['Name a movie about your life and pitch the plot in three sentences.', 'Sell one cloud to someone who has never seen the sky.', 'Create a world where everyone must tell the truth once a day.', 'If your thoughts had a color today, what color would they be?', 'Design an app nobody knows they need yet.', 'Explain love without using the word “feeling”.', 'Design a festival for people who dislike festivals.', 'Tell a story from the point of view of a chair.', 'If you could create a new color, what would you call it?', 'Turn one annoying problem into a game.', 'Write a headline about your life 20 years from now.', 'Invent a product that solves a completely silly problem.'],
   future: ['What skill will matter most in the workplace ten years from now?', 'If AI joined your team, what would you ask it to handle?', 'What culture should your dream company have?', 'What project do you want to build one day?', 'How do you measure success for yourself?', 'If you could start a new career tomorrow, what would it be?', 'What makes a great team?', 'What is the difference between a good job and the right job?', 'What goal are you slowly building toward?', 'What would you write to your future self five years from now?', 'What skill do you want to improve before the end of this year?', 'What should schools teach that they often do not?']
 };
-let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, soundInterval;
+let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, soundInterval, caseSoundTimers = [];
 const topicEl = document.querySelector('#topic');
 function getTopicList() {
   const bank = language === 'en' ? categoryTopicsEn : categoryTopics;
@@ -93,12 +93,56 @@ function playTone(frequency, duration = .06, volume = .035, type = 'square') {
   gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
   oscillator.connect(gain); gain.connect(context.destination); oscillator.start(); oscillator.stop(context.currentTime + duration);
 }
-function playCaseSound() {
-  playTone(170, .1, .045, 'sawtooth');
-  let tick = 0;
+function playNoise(duration = .04, volume = .018, filterFrequency = 1800) {
+  const AudioContextAPI = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextAPI) return;
+  window.poodAudio = window.poodAudio || new AudioContextAPI();
+  const context = window.poodAudio;
+  if (context.state === 'suspended') context.resume();
+  const buffer = context.createBuffer(1, context.sampleRate * duration, context.sampleRate);
+  const data = buffer.getChannelData(0);
+  for (let i = 0; i < data.length; i += 1) data[i] = Math.random() * 2 - 1;
+  const source = context.createBufferSource();
+  const filter = context.createBiquadFilter();
+  const gain = context.createGain();
+  filter.type = 'bandpass'; filter.frequency.value = filterFrequency; filter.Q.value = .7;
+  gain.gain.setValueAtTime(volume, context.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
+  source.buffer = buffer; source.connect(filter); filter.connect(gain); gain.connect(context.destination);
+  source.start(); source.stop(context.currentTime + duration);
+}
+function stopCaseSound() {
+  caseSoundTimers.forEach(timer => clearTimeout(timer));
+  caseSoundTimers = [];
   clearInterval(soundInterval);
-  soundInterval = setInterval(() => { playTone(260 + Math.min(tick++, 14) * 18, .035, .018, 'square'); }, 145);
-  setTimeout(() => { clearInterval(soundInterval); playTone(520, .16, .045, 'triangle'); setTimeout(() => playTone(780, .24, .035, 'triangle'), 80); }, 2850);
+}
+function playCaseSound() {
+  stopCaseSound();
+  // A small layered “case latch” made with Web Audio: metallic click + low mechanical thump.
+  playNoise(.08, .035, 2400);
+  playTone(115, .13, .055, 'sawtooth');
+  caseSoundTimers.push(setTimeout(() => playTone(230, .08, .035, 'square'), 105));
+  caseSoundTimers.push(setTimeout(() => playNoise(.12, .022, 900), 185));
+
+  let tick = 0;
+  const tickSound = () => {
+    const progress = Math.min(tick / 25, 1);
+    playTone(285 + tick * 14, .035, .014 + progress * .012, 'square');
+    if (tick % 3 === 0) playNoise(.018, .008 + progress * .008, 3200);
+    tick += 1;
+    if (tick < 26) {
+      const delay = 155 - progress * 92;
+      soundInterval = setTimeout(tickSound, delay);
+    }
+  };
+  caseSoundTimers.push(setTimeout(tickSound, 360));
+  caseSoundTimers.push(setTimeout(() => {
+    stopCaseSound();
+    playNoise(.18, .04, 1200);
+    playTone(410, .13, .05, 'triangle');
+    caseSoundTimers.push(setTimeout(() => playTone(610, .18, .045, 'triangle'), 95));
+    caseSoundTimers.push(setTimeout(() => playTone(920, .28, .035, 'sine'), 210));
+  }, 3050));
 }
 function pickTopic() {
   const list = getTopicList();
@@ -107,7 +151,7 @@ function pickTopic() {
   clearTimeout(slotTimer);
   clearInterval(slotInterval);
   clearTimeout(caseTimer);
-  clearInterval(soundInterval);
+  stopCaseSound();
   card.classList.remove('shuffle');
   void card.offsetWidth;
   card.classList.remove('slot-spin', 'case-active');
