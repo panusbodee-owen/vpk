@@ -4,47 +4,53 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="เครื่องมือฝึกพูดแบบฉับพลันสำหรับทุกวัน" />
-  <title>พูดเลย — ฝึกพูดให้คล่องในทุกวัน</title>
+  <title>พูดทำไม? — สุ่มหัวข้อแล้วพูดไปก่อน</title>
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="styles.css" />
+  <link rel="stylesheet" href="motion.css" />
+  <link rel="stylesheet" href="modern.css" />
+  <link rel="stylesheet" href="fun.css" />
+  <link rel="stylesheet" href="chips.css" />
+  <link rel="stylesheet" href="slot.css" />
+  <link rel="stylesheet" href="case-opening.css" />
+  <link rel="stylesheet" href="dropdown-fix.css" />
+  <link rel="stylesheet" href="donate.css" />
 </head>
 <body>
   <div class="grain"></div>
+  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <header class="topbar">
-    <a class="brand-mini" href="#top"><span>พูด</span>เลย</a>
-    <nav class="nav-pills" aria-label="เมนูหลัก">
-      <button class="nav-pill active" data-mode="random">สุ่มหัวข้อ</button>
-      <button class="nav-pill" data-mode="interview">เตรียมสัมภาษณ์</button>
-      <button class="nav-pill" data-mode="vocab">ฝึกคำศัพท์</button>
-      <button class="nav-pill" data-mode="research">หัวข้อเจาะลึก <i>ใหม่</i></button>
-    </nav>
-    <div class="brand-mark">Speak with <span>spark.</span> <small>✦</small></div>
+    <a class="brand-mini" href="#top"><span>พูด</span>ทำไม?</a>
+    <nav class="nav-pills" aria-label="เมนูหลัก"><button class="nav-pill active">สุ่มหัวข้อ</button></nav>
+    <div class="header-actions"><div class="brand-mark">No overthinking club <span>✹</span></div><button class="donate-btn" id="donateBtn">Donate <span>♥</span></button></div>
   </header>
 
   <main id="top" class="layout">
     <section class="intro">
       <div class="scribble sun">✦</div>
-      <div class="logo-lockup"><div>พูด</div><div class="logo-outline">เลย</div></div>
-      <p class="tagline">สุ่มหัวข้อ แล้วพูดให้เป็น<br><span>วันละหนึ่งนาที</span></p>
+      <p class="eyebrow">PANUSBODEE / CHAOTIC SPEAKING CLUB <span>2026</span></p>
+      <div class="logo-lockup"><div>พูด</div><div class="logo-outline">ทำไม?</div></div>
+      <p class="tagline">สุ่มมาเลย<br><span>เดี๋ยวก็พูดได้เองแหละ</span></p>
+      <p class="personal-note">คิดเยอะไปก็ไม่ได้พูด ลองสุ่มหัวข้อแล้วปล่อยของแบบไม่ต้องเป๊ะกันเถอะ ✌️</p>
       <div class="steps">
         <div><b>01</b> หยิบหัวข้อที่ใช่</div>
         <div><b>02</b> ตั้งเวลา 1 นาที</div>
         <div><b>03</b> พูดออกมาเลย <span>☺</span></div>
       </div>
-      <button class="analysis" id="analysisBtn">เริ่มฝึกแบบมีโค้ช <span>↗</span></button>
+      <button class="analysis" id="analysisBtn">ขอปั่นก่อน <span>↗</span></button>
     </section>
 
     <section class="practice" aria-live="polite">
       <div class="controls">
-        <button class="select-chip" id="langBtn">🇹🇭 <span id="langLabel">ไทย</span>⌄</button>
-        <button class="select-chip" id="levelBtn">🎲 <span id="levelLabel">สุ่มทุกระดับ</span>⌄</button>
-        <button class="select-chip" id="categoryBtn">🎯 <span id="categoryLabel">ทั่วไป</span>⌄</button>
+        <div class="dropdown-wrap"><button class="select-chip" id="langBtn" aria-expanded="false">🇹🇭 <span id="langLabel">ไทย</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="langLabel" data-value="ไทย">🇹🇭 ไทย</button><button data-target="langLabel" data-value="English">🇺🇸 English</button></div></div>
+        <div class="dropdown-wrap"><button class="select-chip" id="levelBtn" aria-expanded="false">🎲 <span id="levelLabel">สุ่มทุกระดับ</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="levelLabel" data-value="สุ่มทุกระดับ">🎲 สุ่มทุกระดับ</button><button data-target="levelLabel" data-value="เริ่มต้น">🌱 เริ่มต้น</button><button data-target="levelLabel" data-value="ท้าทาย">⚡ ท้าทาย</button></div></div>
+        <div class="dropdown-wrap"><button class="select-chip" id="categoryBtn" aria-expanded="false">🎯 <span id="categoryLabel">ทั่วไป</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="categoryLabel" data-value="ทั่วไป">🎯 ทั่วไป</button><button data-target="categoryLabel" data-value="ชีวิตประจำวัน">☕ ชีวิตประจำวัน</button><button data-target="categoryLabel" data-value="ความคิดสร้างสรรค์">💡 ความคิดสร้างสรรค์</button></div></div>
       </div>
       <div class="topic-stack">
         <p class="side-topic" id="previousTopic">กาแฟแก้วโปรดของคุณบอกอะไรเกี่ยวกับตัวคุณ</p>
-        <div class="topic-card"><span class="quote">“</span><h1 id="topic">อธิบายอินเทอร์เน็ตให้เด็กอนุบาลเข้าใจ โดยห้ามใช้คำว่า “คอมพิวเตอร์”</h1><span class="quote close">”</span></div>
+        <div class="topic-card"><div class="case-pointer"></div><div class="case-track" id="caseTrack"></div><span class="quote">“</span><h1 id="topic">อธิบายอินเทอร์เน็ตให้เด็กอนุบาลเข้าใจ โดยห้ามใช้คำว่า “คอมพิวเตอร์”</h1><span class="quote close">”</span></div>
         <p class="side-topic" id="nextTopic">ถ้าคุณเปลี่ยนอาชีพได้หนึ่งวัน จะเลือกเป็นอะไร</p>
       </div>
       <div class="actions">
@@ -54,7 +60,8 @@
       <div class="timer" id="timer" hidden><span id="timerValue">01:00</span><button id="resetTimer">รีเซ็ต</button></div>
     </section>
   </main>
-  <footer><span>ฝึกน้อย ๆ แต่สม่ำเสมอ แล้วความมั่นใจจะตามมา</span><span>ทำโดยคุณ ✦</span></footer>
+  <footer><span>Designed & mildly chaotic by Panusbodee</span><span>Bangkok, Thailand · พูดไปก่อน ค่อยคิดทีหลัง</span></footer>
+  <div class="donate-modal" id="donateModal" hidden><div class="donate-panel"><button class="modal-close" id="closeDonate">×</button><span class="donate-kicker">THANK YOU ✦</span><h2>ช่วยเติมพลังให้<br><em>พูดทำไม?</em></h2><p>สแกน QR เพื่อสนับสนุนโปรเจกต์นี้ได้เลยครับ</p><img class="donate-qr" src="donate-qr.jpg" alt="PromptPay QR สำหรับโดเนท" /><div class="donate-placeholder">PromptPay · รับเงินได้จากทุกธนาคาร</div></div></div>
   <script src="script.js"></script>
 </body>
 </html>
