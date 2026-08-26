@@ -70,9 +70,16 @@ const categoryTopicsEn = {
   creative: ['Name a movie about your life and pitch the plot in three sentences.', 'Sell one cloud to someone who has never seen the sky.', 'Create a world where everyone must tell the truth once a day.', 'If your thoughts had a color today, what color would they be?', 'Design an app nobody knows they need yet.', 'Explain love without using the word “feeling”.', 'Design a festival for people who dislike festivals.', 'Tell a story from the point of view of a chair.', 'If you could create a new color, what would you call it?', 'Turn one annoying problem into a game.', 'Write a headline about your life 20 years from now.', 'Invent a product that solves a completely silly problem.'],
   future: ['What skill will matter most in the workplace ten years from now?', 'If AI joined your team, what would you ask it to handle?', 'What culture should your dream company have?', 'What project do you want to build one day?', 'How do you measure success for yourself?', 'If you could start a new career tomorrow, what would it be?', 'What makes a great team?', 'What is the difference between a good job and the right job?', 'What goal are you slowly building toward?', 'What would you write to your future self five years from now?', 'What skill do you want to improve before the end of this year?', 'What should schools teach that they often do not?']
 };
-let mode = 'random', language = 'th', selectedCategory = 'general', timerId, seconds = 60, slotTimer, slotInterval, caseTimer;
+let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer;
 const topicEl = document.querySelector('#topic');
-function getTopicList() { const bank = language === 'en' ? categoryTopicsEn : categoryTopics; return bank[selectedCategory] || bank.general; }
+function getTopicList() {
+  const bank = language === 'en' ? categoryTopicsEn : categoryTopics;
+  const allTopics = bank[selectedCategory] || bank.general;
+  if (selectedLevel === 'easy') return allTopics.slice(0, 4);
+  if (selectedLevel === 'medium') return allTopics.slice(4, 8);
+  if (selectedLevel === 'challenge') return allTopics.slice(-4);
+  return allTopics;
+}
 function pickTopic() {
   const list = getTopicList();
   const card = document.querySelector('.topic-card');
@@ -122,6 +129,7 @@ document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
   dropdown.querySelectorAll('.dropdown-menu button').forEach(option => option.addEventListener('click', () => {
     document.querySelector(`#${option.dataset.target}`).textContent = option.dataset.value;
     if (option.dataset.target === 'langLabel') { language = option.dataset.value === 'ไทย' ? 'th' : 'en'; pickTopic(); }
+    if (option.dataset.level) { selectedLevel = option.dataset.level; pickTopic(); }
     if (option.dataset.category) { selectedCategory = option.dataset.category; pickTopic(); }
     dropdown.classList.remove('open');
     trigger.setAttribute('aria-expanded', 'false');
