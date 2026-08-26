@@ -70,7 +70,7 @@ const categoryTopicsEn = {
   creative: ['Name a movie about your life and pitch the plot in three sentences.', 'Sell one cloud to someone who has never seen the sky.', 'Create a world where everyone must tell the truth once a day.', 'If your thoughts had a color today, what color would they be?', 'Design an app nobody knows they need yet.', 'Explain love without using the word “feeling”.', 'Design a festival for people who dislike festivals.', 'Tell a story from the point of view of a chair.', 'If you could create a new color, what would you call it?', 'Turn one annoying problem into a game.', 'Write a headline about your life 20 years from now.', 'Invent a product that solves a completely silly problem.'],
   future: ['What skill will matter most in the workplace ten years from now?', 'If AI joined your team, what would you ask it to handle?', 'What culture should your dream company have?', 'What project do you want to build one day?', 'How do you measure success for yourself?', 'If you could start a new career tomorrow, what would it be?', 'What makes a great team?', 'What is the difference between a good job and the right job?', 'What goal are you slowly building toward?', 'What would you write to your future self five years from now?', 'What skill do you want to improve before the end of this year?', 'What should schools teach that they often do not?']
 };
-let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer;
+let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, soundInterval;
 const topicEl = document.querySelector('#topic');
 function getTopicList() {
   const bank = language === 'en' ? categoryTopicsEn : categoryTopics;
@@ -80,6 +80,26 @@ function getTopicList() {
   if (selectedLevel === 'challenge') return allTopics.slice(-4);
   return allTopics;
 }
+function playTone(frequency, duration = .06, volume = .035, type = 'square') {
+  const AudioContextAPI = window.AudioContext || window.webkitAudioContext;
+  if (!AudioContextAPI) return;
+  window.poodAudio = window.poodAudio || new AudioContextAPI();
+  const context = window.poodAudio;
+  if (context.state === 'suspended') context.resume();
+  const oscillator = context.createOscillator();
+  const gain = context.createGain();
+  oscillator.type = type; oscillator.frequency.value = frequency;
+  gain.gain.setValueAtTime(volume, context.currentTime);
+  gain.gain.exponentialRampToValueAtTime(.001, context.currentTime + duration);
+  oscillator.connect(gain); gain.connect(context.destination); oscillator.start(); oscillator.stop(context.currentTime + duration);
+}
+function playCaseSound() {
+  playTone(170, .1, .045, 'sawtooth');
+  let tick = 0;
+  clearInterval(soundInterval);
+  soundInterval = setInterval(() => { playTone(260 + Math.min(tick++, 14) * 18, .035, .018, 'square'); }, 145);
+  setTimeout(() => { clearInterval(soundInterval); playTone(520, .16, .045, 'triangle'); setTimeout(() => playTone(780, .24, .035, 'triangle'), 80); }, 2850);
+}
 function pickTopic() {
   const list = getTopicList();
   const card = document.querySelector('.topic-card');
@@ -87,11 +107,13 @@ function pickTopic() {
   clearTimeout(slotTimer);
   clearInterval(slotInterval);
   clearTimeout(caseTimer);
+  clearInterval(soundInterval);
   card.classList.remove('shuffle');
   void card.offsetWidth;
   card.classList.remove('slot-spin', 'case-active');
   void card.offsetWidth;
   card.classList.add('shuffle', 'slot-spin', 'case-active');
+  playCaseSound();
   const previousTopic = topicEl.textContent.trim();
   let winner = Math.floor(Math.random() * list.length);
   if (list.length > 1) {
@@ -105,7 +127,7 @@ function pickTopic() {
     const winnerCard = track.querySelector('.case-item.winner');
     const itemWidth = winnerCard.getBoundingClientRect().width;
     const centerOffset = (card.clientWidth - itemWidth) / 2;
-    track.style.transition = 'transform 2.8s cubic-bezier(.08,.72,.14,1)';
+    track.style.transition = 'transform 3s cubic-bezier(.08,.72,.14,1)';
     track.style.transform = `translateX(${centerOffset - winnerCard.offsetLeft}px)`;
   });
   caseTimer = setTimeout(() => {
@@ -113,8 +135,8 @@ function pickTopic() {
     topicEl.classList.remove('shuffle-text');
     card.classList.remove('case-active', 'slot-spin');
     track.innerHTML = '';
-  }, 3100);
-  setTimeout(() => card.classList.remove('shuffle'), 3250);
+  }, 3250);
+  setTimeout(() => card.classList.remove('shuffle'), 3400);
   document.querySelector('#previousTopic').textContent = 'พร้อมไหม? หายใจลึก ๆ แล้วเริ่มพูด';
   document.querySelector('#nextTopic').textContent = 'กดสุ่มอีกครั้งเพื่อเปลี่ยนหัวข้อ';
 }
