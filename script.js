@@ -151,7 +151,42 @@ document.querySelectorAll('.select-chip').forEach((chip, index) => chip.addEvent
   void chip.offsetWidth;
   chip.classList.add('chip-pop');
 }));
-document.querySelector('#analysisBtn').addEventListener('click', () => alert('โหมดปั่นกำลังอุ่นเครื่องอยู่! ตอนนี้กดสุ่มแล้วพูดไปก่อนเลย ✨'));
+const feedbackModal = document.querySelector('#feedbackModal');
+const recordBtn = document.querySelector('#recordBtn');
+const recordStatus = document.querySelector('#recordStatus');
+const transcriptEl = document.querySelector('#transcript');
+const feedbackResult = document.querySelector('#feedbackResult');
+let recognition, isListening = false, speechStartedAt = 0, finalTranscript = '';
+const SpeechRecognitionAPI = window.SpeechRecognition || window.webkitSpeechRecognition;
+document.querySelector('#analysisBtn').addEventListener('click', () => { feedbackModal.hidden = false; feedbackResult.hidden = true; });
+document.querySelector('#closeFeedback').addEventListener('click', () => { if (recognition && isListening) recognition.stop(); feedbackModal.hidden = true; });
+feedbackModal.addEventListener('click', event => { if (event.target === feedbackModal) { if (recognition && isListening) recognition.stop(); feedbackModal.hidden = true; } });
+function showFeedback() {
+  const text = finalTranscript.trim();
+  const secondsSpoken = Math.max(1, Math.round((Date.now() - speechStartedAt) / 1000));
+  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  const fillers = (text.match(/(เอ่อ|อืม|แบบว่า|คือว่า|um|uh|like|you know)/gi) || []).length;
+  const flow = Math.min(100, Math.round(35 + Math.min(secondsSpoken, 60) * .65 + Math.min(words, 100) * .18));
+  const clarity = Math.max(20, Math.min(100, Math.round(58 + Math.min(words, 80) * .25 - fillers * 5)));
+  const confidence = Math.max(20, Math.min(100, Math.round(45 + Math.min(secondsSpoken, 60) * .55 + (words > 25 ? 18 : 0) - fillers * 3)));
+  const total = Math.round((flow + clarity + confidence) / 3);
+  document.querySelector('#scoreValue').textContent = total;
+  document.querySelector('#flowScore').textContent = flow;
+  document.querySelector('#clarityScore').textContent = clarity;
+  document.querySelector('#confidenceScore').textContent = confidence;
+  document.querySelector('#feedbackComment').textContent = total >= 80 ? 'ลื่นไหลมาก! ลองเพิ่มตัวอย่างหรือมุมมองส่วนตัวให้คมขึ้นอีกนิด' : total >= 60 ? 'ทำได้ดีแล้ว ลองพูดให้ต่อเนื่องขึ้นและลดคำฟุ่มเฟือยลงอีกนิด' : 'เริ่มต้นได้ดี ลองพูดให้ยาวขึ้นอีกนิด แล้วค่อย ๆ เพิ่มรายละเอียด';
+  feedbackResult.hidden = false;
+}
+function setupRecognition() {
+  if (!SpeechRecognitionAPI) { transcriptEl.textContent = 'เบราว์เซอร์นี้ยังไม่รองรับการฟังเสียง ลองใช้ Google Chrome หรือ Microsoft Edge'; return false; }
+  recognition = new SpeechRecognitionAPI(); recognition.continuous = true; recognition.interimResults = true; recognition.lang = language === 'en' ? 'en-US' : 'th-TH';
+  recognition.onstart = () => { isListening = true; speechStartedAt = Date.now(); recordBtn.classList.add('stop'); recordBtn.innerHTML = '<span>■</span> หยุดฟัง'; recordStatus.classList.add('listening'); recordStatus.lastChild.textContent = ' กำลังฟังอยู่...'; };
+  recognition.onresult = event => { let interim = ''; finalTranscript = ''; for (let i = 0; i < event.results.length; i++) { const text = event.results[i][0].transcript; if (event.results[i].isFinal) finalTranscript += text + ' '; else interim += text; } transcriptEl.textContent = (finalTranscript + interim) || 'กำลังฟัง...'; };
+  recognition.onerror = event => { if (event.error === 'not-allowed') transcriptEl.textContent = 'กรุณาอนุญาตการใช้ไมโครโฟนเพื่อเริ่มประเมิน'; };
+  recognition.onend = () => { if (isListening) { isListening = false; recordBtn.classList.remove('stop'); recordBtn.innerHTML = '<span>●</span> เริ่มพูด'; recordStatus.classList.remove('listening'); recordStatus.lastChild.textContent = ' พร้อมรับฟัง'; showFeedback(); } };
+  return true;
+}
+recordBtn.addEventListener('click', () => { if (isListening) { recognition.stop(); return; } finalTranscript = ''; transcriptEl.textContent = 'กำลังเตรียมไมโครโฟน...'; if (setupRecognition()) recognition.start(); });
 function renderTimer(){ document.querySelector('#timerValue').textContent = `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`; }
 document.querySelector('#timerBtn').addEventListener('click', () => { document.querySelector('#timer').hidden = false; clearInterval(timerId); seconds = 60; renderTimer(); timerId = setInterval(() => { seconds--; renderTimer(); if(seconds <= 0){ clearInterval(timerId); alert(language === 'en' ? 'Time is up! Great job.' : 'หมดเวลาแล้ว! ทำได้ดีมาก'); } }, 1000); });
 document.querySelector('#stopTimer').addEventListener('click', () => { clearInterval(timerId); timerId = null; });
