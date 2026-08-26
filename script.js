@@ -128,7 +128,7 @@ document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
   });
   dropdown.querySelectorAll('.dropdown-menu button').forEach(option => option.addEventListener('click', () => {
     document.querySelector(`#${option.dataset.target}`).textContent = option.dataset.value;
-    if (option.dataset.target === 'langLabel') language = option.dataset.value === 'ไทย' ? 'th' : 'en';
+    if (option.dataset.target === 'langLabel') { language = option.dataset.value === 'ไทย' ? 'th' : 'en'; document.querySelector('#langEmoji').textContent = option.dataset.emoji; }
     if (option.dataset.level) selectedLevel = option.dataset.level;
     if (option.dataset.category) selectedCategory = option.dataset.category;
     document.querySelector('#previousTopic').textContent = language === 'en' ? 'Settings saved. Ready when you are.' : 'ตั้งค่าแล้ว พร้อมเมื่อคุณพร้อม';
