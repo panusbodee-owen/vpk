@@ -46,17 +46,17 @@
   <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
   <header class="topbar">
     <a class="brand-mini" href="#top"><span>พูด</span>ทำไม?</a>
-    <nav class="nav-pills" aria-label="เมนูหลัก"><button class="nav-pill active">สุ่มหัวข้อ</button></nav>
+    <nav class="nav-pills" aria-label="เมนูหลัก"><button class="nav-pill active" data-mode="random">สุ่มหัวข้อ</button><button class="nav-pill" data-mode="speed">สปีด 30 วิ</button><button class="nav-pill" data-mode="interview">สัมภาษณ์งาน</button></nav>
     <div class="header-actions"><div class="brand-mark">No overthinking club <span>✹</span></div><button class="donate-btn" id="donateBtn">Donate <span>♥</span></button></div>
   </header>
 
   <main id="top" class="layout">
     <section class="intro">
       <div class="scribble sun">✦</div>
-      <p class="eyebrow">PANUSBODEE / CHAOTIC SPEAKING CLUB <span>2026</span></p>
+      <p class="eyebrow">PANUSBODEE / CHAOTIC SPEAKING CLUB</p>
       <div class="logo-lockup"><div>พูด</div><div class="logo-outline">ทำไม?</div></div>
       <p class="tagline">สุ่มมาเลย<br><span>เดี๋ยวก็พูดได้เองแหละ</span></p>
-      <p class="personal-note">คิดเยอะไปก็ไม่ได้พูด ลองสุ่มหัวข้อแล้วปล่อยของแบบไม่ต้องเป๊ะกันเถอะ ✌️</p>
+      <p class="personal-note">คิดเยอะไปก็ไม่ได้พูด ลองสุ่มหัวข้อแล้วปล่อยของแบบไม่ต้องเป๊ะกันเถอะ ✌️<br><span class="mode-note">โหมดสปีด: พูดให้จบก่อน แล้วค่อยคิดทีหลัง</span></p>
       <div class="steps">
         <div><b>01</b> หยิบหัวข้อที่ใช่</div>
         <div><b>02</b> ตั้งเวลา 1 นาที</div>
@@ -70,7 +70,7 @@
       <div class="controls">
         <div class="dropdown-wrap"><button class="select-chip" id="langBtn" aria-expanded="false"><span id="langEmoji">🇹🇭</span> <span id="langLabel">ไทย</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="langLabel" data-emoji="🇹🇭" data-value="ไทย">🇹🇭 ไทย</button><button data-target="langLabel" data-emoji="🇺🇸" data-value="English">🇺🇸 English</button></div></div>
         <div class="dropdown-wrap"><button class="select-chip" id="levelBtn" aria-expanded="false">🎲 <span id="levelLabel">สุ่มทุกระดับ</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="levelLabel" data-level="all" data-value="สุ่มทุกระดับ">🎲 สุ่มทุกระดับ</button><button data-target="levelLabel" data-level="easy" data-value="เริ่มต้น">🌱 เริ่มต้น</button><button data-target="levelLabel" data-level="medium" data-value="ปานกลาง">🎯 ปานกลาง</button><button data-target="levelLabel" data-level="challenge" data-value="ท้าทาย">⚡ ท้าทาย</button></div></div>
-        <div class="dropdown-wrap"><button class="select-chip" id="categoryBtn" aria-expanded="false">🎯 <span id="categoryLabel">ทั่วไป</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="categoryLabel" data-category="general" data-value="ทั่วไป">🎯 ทั่วไป</button><button data-target="categoryLabel" data-category="daily" data-value="ชีวิตประจำวัน">☕ ชีวิตประจำวัน</button><button data-target="categoryLabel" data-category="creative" data-value="ความคิดสร้างสรรค์">💡 ความคิดสร้างสรรค์</button><button data-target="categoryLabel" data-category="future" data-value="งานและอนาคต">🚀 งานและอนาคต</button></div></div>
+        <div class="dropdown-wrap"><button class="select-chip" id="categoryBtn" aria-expanded="false">🎯 <span id="categoryLabel">ทั่วไป</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="categoryLabel" data-category="general" data-value="ทั่วไป">🎯 ทั่วไป</button><button data-target="categoryLabel" data-category="daily" data-value="ชีวิตประจำวัน">☕ ชีวิตประจำวัน</button><button data-target="categoryLabel" data-category="creative" data-value="ความคิดสร้างสรรค์">💡 ความคิดสร้างสรรค์</button><button data-target="categoryLabel" data-category="future" data-value="งานและอนาคต">🚀 งานและอนาคต</button><button data-target="categoryLabel" data-category="deep" data-value="คิดลึก">🧠 คิดลึก</button></div></div>
       </div>
       <div class="topic-stack">
         <p class="side-topic" id="previousTopic">กาแฟแก้วโปรดของคุณบอกอะไรเกี่ยวกับตัวคุณ</p>
@@ -83,6 +83,17 @@
         <button class="timer-link" id="timerBtn">เริ่มจับเวลา <span>→</span></button>
       </div>
       <div class="timer" id="timer" hidden><span id="timerValue">01:00</span><div class="timer-actions"><button id="stopTimer">หยุด</button><button id="resetTimer">รีเซ็ต</button></div></div>
+      <section class="interview-mode" id="interviewMode" hidden>
+        <div class="interview-mode__eyebrow">MODE 03 / INTERVIEW ROOM</div>
+        <h1>ซ้อมตอบคำถามสัมภาษณ์<br><em>ให้เป็นตัวเองมากขึ้น</em></h1>
+        <p class="interview-mode__lead">พื้นที่ซ้อมพูดก่อนถึงห้องสัมภาษณ์จริง สุ่มคำถามแล้วตอบให้ชัด โดยไม่ต้องท่องคำตอบให้เหมือนใคร</p>
+        <div class="interview-mode__grid">
+          <article><span>01</span><h2>ตอบจากประสบการณ์</h2><p>เล่าเหตุการณ์จริงให้เห็นวิธีคิดและสิ่งที่คุณลงมือทำ</p></article>
+          <article><span>02</span><h2>จับเวลาให้พอดี</h2><p>ฝึกเรียบเรียงคำตอบให้อยู่ในเวลาประมาณ 1 นาที</p></article>
+          <article><span>03</span><h2>พูดแล้วค่อยปรับ</h2><p>ใช้ Feedback ดูความต่อเนื่อง ความชัดเจน และความมั่นใจ</p></article>
+        </div>
+        <button class="interview-mode__start" id="startInterview">เริ่มโหมดสัมภาษณ์ <span>→</span></button>
+      </section>
     </section>
   </main>
   <footer><span>Designed & mildly chaotic by Panusbodee</span><span>Bangkok, Thailand · พูดไปก่อน ค่อยคิดทีหลัง</span></footer>

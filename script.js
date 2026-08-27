@@ -62,17 +62,47 @@ const categoryTopics = {
     'เล่าเป้าหมายหนึ่งอย่างที่คุณกำลังค่อย ๆ สร้าง',
     'ถ้าได้ส่งข้อความถึงตัวเองในอีก 5 ปี จะเขียนว่าอะไร',
     'ทักษะหนึ่งอย่างที่คุณอยากเก่งขึ้นก่อนสิ้นปีคืออะไร'
+  ],
+  deep: [
+    'ถ้าความสำเร็จไม่มีใครมองเห็น คุณยังอยากทำสิ่งเดิมอยู่ไหม',
+    'ความเชื่ออะไรของคุณที่อาจเปลี่ยนไปได้เมื่อมีประสบการณ์มากขึ้น',
+    'คุณกำลังพยายามพิสูจน์อะไรกับตัวเองหรือคนอื่นอยู่หรือเปล่า',
+    'ถ้าต้องเลือกหนึ่งอย่างระหว่างความมั่นคงกับอิสระ คุณจะเลือกอะไร เพราะอะไร',
+    'บทเรียนจากความผิดพลาดครั้งหนึ่งที่คุณยังใช้ตัดสินใจอยู่คืออะไร',
+    'คุณคิดว่าตัวตนของเราถูกสร้างจากสิ่งที่เลือก หรือสิ่งที่จำเป็นต้องเจอมากกว่ากัน',
+    'ถ้าคุณได้คุยกับตัวเองในวันที่กำลังท้อที่สุด คุณอยากบอกอะไร',
+    'มีเรื่องอะไรที่คุณรู้คำตอบอยู่แล้ว แต่ยังไม่กล้ายอมรับ',
+    'อะไรคือเส้นแบ่งระหว่างการพยายามต่อกับการรู้ว่าเมื่อไหร่ควรปล่อยมือ',
+    'ถ้าต้องตัดสิ่งหนึ่งออกจากชีวิตเพื่อให้มีพื้นที่กับสิ่งสำคัญ คุณจะตัดอะไร',
+    'คุณอยากให้คนจำคุณจากความสามารถ หรือจากวิธีที่คุณทำให้พวกเขารู้สึก',
+    'วันนี้คุณกำลังใช้ชีวิตตามความต้องการของตัวเอง หรือความคาดหวังของใครอยู่'
   ]
 };
 const categoryTopicsEn = {
   general: ['If you had one extra hour every day, how would you use it?', 'What small thing makes an ordinary day better?', 'What is something you changed your mind about after trying it?', 'If one object could describe you, what would it be?', 'What rule would you add to the world?', 'What compliment do you still remember?', 'What would you teach the whole world?', 'What do people often misunderstand about you?', 'What habit do you want to start this month?', 'Why are you looking forward to tomorrow?', 'If happiness were a meal, what would be in it?', 'What does success mean to you today?'],
   daily: ['What food could you eat every week without getting bored?', 'Turn your morning routine into a commercial.', 'What ordinary place makes you feel comfortable?', 'What everyday object would you redesign?', 'How do you reset after a difficult day?', 'If life had one Undo button, when would you use it?', 'Review your bedroom like a five-star hotel.', 'What purchase has been most worth it?', 'What would you do without the internet for one week?', 'What song fits the soundtrack of your life right now?', 'Describe your perfect day off.', 'What daily ritual would you never give up?'],
   creative: ['Name a movie about your life and pitch the plot in three sentences.', 'Sell one cloud to someone who has never seen the sky.', 'Create a world where everyone must tell the truth once a day.', 'If your thoughts had a color today, what color would they be?', 'Design an app nobody knows they need yet.', 'Explain love without using the word “feeling”.', 'Design a festival for people who dislike festivals.', 'Tell a story from the point of view of a chair.', 'If you could create a new color, what would you call it?', 'Turn one annoying problem into a game.', 'Write a headline about your life 20 years from now.', 'Invent a product that solves a completely silly problem.'],
-  future: ['What skill will matter most in the workplace ten years from now?', 'If AI joined your team, what would you ask it to handle?', 'What culture should your dream company have?', 'What project do you want to build one day?', 'How do you measure success for yourself?', 'If you could start a new career tomorrow, what would it be?', 'What makes a great team?', 'What is the difference between a good job and the right job?', 'What goal are you slowly building toward?', 'What would you write to your future self five years from now?', 'What skill do you want to improve before the end of this year?', 'What should schools teach that they often do not?']
+  future: ['What skill will matter most in the workplace ten years from now?', 'If AI joined your team, what would you ask it to handle?', 'What culture should your dream company have?', 'What project do you want to build one day?', 'How do you measure success for yourself?', 'If you could start a new career tomorrow, what would it be?', 'What makes a great team?', 'What is the difference between a good job and the right job?', 'What goal are you slowly building toward?', 'What would you write to your future self five years from now?', 'What skill do you want to improve before the end of this year?', 'What should schools teach that they often do not?'],
+  deep: ['If nobody could see your success, would you still want the same things?', 'What belief of yours might change as you gain more experience?', 'What are you trying to prove to yourself or to other people?', 'If you had to choose between security and freedom, which would you choose and why?', 'What lesson from a mistake still shapes the way you make decisions?', 'Do you think identity is shaped more by our choices or by what we have to face?', 'If you could speak to yourself on your hardest day, what would you say?', 'What do you already know but still refuse to admit?', 'How do you tell the difference between persistence and knowing when to let go?', 'What would you remove from your life to make room for what matters most?', 'Would you rather be remembered for what you can do or how you make people feel?', 'Are you living by your own wishes today, or by someone else’s expectations?']
 };
+const interviewTopicsEn = [
+  'Tell me about yourself beyond what is written on your resume.',
+  'What strength do you bring to a team?',
+  'Tell me about a time you solved an unexpected problem.',
+  'What would you like to be better at one year from now?',
+  'Describe a piece of feedback that changed how you work.',
+  'How do you decide what to do when everything feels urgent?',
+  'What kind of team environment helps you do your best work?',
+  'Why are you interested in this kind of role?',
+  'Tell me about a project you are proud to have completed.',
+  'What does meaningful progress look like to you?',
+  'How would a teammate describe the way you collaborate?',
+  'What question would you ask us at the end of an interview?'
+];
 let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, caseSoundTimers = [];
 const topicEl = document.querySelector('#topic');
 function getTopicList() {
+  if (mode === 'interview') return language === 'en' ? interviewTopicsEn : topics.interview;
   const bank = language === 'en' ? categoryTopicsEn : categoryTopics;
   const allTopics = bank[selectedCategory] || bank.general;
   if (selectedLevel === 'easy') return allTopics.slice(0, 4);
@@ -168,10 +198,59 @@ function pickTopic() {
     track.innerHTML = '';
   }, 3250);
   setTimeout(() => card.classList.remove('shuffle'), 3400);
-  document.querySelector('#previousTopic').textContent = 'พร้อมไหม? หายใจลึก ๆ แล้วเริ่มพูด';
-  document.querySelector('#nextTopic').textContent = 'กดสุ่มอีกครั้งเพื่อเปลี่ยนหัวข้อ';
+  document.querySelector('#previousTopic').textContent = mode === 'interview'
+    ? (language === 'en' ? 'Interview question ready. Take a breath and begin.' : 'คำถามสัมภาษณ์พร้อมแล้ว หายใจลึก ๆ แล้วเริ่มพูด')
+    : (language === 'en' ? 'Ready when you are.' : 'พร้อมไหม? หายใจลึก ๆ แล้วเริ่มพูด');
+  document.querySelector('#nextTopic').textContent = mode === 'interview'
+    ? (language === 'en' ? 'Press Spin to draw another interview question' : 'กดสุ่มเพื่อเปลี่ยนคำถามสัมภาษณ์')
+    : (language === 'en' ? 'Press Spin to draw a new topic' : 'กดสุ่มอีกครั้งเพื่อเปลี่ยนหัวข้อ');
 }
-document.querySelectorAll('.nav-pill').forEach(btn => btn.addEventListener('click', () => { btn.animate([{transform:'scale(1)'},{transform:'scale(.94)'},{transform:'scale(1)'}], {duration:260}); pickTopic(); }));
+document.querySelectorAll('.nav-pill').forEach(btn => btn.addEventListener('click', () => {
+  btn.animate([{transform:'scale(1)'},{transform:'scale(.94)'},{transform:'scale(1)'}], {duration:260});
+  document.querySelectorAll('.nav-pill').forEach(item => item.classList.toggle('active', item === btn));
+  mode = btn.dataset.mode || 'random';
+  const interviewMode = document.querySelector('#interviewMode');
+  if (mode === 'interview') {
+    document.querySelector('.layout').classList.add('interview-active');
+    interviewMode.hidden = false;
+    document.querySelector('.intro').hidden = true;
+    document.querySelector('.controls').hidden = true;
+    document.querySelector('.topic-stack').hidden = true;
+    document.querySelector('.actions').hidden = true;
+    document.querySelector('#timer').hidden = true;
+    return;
+  }
+  document.querySelector('.layout').classList.remove('interview-active');
+  interviewMode.hidden = true;
+  document.querySelector('.intro').hidden = false;
+  document.querySelector('.controls').hidden = false;
+  document.querySelector('.topic-stack').hidden = false;
+  document.querySelector('.actions').hidden = false;
+  document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = false;
+  document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = false;
+  document.querySelector('#spinBtn').innerHTML = `<span>↻</span> ${language === 'en' ? 'Spin topic' : 'สุ่มหัวข้อ'}`;
+  if (mode === 'speed') {
+    document.querySelector('#mainDuration').value = '30';
+    document.querySelector('#previousTopic').textContent = language === 'en' ? 'Speed mode selected. Make every second count.' : 'เลือกโหมดสปีดแล้ว ทุกวินาทีมีความหมาย';
+    document.querySelector('#nextTopic').textContent = language === 'en' ? 'Press Spin, then speak for 30 seconds' : 'กดสุ่ม แล้วพูดให้จบใน 30 วินาที';
+  } else {
+    document.querySelector('#previousTopic').textContent = language === 'en' ? 'Ready when you are.' : 'พร้อมไหม? หายใจลึก ๆ แล้วเริ่มพูด';
+    document.querySelector('#nextTopic').textContent = language === 'en' ? 'Press Spin to draw a new topic' : 'กดสุ่มหัวข้อเพื่อเริ่มคำถามใหม่';
+  }
+}));
+document.querySelector('#startInterview').addEventListener('click', () => {
+  document.querySelector('.layout').classList.remove('interview-active');
+  document.querySelector('#interviewMode').hidden = true;
+  document.querySelector('.intro').hidden = false;
+  document.querySelector('.controls').hidden = false;
+  document.querySelector('.topic-stack').hidden = false;
+  document.querySelector('.actions').hidden = false;
+  document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = true;
+  document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = true;
+  document.querySelector('#mainDuration').value = '60';
+  document.querySelector('#spinBtn').innerHTML = `<span>↻</span> ${language === 'en' ? 'Spin interview question' : 'สุ่มคำถามสัมภาษณ์'}`;
+  pickTopic();
+});
 document.querySelector('#spinBtn').addEventListener('click', pickTopic);
 document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
   const trigger = dropdown.querySelector('.select-chip');
