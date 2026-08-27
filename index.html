@@ -55,8 +55,8 @@
       <div class="scribble sun">✦</div>
       <p class="eyebrow">PANUSBODEE / CHAOTIC SPEAKING CLUB</p>
       <div class="logo-lockup"><div>พูด</div><div class="logo-outline">ทำไม?</div></div>
-      <p class="tagline">สุ่มมาเลย<br><span>เดี๋ยวก็พูดได้เองแหละ</span></p>
-      <p class="personal-note">คิดเยอะไปก็ไม่ได้พูด ลองสุ่มหัวข้อแล้วปล่อยของแบบไม่ต้องเป๊ะกันเถอะ ✌️<br><span class="mode-note">โหมดสปีด: พูดให้จบก่อน แล้วค่อยคิดทีหลัง</span></p>
+      <p class="tagline" id="modeTagline">สุ่มมาเลย<br><span>เดี๋ยวก็พูดได้เองแหละ</span></p>
+      <p class="personal-note" id="personalNote">คิดเยอะไปก็ไม่ได้พูด ลองสุ่มหัวข้อแล้วปล่อยของแบบไม่ต้องเป๊ะกันเถอะ ✌️</p>
       <div class="steps">
         <div><b>01</b> หยิบหัวข้อที่ใช่</div>
         <div><b>02</b> ตั้งเวลา 1 นาที</div>
@@ -84,13 +84,13 @@
       </div>
       <div class="timer" id="timer" hidden><span id="timerValue">01:00</span><div class="timer-actions"><button id="stopTimer">หยุด</button><button id="resetTimer">รีเซ็ต</button></div></div>
       <section class="interview-mode" id="interviewMode" hidden>
-        <div class="interview-mode__eyebrow">MODE 03 / INTERVIEW ROOM</div>
-        <h1>ซ้อมตอบคำถามสัมภาษณ์<br><em>ให้เป็นตัวเองมากขึ้น</em></h1>
-        <p class="interview-mode__lead">พื้นที่ซ้อมพูดก่อนถึงห้องสัมภาษณ์จริง สุ่มคำถามแล้วตอบให้ชัด โดยไม่ต้องท่องคำตอบให้เหมือนใคร</p>
+        <div class="interview-mode__eyebrow" id="interviewEyebrow">MODE 03 / INTERVIEW ROOM</div>
+        <h1 id="interviewTitle">ซ้อมตอบคำถามสัมภาษณ์<br><em>ให้เป็นตัวเองมากขึ้น</em></h1>
+        <p class="interview-mode__lead" id="interviewLead">พื้นที่ซ้อมพูดก่อนถึงห้องสัมภาษณ์จริง สุ่มคำถามแล้วตอบให้ชัด โดยไม่ต้องท่องคำตอบให้เหมือนใคร</p>
         <div class="interview-mode__grid">
-          <article><span>01</span><h2>ตอบจากประสบการณ์</h2><p>เล่าเหตุการณ์จริงให้เห็นวิธีคิดและสิ่งที่คุณลงมือทำ</p></article>
-          <article><span>02</span><h2>จับเวลาให้พอดี</h2><p>ฝึกเรียบเรียงคำตอบให้อยู่ในเวลาประมาณ 1 นาที</p></article>
-          <article><span>03</span><h2>พูดแล้วค่อยปรับ</h2><p>ใช้ Feedback ดูความต่อเนื่อง ความชัดเจน และความมั่นใจ</p></article>
+          <article><span>01</span><h2 id="interviewCardTitle1">ตอบจากประสบการณ์</h2><p id="interviewCardText1">เล่าเหตุการณ์จริงให้เห็นวิธีคิดและสิ่งที่คุณลงมือทำ</p></article>
+          <article><span>02</span><h2 id="interviewCardTitle2">จับเวลาให้พอดี</h2><p id="interviewCardText2">ฝึกเรียบเรียงคำตอบให้อยู่ในเวลาประมาณ 1 นาที</p></article>
+          <article><span>03</span><h2 id="interviewCardTitle3">พูดแล้วค่อยปรับ</h2><p id="interviewCardText3">ใช้ Feedback ดูความต่อเนื่อง ความชัดเจน และความมั่นใจ</p></article>
         </div>
         <button class="interview-mode__start" id="startInterview">เริ่มโหมดสัมภาษณ์ <span>→</span></button>
       </section>

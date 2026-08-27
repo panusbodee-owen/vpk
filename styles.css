@@ -8,3 +8,4 @@
 .interview-mode{position:relative}
 .nav-pills{display:flex;align-items:stretch}.nav-pill{flex:1;min-width:0;text-align:center;display:inline-flex;align-items:center;justify-content:center}
 @media(max-width:650px){.nav-pills{width:100%}.nav-pill{padding-inline:10px;font-size:12px}}
+#top .actions[hidden],#top .timer[hidden],#top .controls[hidden],#top .topic-stack[hidden],#top .intro[hidden],#top .interview-mode[hidden]{display:none!important}

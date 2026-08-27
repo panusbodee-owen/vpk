@@ -101,6 +101,40 @@ const interviewTopicsEn = [
 ];
 let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, caseSoundTimers = [];
 const topicEl = document.querySelector('#topic');
+function renderModeIntro() {
+  const tagline = document.querySelector('#modeTagline');
+  const note = document.querySelector('#personalNote');
+  if (mode === 'speed') {
+    tagline.innerHTML = language === 'en' ? 'Think fast<br><span>Speak before time runs out</span>' : 'สุ่มให้ไว<br><span>พูดให้ทันก่อนหมดเวลา</span>';
+    note.textContent = language === 'en' ? 'A focused 30-second round. No overthinking, just get to the point.' : 'โหมดสปีด 30 วินาที ตัดความคิดเยอะออก แล้วพูดให้เข้าประเด็น';
+  } else if (mode === 'interview') {
+    tagline.innerHTML = language === 'en' ? 'Answer clearly<br><span>Be more yourself</span>' : 'ตอบให้ชัด<br><span>ในแบบที่เป็นตัวเอง</span>';
+    note.textContent = language === 'en' ? 'Practice interview answers from real experience, one clear thought at a time.' : 'ซ้อมตอบสัมภาษณ์จากประสบการณ์จริง คิดทีละประเด็นแล้วพูดออกมา';
+  } else {
+    tagline.innerHTML = language === 'en' ? 'Pick one<br><span>Then just start talking</span>' : 'สุ่มมาเลย<br><span>เดี๋ยวก็พูดได้เองแหละ</span>';
+    note.textContent = language === 'en' ? 'Overthinking will not make you speak. Pick a topic and let it flow.' : 'คิดเยอะไปก็ไม่ได้พูด ลองสุ่มหัวข้อแล้วปล่อยของแบบไม่ต้องเป๊ะกันเถอะ ✌️';
+  }
+}
+function renderInterviewCopy() {
+  const english = language === 'en';
+  document.querySelector('#interviewEyebrow').textContent = english ? 'MODE 03 / INTERVIEW ROOM' : 'โหมด 03 / ห้องซ้อมสัมภาษณ์';
+  document.querySelector('#interviewTitle').innerHTML = english ? 'Practice interview answers<br><em>and sound more like yourself</em>' : 'ซ้อมตอบคำถามสัมภาษณ์<br><em>ให้เป็นตัวเองมากขึ้น</em>';
+  document.querySelector('#interviewLead').textContent = english ? 'A practice room before the real interview. Draw a question and answer clearly without memorising someone else’s script.' : 'พื้นที่ซ้อมพูดก่อนถึงห้องสัมภาษณ์จริง สุ่มคำถามแล้วตอบให้ชัด โดยไม่ต้องท่องคำตอบให้เหมือนใคร';
+  const cards = english ? [
+    ['Answer from experience', 'Use a real moment to show how you think and what you did.'],
+    ['Keep it focused', 'Shape your answer so it lands clearly in about one minute.'],
+    ['Speak, then refine', 'Use Feedback to improve flow, clarity, and confidence.']
+  ] : [
+    ['ตอบจากประสบการณ์', 'เล่าเหตุการณ์จริงให้เห็นวิธีคิดและสิ่งที่คุณลงมือทำ'],
+    ['จับเวลาให้พอดี', 'ฝึกเรียบเรียงคำตอบให้อยู่ในเวลาประมาณ 1 นาที'],
+    ['พูดแล้วค่อยปรับ', 'ใช้ Feedback ดูความต่อเนื่อง ความชัดเจน และความมั่นใจ']
+  ];
+  cards.forEach((card, index) => {
+    document.querySelector(`#interviewCardTitle${index + 1}`).textContent = card[0];
+    document.querySelector(`#interviewCardText${index + 1}`).textContent = card[1];
+  });
+  document.querySelector('#startInterview').innerHTML = `${english ? 'Start interview mode' : 'เริ่มโหมดสัมภาษณ์'} <span>→</span>`;
+}
 function getTopicList() {
   if (mode === 'interview') return language === 'en' ? interviewTopicsEn : topics.interview;
   const bank = language === 'en' ? categoryTopicsEn : categoryTopics;
@@ -209,12 +243,16 @@ document.querySelectorAll('.nav-pill').forEach(btn => btn.addEventListener('clic
   btn.animate([{transform:'scale(1)'},{transform:'scale(.94)'},{transform:'scale(1)'}], {duration:260});
   document.querySelectorAll('.nav-pill').forEach(item => item.classList.toggle('active', item === btn));
   mode = btn.dataset.mode || 'random';
+  renderModeIntro();
+  renderInterviewCopy();
   const interviewMode = document.querySelector('#interviewMode');
   if (mode === 'interview') {
     document.querySelector('.layout').classList.add('interview-active');
     interviewMode.hidden = false;
     document.querySelector('.intro').hidden = true;
-    document.querySelector('.controls').hidden = true;
+    document.querySelector('.controls').hidden = false;
+    document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = true;
+    document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = true;
     document.querySelector('.topic-stack').hidden = true;
     document.querySelector('.actions').hidden = true;
     document.querySelector('#timer').hidden = true;
@@ -226,11 +264,19 @@ document.querySelectorAll('.nav-pill').forEach(btn => btn.addEventListener('clic
   document.querySelector('.controls').hidden = false;
   document.querySelector('.topic-stack').hidden = false;
   document.querySelector('.actions').hidden = false;
+  document.querySelector('#timer').hidden = false;
   document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = false;
   document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = false;
+  document.querySelector('#mainDuration').hidden = false;
+  document.querySelector('#mainDuration').disabled = false;
   document.querySelector('#spinBtn').innerHTML = `<span>↻</span> ${language === 'en' ? 'Spin topic' : 'สุ่มหัวข้อ'}`;
   if (mode === 'speed') {
     document.querySelector('#mainDuration').value = '30';
+    document.querySelector('#mainDuration').hidden = true;
+    document.querySelector('#mainDuration').disabled = true;
+    clearInterval(timerId);
+    seconds = 30;
+    renderTimer();
     document.querySelector('#previousTopic').textContent = language === 'en' ? 'Speed mode selected. Make every second count.' : 'เลือกโหมดสปีดแล้ว ทุกวินาทีมีความหมาย';
     document.querySelector('#nextTopic').textContent = language === 'en' ? 'Press Spin, then speak for 30 seconds' : 'กดสุ่ม แล้วพูดให้จบใน 30 วินาที';
   } else {
@@ -239,14 +285,17 @@ document.querySelectorAll('.nav-pill').forEach(btn => btn.addEventListener('clic
   }
 }));
 document.querySelector('#startInterview').addEventListener('click', () => {
-  document.querySelector('.layout').classList.remove('interview-active');
-  document.querySelector('#interviewMode').hidden = true;
-  document.querySelector('.intro').hidden = false;
+  document.querySelector('.layout').classList.add('interview-active');
+  document.querySelector('#interviewMode').hidden = false;
+  document.querySelector('.intro').hidden = true;
   document.querySelector('.controls').hidden = false;
   document.querySelector('.topic-stack').hidden = false;
-  document.querySelector('.actions').hidden = false;
+  document.querySelector('.actions').hidden = true;
+  document.querySelector('#timer').hidden = true;
   document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = true;
   document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = true;
+  document.querySelector('#mainDuration').hidden = false;
+  document.querySelector('#mainDuration').disabled = false;
   document.querySelector('#mainDuration').value = '60';
   document.querySelector('#spinBtn').innerHTML = `<span>↻</span> ${language === 'en' ? 'Spin interview question' : 'สุ่มคำถามสัมภาษณ์'}`;
   pickTopic();
@@ -264,7 +313,7 @@ document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
   });
   dropdown.querySelectorAll('.dropdown-menu button').forEach(option => option.addEventListener('click', () => {
     document.querySelector(`#${option.dataset.target}`).textContent = option.dataset.value;
-    if (option.dataset.target === 'langLabel') { language = option.dataset.value === 'ไทย' ? 'th' : 'en'; document.querySelector('#langEmoji').textContent = option.dataset.emoji; }
+    if (option.dataset.target === 'langLabel') { language = option.dataset.value === 'ไทย' ? 'th' : 'en'; document.querySelector('#langEmoji').textContent = option.dataset.emoji; renderModeIntro(); renderInterviewCopy(); }
     if (option.dataset.level) selectedLevel = option.dataset.level;
     if (option.dataset.category) selectedCategory = option.dataset.category;
     document.querySelector('#previousTopic').textContent = language === 'en' ? 'Settings saved. Ready when you are.' : 'ตั้งค่าแล้ว พร้อมเมื่อคุณพร้อม';
@@ -335,4 +384,4 @@ document.querySelector('#clearHistory').addEventListener('click', () => { localS
 function renderTimer(){ document.querySelector('#timerValue').textContent = `${String(Math.floor(seconds/60)).padStart(2,'0')}:${String(seconds%60).padStart(2,'0')}`; }
 document.querySelector('#timerBtn').addEventListener('click', () => { document.querySelector('#timer').hidden = false; clearInterval(timerId); seconds = Number(mainDuration.value); renderTimer(); timerId = setInterval(() => { seconds--; renderTimer(); if(seconds <= 0){ clearInterval(timerId); alert(language === 'en' ? 'Time is up! Great job.' : 'หมดเวลาแล้ว! ทำได้ดีมาก'); } }, 1000); });
 document.querySelector('#stopTimer').addEventListener('click', () => { clearInterval(timerId); timerId = null; });
-document.querySelector('#resetTimer').addEventListener('click', () => { clearInterval(timerId); seconds = 60; renderTimer(); document.querySelector('#timer').hidden = true; });
+document.querySelector('#resetTimer').addEventListener('click', () => { clearInterval(timerId); seconds = mode === 'speed' ? 30 : Number(mainDuration.value); renderTimer(); document.querySelector('#timer').hidden = true; });
