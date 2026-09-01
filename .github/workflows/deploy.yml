@@ -46,6 +46,7 @@ jobs:
           mkdir -p site
           cp vpk/index.html site/
           cp -r vpk/pood site/pood
+          cp -r vpk/life site/life
           mkdir -p site/scale
           cp -r scale-src/dist/. site/scale/
 

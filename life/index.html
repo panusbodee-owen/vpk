@@ -1,0 +1,110 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="นาฬิกาชีวิต — เห็นชีวิตทั้งหมดของคุณเป็นตารางสัปดาห์ กรอกวันเกิดแล้วดูว่าผ่านไปแล้วเท่าไหร่ เหลืออีกเท่าไหร่" />
+  <meta name="author" content="Panusbodee Pisutsuwimon" />
+  <meta name="theme-color" content="#0b1022" />
+  <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/life/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="นาฬิกาชีวิต" />
+  <meta property="og:title" content="นาฬิกาชีวิต — ชีวิตคุณเป็นตารางสัปดาห์" />
+  <meta property="og:description" content="กรอกวันเกิดแล้วดูว่าชีวิตผ่านไปแล้วกี่สัปดาห์ เหลืออีกกี่สัปดาห์" />
+  <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/life/" />
+  <link rel="icon" type="image/svg+xml" href="../pood/favicon.svg" />
+  <title>นาฬิกาชีวิต — ชีวิตคุณเป็นตารางสัปดาห์</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="back-link" href="../" title="กลับหน้ารวมโปรเจกต์">← Panusbodee's Lab</a>
+
+  <main>
+    <!-- หน้ากรอกข้อมูล -->
+    <section id="intro" class="intro">
+      <p class="kicker">MEMENTO MORI</p>
+      <h1>นาฬิกา<span>ชีวิต</span></h1>
+      <p class="sub">
+        ชีวิตคนเราสั้นกว่าที่คิด — แต่ละจุดด้านล่างคือ <b>1 สัปดาห์</b> ของชีวิตคุณ
+        กรอกวันเกิดแล้วดูว่าผ่านมาแล้วเท่าไหร่ เหลืออีกเท่าไหร่
+      </p>
+
+      <form id="lifeForm" class="form">
+        <label>
+          <span>วันเกิดของคุณ</span>
+          <input type="date" id="birthdate" required />
+        </label>
+        <label>
+          <span>คาดว่าจะมีชีวิตถึงอายุ (ปี)</span>
+          <input type="number" id="lifespan" min="1" max="120" value="80" required />
+        </label>
+        <button type="submit">ดูนาฬิกาชีวิตของฉัน →</button>
+      </form>
+
+      <p class="privacy-note">ข้อมูลนี้คำนวณในเบราว์เซอร์ของคุณเท่านั้น ไม่ถูกส่งไปที่ไหนทั้งนั้นครับ</p>
+    </section>
+
+    <!-- หน้าผลลัพธ์ -->
+    <section id="result" class="result" hidden>
+      <button id="editBtn" class="edit-btn">← แก้ไขวันเกิด</button>
+
+      <div class="stats">
+        <div class="stat">
+          <div class="stat-value" id="statLived">0</div>
+          <div class="stat-label">สัปดาห์ที่ผ่านมาแล้ว</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statPercent">0%</div>
+          <div class="stat-label">ของชีวิตที่วางแผนไว้</div>
+        </div>
+        <div class="stat">
+          <div class="stat-value" id="statLeft">0</div>
+          <div class="stat-label">สัปดาห์ที่เหลือ (โดยประมาณ)</div>
+        </div>
+      </div>
+
+      <div class="fortune">
+        <p class="fortune-title">ดวงของคุณ <span>(เอาไว้สนุกๆ นะ อย่าเชื่อจริงจัง 😄)</span></p>
+        <div class="fortune-grid">
+          <div class="fortune-item">
+            <div class="fortune-label">วันเกิด</div>
+            <div class="fortune-value" id="fortuneDay">—</div>
+          </div>
+          <div class="fortune-item">
+            <div class="fortune-label">ราศี</div>
+            <div class="fortune-value" id="fortuneZodiac">—</div>
+          </div>
+          <div class="fortune-item">
+            <div class="fortune-label">ปีนักษัตร</div>
+            <div class="fortune-value" id="fortuneAnimal">—</div>
+          </div>
+        </div>
+        <p class="fortune-quote" id="fortuneQuote"></p>
+      </div>
+
+      <div class="grid-wrap">
+        <div class="grid-scroll">
+          <div id="yearLabels" class="year-labels"></div>
+          <div id="weekGrid" class="week-grid"></div>
+        </div>
+      </div>
+
+      <div class="legend">
+        <span><i class="dot lived"></i> ผ่านมาแล้ว</span>
+        <span><i class="dot now"></i> สัปดาห์นี้</span>
+        <span><i class="dot future"></i> ยังไม่มาถึง</span>
+      </div>
+
+      <p class="footnote" id="footnote"></p>
+    </section>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>

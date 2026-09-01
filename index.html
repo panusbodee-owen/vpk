@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน และไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ" />
+  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ และนาฬิกาชีวิต" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Panusbodee's Lab" />
   <meta property="og:title" content="เลือกโปรเจกต์ — Panusbodee's Lab" />
-  <meta property="og:description" content="พูดทำไม? เว็บฝึกพูดฉับพลัน · ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ" />
+  <meta property="og:description" content="พูดทำไม? เว็บฝึกพูดฉับพลัน · ไล่ล่าสเกลจักรวาล · นาฬิกาชีวิต" />
   <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/" />
   <link rel="icon" type="image/svg+xml" href="pood/favicon.svg" />
   <link rel="apple-touch-icon" href="pood/favicon.svg" />
@@ -85,10 +85,13 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: repeat(2, minmax(240px, 340px));
-      gap: 28px;
+      grid-template-columns: repeat(3, minmax(220px, 300px));
+      gap: 24px;
       width: 100%;
-      max-width: 760px;
+      max-width: 980px;
+    }
+    @media (max-width: 900px) {
+      .cards { grid-template-columns: repeat(2, minmax(220px, 320px)); max-width: 680px; }
     }
     @media (max-width: 620px) {
       .cards { grid-template-columns: 1fr; max-width: 340px; }
@@ -129,6 +132,7 @@
     .card:hover::before, .card:focus-visible::before { opacity: 0.85; }
     .card-pood { --glow-color: #ed9b4c; }
     .card-scale { --glow-color: #a855f7; }
+    .card-life { --glow-color: #f472b6; }
     .card .emoji { font-size: 44px; position: relative; }
     .card h2 {
       font-size: 22px;
@@ -154,6 +158,7 @@
     }
     .card-pood .go { color: #ed9b4c; }
     .card-scale .go { color: #c084fc; }
+    .card-life .go { color: #f472b6; }
     footer {
       position: relative;
       z-index: 1;
@@ -192,6 +197,15 @@
         <p>เลื่อนสกอลล์ซูมออกจากควาร์กเล็กจิ๋ว ไปจนถึงเอกภพที่สังเกตได้ทั้งหมด</p>
       </div>
       <span class="go">เริ่มซูม →</span>
+    </a>
+
+    <a class="card card-life" href="life/">
+      <div>
+        <span class="emoji">⏳</span>
+        <h2>นาฬิกาชีวิต</h2>
+        <p>กรอกวันเกิด เห็นชีวิตทั้งหมดเป็นตารางสัปดาห์ แถมดูดวงกวนๆ ให้ด้วย</p>
+      </div>
+      <span class="go">ดูนาฬิกาชีวิต →</span>
     </a>
   </div>
 
