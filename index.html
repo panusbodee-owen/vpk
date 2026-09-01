@@ -114,19 +114,21 @@
       border-color: rgba(255, 255, 255, 0.3);
       background: rgba(255, 255, 255, 0.06);
     }
-    .card .glow-spot {
+    .card::before {
+      content: "";
       position: absolute;
-      inset: -40% -40% auto auto;
-      width: 60%;
+      inset: -20% -20% auto auto;
+      width: 80%;
       aspect-ratio: 1;
       border-radius: 999px;
-      filter: blur(40px);
-      opacity: 0.5;
+      background: radial-gradient(circle, var(--glow-color) 0%, transparent 68%);
+      opacity: 0.55;
       transition: opacity 0.25s ease;
+      pointer-events: none;
     }
-    .card:hover .glow-spot { opacity: 0.8; }
-    .card-pood .glow-spot { background: #ed9b4c; }
-    .card-scale .glow-spot { background: #a855f7; }
+    .card:hover::before, .card:focus-visible::before { opacity: 0.85; }
+    .card-pood { --glow-color: #ed9b4c; }
+    .card-scale { --glow-color: #a855f7; }
     .card .emoji { font-size: 44px; position: relative; }
     .card h2 {
       font-size: 22px;
@@ -175,7 +177,6 @@
 
   <div class="cards">
     <a class="card card-pood" href="pood/">
-      <span class="glow-spot" aria-hidden="true"></span>
       <div>
         <span class="emoji">🗣️</span>
         <h2>พูดทำไม?</h2>
@@ -185,7 +186,6 @@
     </a>
 
     <a class="card card-scale" href="scale/">
-      <span class="glow-spot" aria-hidden="true"></span>
       <div>
         <span class="emoji">🔭</span>
         <h2>ไล่ล่าสเกลจักรวาล</h2>
