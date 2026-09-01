@@ -99,7 +99,56 @@ const interviewTopicsEn = [
   'How would a teammate describe the way you collaborate?',
   'What question would you ask us at the end of an interview?'
 ];
-let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, caseSoundTimers = [];
+const interviewStyleTopics = {
+  general: [
+    'เล่าเกี่ยวกับตัวคุณในแบบที่ไม่ซ้ำกับเรซูเม่',
+    'จุดแข็งที่คุณใช้ช่วยทีมได้ดีที่สุดคืออะไร',
+    'เล่าเหตุการณ์ที่คุณต้องแก้ปัญหาเฉพาะหน้า',
+    'อีกสามปีข้างหน้า คุณอยากเห็นตัวเองเป็นอย่างไร',
+    'เล่าโปรเจกต์ที่คุณภูมิใจที่สุดและบทบาทของคุณในโปรเจกต์นั้น',
+    'คำแนะนำหรือฟีดแบ็กอะไรที่เปลี่ยนวิธีทำงานของคุณ'
+  ],
+  tech: [
+    'เล่าโปรเจกต์เทคโนโลยีที่คุณเคยทำ ตั้งแต่โจทย์จนถึงผลลัพธ์',
+    'เวลาระบบมีปัญหา คุณจะไล่หาสาเหตุอย่างเป็นขั้นตอนอย่างไร',
+    'อธิบายเทคโนโลยีที่คุณถนัดให้คนที่ไม่ใช่สายเทคเข้าใจ',
+    'คุณตัดสินใจเลือกระหว่างความเร็ว คุณภาพ และความปลอดภัยอย่างไร',
+    'เล่าครั้งที่คุณต้องเรียนรู้เครื่องมือหรือเฟรมเวิร์กใหม่อย่างรวดเร็ว',
+    'ถ้าเห็นโค้ดหรือระบบที่ทำงานได้แต่ดูแลยาก คุณจะจัดการอย่างไร'
+  ],
+  management: [
+    'เล่าเหตุการณ์ที่คุณต้องนำทีมให้ไปถึงเป้าหมาย',
+    'ถ้าสมาชิกในทีมเห็นต่างกันมาก คุณจะช่วยให้ทีมตัดสินใจอย่างไร',
+    'คุณจัดลำดับความสำคัญเมื่อทุกงานถูกบอกว่าเร่งด่วนอย่างไร',
+    'เล่าครั้งที่คุณต้องรับผิดชอบต่อความผิดพลาดของทีม',
+    'คุณวัดความสำเร็จของทีมและโครงการจากอะไรบ้าง',
+    'ถ้าผู้มีส่วนได้ส่วนเสียเปลี่ยนความต้องการกลางทาง คุณจะรับมืออย่างไร'
+  ],
+  creative: [
+    'เล่าผลงานที่แสดงวิธีคิดสร้างสรรค์ของคุณได้ดีที่สุด',
+    'คุณเริ่มต้นคิดไอเดียใหม่เมื่อเจอโจทย์ที่ยังไม่ชัดอย่างไร',
+    'เล่าครั้งที่คุณต้องปกป้องไอเดียต่อหน้าคนที่ไม่เห็นด้วย',
+    'คุณใช้ฟีดแบ็กเพื่อพัฒนางานโดยไม่เสียตัวตนอย่างไร',
+    'ถ้าเวลาน้อยและทรัพยากรจำกัด คุณจะเลือกตัดอะไรออกจากงานก่อน',
+    'ผลงานที่ดีในมุมมองของคุณควรสร้างผลกระทบอะไรให้ผู้ใช้'
+  ],
+  graduate: [
+    'เล่าประสบการณ์จากการเรียน ฝึกงาน หรือกิจกรรมนอกห้องเรียนที่สะท้อนตัวคุณ',
+    'ทักษะอะไรที่คุณกำลังเร่งพัฒนาเพื่อเริ่มต้นการทำงาน',
+    'เล่าครั้งที่คุณทำงานร่วมกับคนที่มีสไตล์ต่างจากคุณ',
+    'เมื่อได้รับงานที่ไม่เคยทำ คุณจะเริ่มต้นเรียนรู้จากตรงไหน',
+    'คุณอยากได้อะไรจากหัวหน้าหรือทีมในช่วงเริ่มงาน',
+    'ทำไมคุณจึงสนใจตำแหน่งนี้ และคุณคิดว่าจะช่วยทีมได้อย่างไร'
+  ]
+};
+const interviewStyleTopicsEn = {
+  general: interviewTopicsEn,
+  tech: ['Tell me about a technology project you built, from the problem to the outcome.', 'How would you systematically debug a failing system?', 'Explain a technology you know well to a non-technical person.', 'How do you balance speed, quality, and security?', 'Tell me about a time you had to learn a new tool or framework quickly.', 'What would you do with working code that is difficult to maintain?'],
+  management: ['Tell me about a time you led a team toward a goal.', 'How do you help a team decide when members strongly disagree?', 'How do you prioritise when every task is urgent?', 'Tell me about a time you took responsibility for a team mistake.', 'How do you measure the success of a team or project?', 'How would you handle a stakeholder changing requirements mid-project?'],
+  creative: ['Tell me about work that best shows how you think creatively.', 'How do you start when a creative brief is still unclear?', 'Tell me about a time you defended an idea someone disagreed with.', 'How do you use feedback without losing your point of view?', 'If time and resources were limited, what would you cut first?', 'What impact should good creative work have on its users?'],
+  graduate: ['Tell me about a class, internship, or activity that reflects who you are.', 'What skill are you actively developing for your first role?', 'Tell me about a time you worked with someone very different from you.', 'How do you start learning something you have never done before?', 'What do you hope to learn from your first manager or team?', 'Why are you interested in this role, and how could you help the team?']
+};
+let mode = 'random', language = 'th', selectedCategory = 'general', selectedLevel = 'all', selectedInterviewStyle = 'general', timerId, seconds = 60, slotTimer, slotInterval, caseTimer, caseSoundTimers = [];
 const topicEl = document.querySelector('#topic');
 function renderModeIntro() {
   const tagline = document.querySelector('#modeTagline');
@@ -136,7 +185,10 @@ function renderInterviewCopy() {
   document.querySelector('#startInterview').innerHTML = `${english ? 'Start interview mode' : 'เริ่มโหมดสัมภาษณ์'} <span>→</span>`;
 }
 function getTopicList() {
-  if (mode === 'interview') return language === 'en' ? interviewTopicsEn : topics.interview;
+  if (mode === 'interview') {
+    const bank = language === 'en' ? interviewStyleTopicsEn : interviewStyleTopics;
+    return bank[selectedInterviewStyle] || bank.general;
+  }
   const bank = language === 'en' ? categoryTopicsEn : categoryTopics;
   const allTopics = bank[selectedCategory] || bank.general;
   if (selectedLevel === 'easy') return allTopics.slice(0, 4);
@@ -253,6 +305,7 @@ document.querySelectorAll('.nav-pill').forEach(btn => btn.addEventListener('clic
     document.querySelector('.controls').hidden = false;
     document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = true;
     document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = true;
+    document.querySelector('.interview-style-wrap').hidden = false;
     document.querySelector('.topic-stack').hidden = true;
     document.querySelector('.actions').hidden = true;
     document.querySelector('#timer').hidden = true;
@@ -267,6 +320,7 @@ document.querySelectorAll('.nav-pill').forEach(btn => btn.addEventListener('clic
   document.querySelector('#timer').hidden = false;
   document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = false;
   document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = false;
+  document.querySelector('.interview-style-wrap').hidden = true;
   document.querySelector('#mainDuration').hidden = false;
   document.querySelector('#mainDuration').disabled = false;
   document.querySelector('#spinBtn').innerHTML = `<span>↻</span> ${language === 'en' ? 'Spin topic' : 'สุ่มหัวข้อ'}`;
@@ -294,6 +348,7 @@ document.querySelector('#startInterview').addEventListener('click', () => {
   document.querySelector('#timer').hidden = true;
   document.querySelector('#levelBtn').closest('.dropdown-wrap').hidden = true;
   document.querySelector('#categoryBtn').closest('.dropdown-wrap').hidden = true;
+  document.querySelector('.interview-style-wrap').hidden = false;
   document.querySelector('#mainDuration').hidden = false;
   document.querySelector('#mainDuration').disabled = false;
   document.querySelector('#mainDuration').value = '60';
@@ -316,6 +371,9 @@ document.querySelectorAll('.dropdown-wrap').forEach(dropdown => {
     if (option.dataset.target === 'langLabel') { language = option.dataset.value === 'ไทย' ? 'th' : 'en'; document.querySelector('#langEmoji').textContent = option.dataset.emoji; renderModeIntro(); renderInterviewCopy(); }
     if (option.dataset.level) selectedLevel = option.dataset.level;
     if (option.dataset.category) selectedCategory = option.dataset.category;
+    if (option.dataset.interviewStyle) {
+      selectedInterviewStyle = option.dataset.interviewStyle;
+    }
     document.querySelector('#previousTopic').textContent = language === 'en' ? 'Settings saved. Ready when you are.' : 'ตั้งค่าแล้ว พร้อมเมื่อคุณพร้อม';
     document.querySelector('#nextTopic').textContent = language === 'en' ? 'Press Spin to draw a new topic' : 'กดสุ่มหัวข้อเพื่อเริ่มคำถามใหม่';
     dropdown.classList.remove('open');
