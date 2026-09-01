@@ -1,0 +1,64 @@
+name: Deploy to GitHub Pages
+
+on:
+  push:
+    branches: [main]
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout vpk (landing + พูดทำไม?)
+        uses: actions/checkout@v4
+        with:
+          path: vpk
+
+      - name: Checkout Scale Explorer source
+        uses: actions/checkout@v4
+        with:
+          repository: panusbodee-owen/Sclae-Seq
+          path: scale-src
+
+      - uses: actions/setup-node@v4
+        with:
+          node-version: 20
+          cache: npm
+          cache-dependency-path: scale-src/package-lock.json
+
+      - name: Build Scale Explorer (mounted at /vpk/scale/)
+        working-directory: scale-src
+        run: |
+          npm ci
+          npx vite build --base=/vpk/scale/
+
+      - name: Assemble combined site
+        run: |
+          mkdir -p site
+          cp vpk/index.html site/
+          cp -r vpk/pood site/pood
+          mkdir -p site/scale
+          cp -r scale-src/dist/. site/scale/
+
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: site
+
+  deploy:
+    needs: build
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - id: deployment
+        uses: actions/deploy-pages@v4

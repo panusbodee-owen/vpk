@@ -3,102 +3,200 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="พูดทำไม? เว็บฝึกพูดฉับพลันฟรี สุ่มหัวข้อภาษาไทยและ English เลือกระดับความยาก จับเวลา และดู Feedback การพูดของคุณ" />
+  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน และไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/" />
   <meta property="og:type" content="website" />
-  <meta property="og:site_name" content="พูดทำไม?" />
-  <meta property="og:title" content="พูดทำไม? — สุ่มหัวข้อฝึกพูด" />
-  <meta property="og:description" content="สุ่มหัวข้อฝึกพูด เลือกระดับ จับเวลา และลองพูดให้ฟังได้ฟรี" />
+  <meta property="og:site_name" content="Panusbodee's Lab" />
+  <meta property="og:title" content="เลือกโปรเจกต์ — Panusbodee's Lab" />
+  <meta property="og:description" content="พูดทำไม? เว็บฝึกพูดฉับพลัน · ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ" />
   <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/" />
-  <meta property="og:image" content="https://panusbodee-owen.github.io/vpk/favicon.svg" />
-  <meta name="twitter:card" content="summary" />
-  <meta name="twitter:title" content="พูดทำไม? — สุ่มหัวข้อฝึกพูด" />
-  <meta name="twitter:description" content="เครื่องมือฝึกพูดฉับพลันฟรีสำหรับคนที่อยากพูดให้ชัดขึ้น" />
-  <meta name="twitter:image" content="https://panusbodee-owen.github.io/vpk/favicon.svg" />
-  <link rel="icon" type="image/svg+xml" href="favicon.svg" />
-  <link rel="apple-touch-icon" href="favicon.svg" />
-  <title>พูดทำไม? — สุ่มหัวข้อแล้วพูดไปก่อน</title>
-  <script type="application/ld+json">{"@context":"https://schema.org","@type":"WebApplication","name":"พูดทำไม?","alternateName":"Pood Thammai","url":"https://panusbodee-owen.github.io/vpk/","description":"เว็บฝึกพูดฉับพลันฟรี สุ่มหัวข้อ เลือกระดับ จับเวลา และรับ Feedback การพูด","applicationCategory":"EducationalApplication","operatingSystem":"Any","inLanguage":["th","en"],"author":{"@type":"Person","name":"Panusbodee Pisutsuwimon","url":"https://owenpanusbodee.online/?lang=en#/"},"offers":{"@type":"Offer","price":"0","priceCurrency":"THB"}}</script>
-  <link rel="preconnect" href="https://fonts.googleapis.com">
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-  <link href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Nunito:wght@400;600;700;800;900&display=swap" rel="stylesheet">
-  <link rel="stylesheet" href="styles.css" />
-  <link rel="stylesheet" href="motion.css" />
-  <link rel="stylesheet" href="modern.css" />
-  <link rel="stylesheet" href="fun.css" />
-  <link rel="stylesheet" href="chips.css" />
-  <link rel="stylesheet" href="slot.css" />
-  <link rel="stylesheet" href="case-opening.css" />
-  <link rel="stylesheet" href="dropdown-fix.css" />
-  <link rel="stylesheet" href="donate.css" />
-  <link rel="stylesheet" href="timer-fix.css" />
-  <link rel="stylesheet" href="profile-link.css" />
-  <link rel="stylesheet" href="feedback.css?v=42cdc46" />
-  <link rel="stylesheet" href="duration.css" />
-  <link rel="stylesheet" href="history.css" />
-  <link rel="stylesheet" href="leaderboard.css" />
-  <link rel="stylesheet" href="smooth-case.css" />
+  <link rel="icon" type="image/svg+xml" href="pood/favicon.svg" />
+  <link rel="apple-touch-icon" href="pood/favicon.svg" />
+  <title>เลือกโปรเจกต์ — Panusbodee's Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap"
+    rel="stylesheet"
+  />
+  <style>
+    * { box-sizing: border-box; }
+    html, body {
+      margin: 0;
+      min-height: 100%;
+      background: #05030f;
+      color: #f5f3ff;
+      font-family: "Kanit", "Nunito", system-ui, sans-serif;
+      overflow-x: hidden;
+    }
+    body {
+      min-height: 100svh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 8vh 6vw;
+      position: relative;
+    }
+    .glow {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      background:
+        radial-gradient(ellipse 60% 45% at 18% 20%, rgba(237, 155, 76, 0.16) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 45% at 85% 75%, rgba(139, 92, 246, 0.22) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(11, 16, 34, 0.9) 0%, transparent 60%);
+      pointer-events: none;
+    }
+    header {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      margin-bottom: 5vh;
+    }
+    .kicker {
+      font-size: 12px;
+      letter-spacing: 0.35em;
+      text-transform: uppercase;
+      color: rgba(245, 243, 255, 0.5);
+      margin: 0 0 12px;
+    }
+    h1 {
+      font-size: clamp(28px, 5vw, 48px);
+      font-weight: 700;
+      margin: 0;
+      line-height: 1.2;
+    }
+    h1 span {
+      background: linear-gradient(90deg, #ed9b4c, #f472b6, #a78bfa);
+      -webkit-background-clip: text;
+      background-clip: text;
+      color: transparent;
+    }
+    p.sub {
+      margin: 14px 0 0;
+      color: rgba(245, 243, 255, 0.55);
+      font-family: "Nunito", sans-serif;
+      font-size: 15px;
+    }
+    .cards {
+      position: relative;
+      z-index: 1;
+      display: grid;
+      grid-template-columns: repeat(2, minmax(240px, 340px));
+      gap: 28px;
+      width: 100%;
+      max-width: 760px;
+    }
+    @media (max-width: 620px) {
+      .cards { grid-template-columns: 1fr; max-width: 340px; }
+    }
+    .card {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      min-height: 240px;
+      padding: 28px 26px;
+      border-radius: 22px;
+      text-decoration: none;
+      color: inherit;
+      border: 1px solid rgba(255, 255, 255, 0.12);
+      background: rgba(255, 255, 255, 0.03);
+      backdrop-filter: blur(6px);
+      overflow: hidden;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+    }
+    .card:hover, .card:focus-visible {
+      transform: translateY(-6px);
+      border-color: rgba(255, 255, 255, 0.3);
+      background: rgba(255, 255, 255, 0.06);
+    }
+    .card .glow-spot {
+      position: absolute;
+      inset: -40% -40% auto auto;
+      width: 60%;
+      aspect-ratio: 1;
+      border-radius: 999px;
+      filter: blur(40px);
+      opacity: 0.5;
+      transition: opacity 0.25s ease;
+    }
+    .card:hover .glow-spot { opacity: 0.8; }
+    .card-pood .glow-spot { background: #ed9b4c; }
+    .card-scale .glow-spot { background: #a855f7; }
+    .card .emoji { font-size: 44px; position: relative; }
+    .card h2 {
+      font-size: 22px;
+      margin: 18px 0 6px;
+      position: relative;
+    }
+    .card p {
+      margin: 0;
+      font-family: "Nunito", sans-serif;
+      font-size: 13.5px;
+      line-height: 1.55;
+      color: rgba(245, 243, 255, 0.65);
+      position: relative;
+    }
+    .card .go {
+      margin-top: 18px;
+      font-size: 13px;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      position: relative;
+    }
+    .card-pood .go { color: #ed9b4c; }
+    .card-scale .go { color: #c084fc; }
+    footer {
+      position: relative;
+      z-index: 1;
+      margin-top: 6vh;
+      font-family: "Nunito", sans-serif;
+      font-size: 12.5px;
+      color: rgba(245, 243, 255, 0.35);
+      text-align: center;
+    }
+    footer a { color: inherit; }
+  </style>
 </head>
 <body>
-  <div class="grain"></div>
-  <div class="ambient ambient-one"></div><div class="ambient ambient-two"></div>
-  <header class="topbar">
-    <a class="brand-mini" href="#top"><span>พูด</span>ทำไม?</a>
-    <nav class="nav-pills" aria-label="เมนูหลัก"><button class="nav-pill active" data-mode="random">สุ่มหัวข้อ</button><button class="nav-pill" data-mode="speed">สปีด 30 วิ</button><button class="nav-pill" data-mode="interview">สัมภาษณ์งาน</button></nav>
-    <div class="header-actions"><div class="brand-mark">No overthinking club <span>✹</span></div><button class="donate-btn" id="donateBtn">Donate <span>♥</span></button></div>
+  <div class="glow" aria-hidden="true"></div>
+
+  <header>
+    <p class="kicker">Panusbodee's Lab</p>
+    <h1>อยากไปเล่น<span>อะไรดี?</span></h1>
+    <p class="sub">เลือกโปรเจกต์ที่อยากลองด้านล่างได้เลยครับ</p>
   </header>
 
-  <main id="top" class="layout">
-    <section class="intro">
-      <div class="scribble sun">✦</div>
-      <p class="eyebrow">PANUSBODEE / CHAOTIC SPEAKING CLUB</p>
-      <div class="logo-lockup"><div>พูด</div><div class="logo-outline">ทำไม?</div></div>
-      <p class="tagline" id="modeTagline">สุ่มมาเลย<br><span>เดี๋ยวก็พูดได้เองแหละ</span></p>
-      <p class="personal-note" id="personalNote">คิดเยอะไปก็ไม่ได้พูด ลองสุ่มหัวข้อแล้วปล่อยของแบบไม่ต้องเป๊ะกันเถอะ ✌️</p>
-      <div class="steps">
-        <div><b>01</b> หยิบหัวข้อที่ใช่</div>
-        <div><b>02</b> ตั้งเวลา 1 นาที</div>
-        <div><b>03</b> พูดออกมาเลย <span>☺</span></div>
+  <div class="cards">
+    <a class="card card-pood" href="pood/">
+      <span class="glow-spot" aria-hidden="true"></span>
+      <div>
+        <span class="emoji">🗣️</span>
+        <h2>พูดทำไม?</h2>
+        <p>สุ่มหัวข้อฝึกพูดฉับพลัน เลือกระดับ จับเวลา แล้วลองพูดให้ฟังได้เลย</p>
       </div>
-      <button class="analysis" id="analysisBtn">ลองพูดให้ฟัง <span>✦</span></button>
-      <div class="profile-cta"><a class="profile-link" href="https://owenpanusbodee.online/?lang=en#/" target="_blank" rel="noopener noreferrer">รู้จักผมเพิ่ม <span>↗</span></a><span>ดูผลงาน แนวคิด และเรื่องราวของ Panusbodee</span></div>
-    </section>
+      <span class="go">เข้าไปพูด →</span>
+    </a>
 
-    <section class="practice" aria-live="polite">
-      <div class="controls">
-        <div class="dropdown-wrap"><button class="select-chip" id="langBtn" aria-expanded="false"><span id="langEmoji">🇹🇭</span> <span id="langLabel">ไทย</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="langLabel" data-emoji="🇹🇭" data-value="ไทย">🇹🇭 ไทย</button><button data-target="langLabel" data-emoji="🇺🇸" data-value="English">🇺🇸 English</button></div></div>
-        <div class="dropdown-wrap"><button class="select-chip" id="levelBtn" aria-expanded="false">🎲 <span id="levelLabel">สุ่มทุกระดับ</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="levelLabel" data-level="all" data-value="สุ่มทุกระดับ">🎲 สุ่มทุกระดับ</button><button data-target="levelLabel" data-level="easy" data-value="เริ่มต้น">🌱 เริ่มต้น</button><button data-target="levelLabel" data-level="medium" data-value="ปานกลาง">🎯 ปานกลาง</button><button data-target="levelLabel" data-level="challenge" data-value="ท้าทาย">⚡ ท้าทาย</button></div></div>
-        <div class="dropdown-wrap"><button class="select-chip" id="categoryBtn" aria-expanded="false">🎯 <span id="categoryLabel">ทั่วไป</span><b>⌄</b></button><div class="dropdown-menu"><button data-target="categoryLabel" data-category="general" data-value="ทั่วไป">🎯 ทั่วไป</button><button data-target="categoryLabel" data-category="daily" data-value="ชีวิตประจำวัน">☕ ชีวิตประจำวัน</button><button data-target="categoryLabel" data-category="creative" data-value="ความคิดสร้างสรรค์">💡 ความคิดสร้างสรรค์</button><button data-target="categoryLabel" data-category="future" data-value="งานและอนาคต">🚀 งานและอนาคต</button><button data-target="categoryLabel" data-category="deep" data-value="คิดลึก">🧠 คิดลึก</button></div></div>
+    <a class="card card-scale" href="scale/">
+      <span class="glow-spot" aria-hidden="true"></span>
+      <div>
+        <span class="emoji">🔭</span>
+        <h2>ไล่ล่าสเกลจักรวาล</h2>
+        <p>เลื่อนสกอลล์ซูมออกจากควาร์กเล็กจิ๋ว ไปจนถึงเอกภพที่สังเกตได้ทั้งหมด</p>
       </div>
-      <div class="topic-stack">
-        <p class="side-topic" id="previousTopic">กาแฟแก้วโปรดของคุณบอกอะไรเกี่ยวกับตัวคุณ</p>
-        <div class="topic-card"><div class="case-pointer"></div><div class="case-track" id="caseTrack"></div><span class="quote">“</span><h1 id="topic">อธิบายอินเทอร์เน็ตให้เด็กอนุบาลเข้าใจ โดยห้ามใช้คำว่า “คอมพิวเตอร์”</h1><span class="quote close">”</span></div>
-        <p class="side-topic" id="nextTopic">ถ้าคุณเปลี่ยนอาชีพได้หนึ่งวัน จะเลือกเป็นอะไร</p>
-      </div>
-      <div class="actions">
-        <button class="spin" id="spinBtn"><span>↻</span> สุ่มหัวข้อ</button>
-        <select class="duration-select" id="mainDuration" aria-label="เลือกเวลาพูด"><option value="30">⏱ 00:30</option><option value="60" selected>⏱ 01:00</option><option value="120">⏱ 02:00</option><option value="180">⏱ 03:00</option></select>
-        <button class="timer-link" id="timerBtn">เริ่มจับเวลา <span>→</span></button>
-      </div>
-      <div class="timer" id="timer" hidden><span id="timerValue">01:00</span><div class="timer-actions"><button id="stopTimer">หยุด</button><button id="resetTimer">รีเซ็ต</button></div></div>
-      <section class="interview-mode" id="interviewMode" hidden>
-        <div class="interview-mode__eyebrow" id="interviewEyebrow">MODE 03 / INTERVIEW ROOM</div>
-        <h1 id="interviewTitle">ซ้อมตอบคำถามสัมภาษณ์<br><em>ให้เป็นตัวเองมากขึ้น</em></h1>
-        <p class="interview-mode__lead" id="interviewLead">พื้นที่ซ้อมพูดก่อนถึงห้องสัมภาษณ์จริง สุ่มคำถามแล้วตอบให้ชัด โดยไม่ต้องท่องคำตอบให้เหมือนใคร</p>
-        <div class="interview-mode__grid">
-          <article><span>01</span><h2 id="interviewCardTitle1">ตอบจากประสบการณ์</h2><p id="interviewCardText1">เล่าเหตุการณ์จริงให้เห็นวิธีคิดและสิ่งที่คุณลงมือทำ</p></article>
-          <article><span>02</span><h2 id="interviewCardTitle2">จับเวลาให้พอดี</h2><p id="interviewCardText2">ฝึกเรียบเรียงคำตอบให้อยู่ในเวลาประมาณ 1 นาที</p></article>
-          <article><span>03</span><h2 id="interviewCardTitle3">พูดแล้วค่อยปรับ</h2><p id="interviewCardText3">ใช้ Feedback ดูความต่อเนื่อง ความชัดเจน และความมั่นใจ</p></article>
-        </div>
-        <button class="interview-mode__start" id="startInterview">เริ่มโหมดสัมภาษณ์ <span>→</span></button>
-      </section>
-    </section>
-  </main>
-  <footer><span>Designed & mildly chaotic by Panusbodee</span><span>Bangkok, Thailand · พูดไปก่อน ค่อยคิดทีหลัง</span></footer>
-  <div class="donate-modal" id="donateModal" hidden><div class="donate-panel"><button class="modal-close" id="closeDonate">×</button><span class="donate-kicker">THANK YOU ✦</span><h2>ช่วยเติมพลังให้<br><em>พูดทำไม?</em></h2><p>สแกน QR เพื่อสนับสนุนโปรเจกต์นี้ได้เลยครับ</p><img class="donate-qr" src="donate-qr.jpg" alt="PromptPay QR สำหรับโดเนท" /><div class="donate-placeholder">PromptPay · รับเงินได้จากทุกธนาคาร</div></div></div>
-  <div class="feedback-modal" id="feedbackModal" hidden><div class="feedback-panel"><button class="modal-close" id="closeFeedback">×</button><span class="donate-kicker">SPEAK & GET FEEDBACK ✦</span><h2>ลองพูดดู<br><em>แล้วมาดูคะแนนกัน</em></h2><div class="feedback-topic"><small>หัวข้อที่กำลังฝึก</small><strong id="feedbackTopic">–</strong></div><p class="feedback-note">กดเริ่ม แล้วพูดตามหัวข้อที่สุ่มได้ ระบบจะฟังและประเมินเบื้องต้นให้คุณ</p><div class="record-status" id="recordStatus"><span></span> พร้อมรับฟัง</div><div class="feedback-timer"><label for="feedbackDuration">เวลาพูด</label><select id="feedbackDuration"><option value="30">00:30</option><option value="60" selected>01:00</option><option value="120">02:00</option><option value="180">03:00</option></select><strong id="feedbackTimerValue">01:00</strong><button id="feedbackTimerBtn">เริ่มจับเวลา</button><button id="feedbackTimerReset">รีเซ็ต</button></div><button class="record-btn" id="recordBtn"><span>●</span> เริ่มพูด</button><div class="transcript" id="transcript">คำพูดของคุณจะแสดงตรงนี้...</div><div class="feedback-result" id="feedbackResult" hidden><div class="score-ring"><strong id="scoreValue">0</strong><small>/100</small></div><div class="score-breakdown"><div><span>ความต่อเนื่อง</span><b id="flowScore">–</b></div><div><span>ความชัดเจน</span><b id="clarityScore">–</b></div><div><span>ความมั่นใจ</span><b id="confidenceScore">–</b></div></div><p id="feedbackComment"></p></div><div class="history-head"><span>คะแนนที่ผ่านมา</span><button id="clearHistory">ล้างประวัติ</button></div><div class="score-history" id="scoreHistory">ยังไม่มีประวัติการพูด</div><section class="leaderboard-mockup"><div class="leaderboard-title"><span>LEADERBOARD</span><small>DEMO</small></div><div class="leader-row top"><i>🥇</i><span><b>Panusbodee · You</b><small>Current best · 77/100</small></span><strong>77</strong></div><div class="leader-row"><i>🥈</i><span><b>พูดไปก่อน</b><small>Creative category</small></span><strong>72</strong></div><div class="leader-row"><i>🥉</i><span><b>Mildly Confident</b><small>Fluency streak · 7 days</small></span><strong>68</strong></div></section></div></div>
-  <script src="script.js?v=quiet-audio-2"></script>
+      <span class="go">เริ่มซูม →</span>
+    </a>
+  </div>
+
+  <footer>
+    ทำโดย Panusbodee Pisutsuwimon
+  </footer>
 </body>
 </html>
