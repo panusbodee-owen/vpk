@@ -25,6 +25,8 @@ body::before {
     radial-gradient(ellipse 60% 45% at 18% 15%, var(--glow-a) 0%, transparent 70%),
     radial-gradient(ellipse 55% 45% at 85% 80%, var(--glow-b) 0%, transparent 70%);
   pointer-events: none;
+  animation: bg-drift 22s ease-in-out infinite;
+  will-change: transform;
 }
 
 .back-link {
@@ -242,7 +244,9 @@ h1 span {
   color: rgba(var(--ink-rgb), 0.45);
   text-align: center;
   margin: 0;
+  max-width: 380px;
 }
+.radius-count.warn { color: #fbbf24; }
 
 /* ---------- Spin button ---------- */
 .spin-wrap {
@@ -323,6 +327,7 @@ h1 span {
   margin-bottom: 14px;
 }
 .result-area #resultDistance { color: var(--accent-2); font-weight: 600; }
+.result-area #resultDistance.out-of-range { color: #fbbf24; }
 
 .result-desc {
   font-family: "Nunito", sans-serif;

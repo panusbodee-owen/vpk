@@ -24,6 +24,7 @@
     { id: "mkrestaurant", name: "MK สุกี้ สาขาสยามพารากอน", category: "food", area: "สยามพารากอน", lat: 13.7460, lng: 100.5347, description: "สุกี้แบรนด์คนไทยที่คุ้นเคย บริการเร็ว เมนูครบ เหมาะกับมื้อครอบครัว", tags: ["สุกี้", "แบรนด์คนไทย"] },
     { id: "nahm", name: "Nahm", category: "food", area: "สาทร", lat: 13.7223, lng: 100.5288, description: "อาหารไทยร่วมสมัยแนวไฟน์ไดนิ่ง ตีความสูตรโบราณให้ทันสมัย ติดมิชลิน", tags: ["ไฟน์ไดนิ่ง", "มิชลิน"] },
     { id: "greyhound", name: "Greyhound Café สาขาเอ็มควอเทียร์", category: "food", area: "เอ็มควอเทียร์", lat: 13.7300, lng: 100.5695, description: "ร้านอาหารไทยฟิวชันสไตล์อาร์ตี้ เมนูซิกเนเจอร์คือสปาเกตตีขี้เมาทะเล", tags: ["ฟิวชัน", "อาหารไทยประยุกต์"] },
+    { id: "mkladprao", name: "MK สุกี้ สาขาเซ็นทรัลลาดพร้าว", category: "food", area: "เซ็นทรัลลาดพร้าว", lat: 13.8154, lng: 100.5613, description: "สุกี้แบรนด์คนไทยที่คุ้นเคย สาขาย่านลาดพร้าว-จตุจักร ใกล้รถไฟฟ้าหมอชิต", tags: ["สุกี้", "แบรนด์คนไทย"] },
     { id: "peaor", name: "Pe Aor Tom Yum Kung", category: "food", area: "ถนนสี่พระยา", lat: 13.7245, lng: 100.5310, description: "ต้มยำกุ้งซีฟู้ดสูตรเข้มข้น ร้านดังที่นักท่องเที่ยวต้องแวะ", tags: ["ต้มยำกุ้ง", "ซีฟู้ด"] },
     { id: "err", name: "Err Urban Rustic Thai", category: "food", area: "ท่าเตียน", lat: 13.7460, lng: 100.4913, description: "อาหารไทยสไตล์ลูกทุ่งประยุกต์ บรรยากาศเก๋ใกล้แม่น้ำเจ้าพระยาและวัดโพธิ์", tags: ["อาหารไทย", "ริมแม่น้ำ"] },
     // เครื่องดื่ม
@@ -52,6 +53,7 @@
     { id: "bualoynana", name: "บัวลอยเยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7401, lng: 100.5093, description: "บัวลอยไข่หวานร้อนๆ สูตรดั้งเดิมย่านไชน่าทาวน์ ของหวานเรียกความทรงจำวัยเด็ก", tags: ["บัวลอย", "ไชน่าทาวน์"] },
     { id: "douhua", name: "เต้าฮวยเจ้าเก่า เยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7396, lng: 100.5087, description: "เต้าฮวยนุ่มละมุนราดน้ำขิงหอมกรุ่น ของหวานต้นตำรับย่านเยาวราช", tags: ["เต้าฮวย", "ไชน่าทาวน์"] },
     { id: "gussdamngood", name: "Guss Damn Good สาขาอารีย์", category: "dessert", area: "อารีย์", lat: 13.7788, lng: 100.5440, description: "ไอศกรีมโฮมเมดรสชาติแปลกใหม่ เปลี่ยนเมนูตามฤดูกาล ร้านดังย่านอารีย์", tags: ["ไอศกรีม", "โฮมเมด"] },
+    { id: "afteryouladprao", name: "After You สาขาเซ็นทรัลลาดพร้าว", category: "dessert", area: "เซ็นทรัลลาดพร้าว", lat: 13.8154, lng: 100.5613, description: "ต้นตำรับชิบูย่าโทสต์และฮันนี่โทสต์ สาขาย่านลาดพร้าว-จตุจักร ใกล้รถไฟฟ้าหมอชิต", tags: ["ฮันนี่โทสต์", "คาเฟ่ขนมหวาน"] },
   ];
 
   // ---------- โซน/ห้างยอดฮิต — เลือกแทนการขอตำแหน่ง GPS ก็ได้ ----------
@@ -64,6 +66,7 @@
     { id: "yaowarat", name: "เยาวราช", lat: 13.7398, lng: 100.5088 },
     { id: "ari", name: "อารีย์", lat: 13.7793, lng: 100.5448 },
     { id: "sathorn", name: "สาทร", lat: 13.7215, lng: 100.5295 },
+    { id: "ladprao", name: "ลาดพร้าว-จตุจักร", lat: 13.8154, lng: 100.5613 },
   ];
 
   /**
@@ -179,7 +182,9 @@
     if (!state.nearMe || !state.userLoc) return base;
 
     var result = withinRadius();
-    var chosen = result.within.length > 0 ? result.within : result.nearest.slice(0, 1);
+    // ไม่มีร้านในระยะที่เลือก — fallback ไปเอาร้านที่ใกล้ที่สุด 5 ร้านแทน (ไม่ใช่แค่ร้านเดียว)
+    // เพื่อให้ "สุ่มใหม่" ยังสุ่มได้จริง ไม่ใช่ได้ร้านเดิมซ้ำทุกครั้ง
+    var chosen = result.within.length > 0 ? result.within : result.nearest.slice(0, 5);
     return chosen.map(function (x) { return x.r; });
   }
 
@@ -210,9 +215,12 @@
     if (state.nearMe && state.userLoc) {
       var km = distanceKm(state.userLoc.lat, state.userLoc.lng, state.result.lat, state.result.lng);
       els.distance.hidden = false;
-      els.distance.textContent = "· ห่างประมาณ " + km.toFixed(1) + " กม. (เส้นตรง)";
+      var outOfRange = km > state.radiusKm;
+      els.distance.textContent = "· ห่างประมาณ " + km.toFixed(1) + " กม. (เส้นตรง)" + (outOfRange ? " — นอกระยะที่เลือก" : "");
+      els.distance.classList.toggle("out-of-range", outOfRange);
     } else {
       els.distance.hidden = true;
+      els.distance.classList.remove("out-of-range");
     }
 
     els.tags.innerHTML = "";
@@ -288,9 +296,12 @@
     els.radiusCount.hidden = false;
     if (result.within.length > 0) {
       els.radiusCount.textContent = "พบ " + result.within.length + " ร้านในระยะ " + state.radiusKm + " กม.";
+      els.radiusCount.classList.remove("warn");
     } else {
+      var nearestKm = result.nearest.length > 0 ? result.nearest[0].km.toFixed(1) : "?";
       els.radiusCount.textContent =
-        "ไม่มีร้านในระยะ " + state.radiusKm + " กม. — เอาร้านที่ใกล้ที่สุดให้แทน";
+        "⚠️ ไม่มีร้านในระยะ " + state.radiusKm + " กม. — ร้านที่ใกล้ที่สุดอยู่ห่าง " + nearestKm + " กม. (จะสุ่มจาก 5 ร้านที่ใกล้ที่สุดแทน)";
+      els.radiusCount.classList.add("warn");
     }
   }
 

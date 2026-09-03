@@ -114,3 +114,21 @@
   .theme-widget__toggle { width: 26px; height: 26px; font-size: 13px; }
   .theme-widget__swatch { width: 15px; height: 15px; }
 }
+
+/* ---------- Background glow animation ----------
+   Shared keyframes for the drifting glow used by .glow (index.html)
+   and body::before (life/, eat/). Scale never drops below 1.05 so the
+   soft edges never show inside the viewport while it drifts. */
+@keyframes bg-drift {
+  0%   { transform: translate3d(0, 0, 0) scale(1.06); }
+  33%  { transform: translate3d(-2.5%, 2%, 0) scale(1.1); }
+  66%  { transform: translate3d(2%, -1.5%, 0) scale(1.08); }
+  100% { transform: translate3d(0, 0, 0) scale(1.06); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .glow,
+  body::before {
+    animation: none !important;
+  }
+}
