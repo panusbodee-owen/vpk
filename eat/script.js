@@ -43,13 +43,25 @@
     { id: "douhua", name: "เต้าฮวยเจ้าเก่า เยาวราช", category: "dessert", area: "เยาวราช", description: "เต้าฮวยนุ่มละมุนราดน้ำขิงหอมกรุ่น ของหวานต้นตำรับย่านเยาวราช", tags: ["เต้าฮวย", "ไชน่าทาวน์"] },
   ];
 
-  /** ลิงก์ค้นหาร้านนี้บนแพลตฟอร์มสั่งอาหารเดลิเวอรี — เปิดผลค้นหาของร้านบนแพลตฟอร์มนั้นๆ */
-  function getOrderLinks(name) {
-    var q = encodeURIComponent(name + " กรุงเทพ");
+  /**
+   * ลิงก์ Google Maps ไปยังร้านนี้โดยตรง — คลิกแล้วเจอร้านจริงเสมอ (ไม่ต้องล็อกอิน)
+   * ส่วนใหญ่ร้านดังจะมีปุ่ม "สั่งอาหาร" ต่อไปยัง LINE MAN/Grab/ShopeeFood ให้ในหน้า Maps เลย ถ้าร้านนั้นเปิดให้บริการ
+   */
+  function getMapsLink(name, area) {
+    var q = encodeURIComponent(name + " " + area + " กรุงเทพ");
+    return "https://www.google.com/maps/search/?api=1&query=" + q;
+  }
+
+  /**
+   * ลิงก์เปิดแอป/เว็บของแต่ละแพลตฟอร์ม — เป็นหน้าแรกจริงของแต่ละเจ้า (ไม่ใช่ผลค้นหาปลอม)
+   * เพราะ LINE MAN / Grab / ShopeeFood ไม่มี URL ค้นหาสาธารณะที่พาไปหน้าร้านตรงๆ ได้
+   * ผู้ใช้เปิดแล้วพิมพ์ชื่อร้านค้นหาต่อในแอปได้เลย
+   */
+  function getAppLinks() {
     return [
-      { id: "lineman", label: "LINE MAN", color: "#00B900", url: "https://www.google.com/search?q=" + q + "+site:food.lineman.line.me" },
-      { id: "grab", label: "Grab", color: "#00B14F", url: "https://www.google.com/search?q=" + q + "+site:food.grab.com" },
-      { id: "shopeefood", label: "ShopeeFood", color: "#EE4D2D", url: "https://www.google.com/search?q=" + q + "+site:shopeefood.co.th" },
+      { id: "lineman", label: "LINE MAN", color: "#00B900", url: "https://food.lineman.line.me/" },
+      { id: "grab", label: "Grab", color: "#00B14F", url: "https://food.grab.com/th/en/" },
+      { id: "shopeefood", label: "ShopeeFood", color: "#EE4D2D", url: "https://shopeefood.co.th/" },
     ];
   }
 
@@ -73,7 +85,8 @@
     area: document.getElementById("resultArea"),
     desc: document.getElementById("resultDesc"),
     tags: document.getElementById("resultTags"),
-    orderLinks: document.getElementById("orderLinks"),
+    mapsLink: document.getElementById("mapsLink"),
+    appLinks: document.getElementById("appLinks"),
   };
 
   function pool() {
@@ -113,16 +126,18 @@
       els.tags.appendChild(span);
     });
 
-    els.orderLinks.innerHTML = "";
-    getOrderLinks(state.result.name).forEach(function (link) {
+    els.mapsLink.href = getMapsLink(state.result.name, state.result.area);
+
+    els.appLinks.innerHTML = "";
+    getAppLinks().forEach(function (link) {
       var a = document.createElement("a");
       a.href = link.url;
       a.target = "_blank";
       a.rel = "noopener noreferrer";
-      a.className = "order-btn";
+      a.className = "app-btn";
       a.style.backgroundColor = link.color;
       a.textContent = link.label;
-      els.orderLinks.appendChild(a);
+      els.appLinks.appendChild(a);
     });
   }
 

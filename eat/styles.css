@@ -213,21 +213,40 @@ h1 span {
   padding: 4px 10px;
 }
 
+.maps-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: "Kanit", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: #05030f;
+  text-decoration: none;
+  background: linear-gradient(90deg, #4ade80, #22c55e);
+  border-radius: 14px;
+  padding: 14px 16px;
+  margin-bottom: 20px;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.maps-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
 .order-label {
   font-family: "Nunito", sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: rgba(245, 243, 255, 0.5);
   margin-bottom: 10px;
+  text-align: center;
 }
 
-.order-links {
+.app-links {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
   gap: 10px;
 }
 
-.order-btn {
+.app-btn {
   display: flex;
   align-items: center;
   justify-content: center;
@@ -239,18 +258,20 @@ h1 span {
   text-decoration: none;
   border-radius: 12px;
   padding: 12px 8px;
-  transition: filter 0.15s ease, transform 0.15s ease;
+  opacity: 0.9;
+  transition: filter 0.15s ease, transform 0.15s ease, opacity 0.15s ease;
 }
-.order-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+.app-btn:hover { filter: brightness(1.08); transform: translateY(-1px); opacity: 1; }
 
 .note {
   font-family: "Nunito", sans-serif;
   font-size: 10.5px;
   color: rgba(245, 243, 255, 0.4);
   text-align: center;
+  line-height: 1.6;
   margin: 14px 0 0;
 }
 
 @media (max-width: 480px) {
-  .order-links { grid-template-columns: 1fr; }
+  .app-links { grid-template-columns: 1fr; }
 }
