@@ -171,9 +171,10 @@ h1 span {
 .stat {
   text-align: center;
   padding: 16px 8px;
-  border: 1px solid rgba(var(--ink-rgb), 0.1);
+  border: 1px solid var(--card-border);
   border-radius: 14px;
-  background: rgba(var(--ink-rgb), 0.03);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
 }
 .stat-value {
   font-size: clamp(20px, 4vw, 28px);
@@ -193,9 +194,10 @@ h1 span {
 .fortune {
   margin-bottom: 28px;
   padding: 20px;
-  border: 1px solid rgba(var(--ink-rgb), 0.1);
+  border: 1px solid var(--card-border);
   border-radius: 16px;
-  background: rgba(var(--ink-rgb), 0.03);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
   text-align: center;
 }
 .fortune-title {
