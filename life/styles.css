@@ -7,8 +7,8 @@
 html, body {
   margin: 0;
   min-height: 100%;
-  background: #05030f;
-  color: #f5f3ff;
+  background: var(--bg);
+  color: rgb(var(--ink-rgb));
   font-family: "Kanit", "Nunito", system-ui, sans-serif;
 }
 
@@ -24,8 +24,8 @@ body::before {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 60% 45% at 18% 15%, rgba(237, 155, 76, 0.14) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 45% at 85% 80%, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
+    radial-gradient(ellipse 60% 45% at 18% 15%, var(--glow-a) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 85% 80%, var(--glow-b) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -35,11 +35,11 @@ body::before {
   top: 16px;
   z-index: 50;
   font-size: 12px;
-  color: rgba(245, 243, 255, 0.4);
+  color: rgba(var(--ink-rgb), 0.4);
   text-decoration: none;
   transition: color 0.2s ease;
 }
-.back-link:hover { color: rgba(245, 243, 255, 0.8); }
+.back-link:hover { color: rgba(var(--ink-rgb), 0.8); }
 
 main {
   position: relative;
@@ -63,7 +63,7 @@ main {
   font-size: 12px;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(245, 243, 255, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin: 0 0 14px;
 }
 
@@ -74,7 +74,7 @@ h1 {
   line-height: 1.15;
 }
 h1 span {
-  background: linear-gradient(90deg, #ed9b4c, #f472b6, #a78bfa);
+  background: var(--accent-grad-3);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -86,9 +86,9 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-size: 15px;
   line-height: 1.65;
-  color: rgba(245, 243, 255, 0.65);
+  color: rgba(var(--ink-rgb), 0.65);
 }
-.sub b { color: #f5f3ff; }
+.sub b { color: rgb(var(--ink-rgb)); }
 
 .form {
   margin-top: 36px;
@@ -104,29 +104,28 @@ h1 span {
   gap: 6px;
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
-  color: rgba(245, 243, 255, 0.6);
+  color: rgba(var(--ink-rgb), 0.6);
   text-align: left;
 }
 .form input {
   font-family: "Kanit", sans-serif;
   font-size: 15px;
-  color: #f5f3ff;
-  background: rgba(255, 255, 255, 0.06);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  color: rgb(var(--ink-rgb));
+  background: rgba(var(--ink-rgb), 0.06);
+  border: 1px solid rgba(var(--ink-rgb), 0.15);
   border-radius: 10px;
   padding: 10px 14px;
   outline: none;
   min-width: 170px;
-  color-scheme: dark;
   transition: border-color 0.2s ease;
 }
-.form input:focus { border-color: #f472b6; }
+.form input:focus { border-color: var(--accent-2); }
 .form button {
   font-family: "Kanit", sans-serif;
   font-weight: 600;
   font-size: 14.5px;
-  color: #1a0b2e;
-  background: linear-gradient(90deg, #ed9b4c, #f472b6);
+  color: var(--on-accent);
+  background: var(--accent-grad-2);
   border: none;
   border-radius: 10px;
   padding: 12px 22px;
@@ -135,14 +134,14 @@ h1 span {
 }
 .form button:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 20px rgba(244, 114, 182, 0.3);
+  box-shadow: 0 8px 20px rgba(var(--accent-2-rgb), 0.3);
 }
 
 .privacy-note {
   margin-top: 22px;
   font-family: "Nunito", sans-serif;
   font-size: 11.5px;
-  color: rgba(245, 243, 255, 0.35);
+  color: rgba(var(--ink-rgb), 0.35);
 }
 
 /* ---------- Result ---------- */
@@ -151,7 +150,7 @@ h1 span {
 .edit-btn {
   background: none;
   border: none;
-  color: rgba(245, 243, 255, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   font-family: "Kanit", sans-serif;
   font-size: 13px;
   cursor: pointer;
@@ -159,7 +158,7 @@ h1 span {
   margin-bottom: 28px;
   transition: color 0.2s ease;
 }
-.edit-btn:hover { color: #f5f3ff; }
+.edit-btn:hover { color: rgb(var(--ink-rgb)); }
 
 .stats {
   display: grid;
@@ -170,14 +169,14 @@ h1 span {
 .stat {
   text-align: center;
   padding: 16px 8px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   border-radius: 14px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--ink-rgb), 0.03);
 }
 .stat-value {
   font-size: clamp(20px, 4vw, 28px);
   font-weight: 700;
-  background: linear-gradient(90deg, #ed9b4c, #f472b6);
+  background: var(--accent-grad-2);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -186,24 +185,24 @@ h1 span {
   margin-top: 4px;
   font-family: "Nunito", sans-serif;
   font-size: 11px;
-  color: rgba(245, 243, 255, 0.55);
+  color: rgba(var(--ink-rgb), 0.55);
 }
 
 .fortune {
   margin-bottom: 28px;
   padding: 20px;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--ink-rgb), 0.03);
   text-align: center;
 }
 .fortune-title {
   margin: 0 0 16px;
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
-  color: rgba(245, 243, 255, 0.55);
+  color: rgba(var(--ink-rgb), 0.55);
 }
-.fortune-title span { color: rgba(245, 243, 255, 0.35); }
+.fortune-title span { color: rgba(var(--ink-rgb), 0.35); }
 .fortune-grid {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
@@ -212,12 +211,12 @@ h1 span {
 .fortune-item {
   padding: 10px 6px;
   border-radius: 10px;
-  background: rgba(255, 255, 255, 0.03);
+  background: rgba(var(--ink-rgb), 0.03);
 }
 .fortune-label {
   font-family: "Nunito", sans-serif;
   font-size: 10.5px;
-  color: rgba(245, 243, 255, 0.45);
+  color: rgba(var(--ink-rgb), 0.45);
   margin-bottom: 4px;
 }
 .fortune-value {
@@ -229,7 +228,7 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-style: italic;
   font-size: 13.5px;
-  color: rgba(245, 243, 255, 0.75);
+  color: rgba(var(--ink-rgb), 0.75);
   line-height: 1.6;
 }
 
@@ -238,9 +237,9 @@ h1 span {
 }
 
 .grid-wrap {
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(var(--ink-rgb), 0.1);
   border-radius: 16px;
-  background: rgba(255, 255, 255, 0.02);
+  background: rgba(var(--ink-rgb), 0.02);
   padding: 20px;
   display: flex;
   justify-content: center;
@@ -265,7 +264,7 @@ h1 span {
   line-height: var(--cell, 7px);
   font-family: "Nunito", sans-serif;
   font-size: 8.5px;
-  color: rgba(245, 243, 255, 0.35);
+  color: rgba(var(--ink-rgb), 0.35);
   white-space: nowrap;
 }
 .week-grid {
@@ -279,16 +278,16 @@ h1 span {
   height: var(--cell, 7px);
   border-radius: 1.5px;
   background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.18);
+  border: 1px solid rgba(var(--ink-rgb), 0.18);
 }
 .week-grid .cell.lived {
-  background: linear-gradient(135deg, #ed9b4c, #f472b6);
+  background: linear-gradient(135deg, var(--accent-1), var(--accent-2));
   border-color: transparent;
 }
 .week-grid .cell.now {
-  background: #ffffff;
-  border-color: #ffffff;
-  box-shadow: 0 0 6px 1px rgba(255, 255, 255, 0.8);
+  background: var(--marker);
+  border-color: var(--marker);
+  box-shadow: 0 0 6px 1px var(--marker-glow);
 }
 
 .legend {
@@ -299,7 +298,7 @@ h1 span {
   margin-top: 18px;
   font-family: "Nunito", sans-serif;
   font-size: 12px;
-  color: rgba(245, 243, 255, 0.6);
+  color: rgba(var(--ink-rgb), 0.6);
 }
 .legend .dot {
   display: inline-block;
@@ -309,16 +308,16 @@ h1 span {
   margin-right: 6px;
   vertical-align: -1px;
 }
-.legend .dot.lived { background: linear-gradient(135deg, #ed9b4c, #f472b6); }
-.legend .dot.now { background: #fff; box-shadow: 0 0 5px 1px rgba(255, 255, 255, 0.8); }
-.legend .dot.future { border: 1px solid rgba(255, 255, 255, 0.3); }
+.legend .dot.lived { background: linear-gradient(135deg, var(--accent-1), var(--accent-2)); }
+.legend .dot.now { background: var(--marker); box-shadow: 0 0 5px 1px var(--marker-glow); }
+.legend .dot.future { border: 1px solid rgba(var(--ink-rgb), 0.3); }
 
 .footnote {
   margin-top: 28px;
   text-align: center;
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
-  color: rgba(245, 243, 255, 0.45);
+  color: rgba(var(--ink-rgb), 0.45);
   line-height: 1.7;
 }
 

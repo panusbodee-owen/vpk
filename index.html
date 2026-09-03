@@ -2,6 +2,16 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    // ป้องกันหน้าวูบ (FOUC): อ่านธีมที่บันทึกไว้แล้วตั้งค่าก่อนวาดหน้า ต้องรันก่อน stylesheet เสมอ
+    (function () {
+      try {
+        if (localStorage.getItem("vpk-theme") === "light") document.documentElement.dataset.theme = "light";
+        var a = localStorage.getItem("vpk-accent");
+        if (a && a !== "aurora") document.documentElement.dataset.accent = a;
+      } catch (e) {}
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ, นาฬิกาชีวิต และหิวไรดี? สุ่มร้านเด็ดกรุงเทพฯ" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
@@ -21,13 +31,15 @@
     href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap"
     rel="stylesheet"
   />
+  <link rel="stylesheet" href="theme.css" />
+  <script src="theme.js" defer></script>
   <style>
     * { box-sizing: border-box; }
     html, body {
       margin: 0;
       min-height: 100%;
-      background: #05030f;
-      color: #f5f3ff;
+      background: var(--bg);
+      color: rgb(var(--ink-rgb));
       font-family: "Kanit", "Nunito", system-ui, sans-serif;
       overflow-x: hidden;
     }
@@ -45,9 +57,9 @@
       inset: 0;
       z-index: 0;
       background:
-        radial-gradient(ellipse 60% 45% at 18% 20%, rgba(237, 155, 76, 0.16) 0%, transparent 70%),
-        radial-gradient(ellipse 55% 45% at 85% 75%, rgba(139, 92, 246, 0.22) 0%, transparent 70%),
-        radial-gradient(ellipse 80% 60% at 50% 100%, rgba(11, 16, 34, 0.9) 0%, transparent 60%);
+        radial-gradient(ellipse 60% 45% at 18% 20%, var(--glow-a) 0%, transparent 70%),
+        radial-gradient(ellipse 55% 45% at 85% 75%, var(--glow-b) 0%, transparent 70%),
+        radial-gradient(ellipse 80% 60% at 50% 100%, var(--glow-vignette) 0%, transparent 60%);
       pointer-events: none;
     }
     header {
@@ -60,7 +72,7 @@
       font-size: 12px;
       letter-spacing: 0.35em;
       text-transform: uppercase;
-      color: rgba(245, 243, 255, 0.5);
+      color: rgba(var(--ink-rgb), 0.5);
       margin: 0 0 12px;
     }
     h1 {
@@ -70,14 +82,14 @@
       line-height: 1.2;
     }
     h1 span {
-      background: linear-gradient(90deg, #ed9b4c, #f472b6, #a78bfa);
+      background: var(--accent-grad-3);
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
     p.sub {
       margin: 14px 0 0;
-      color: rgba(245, 243, 255, 0.55);
+      color: rgba(var(--ink-rgb), 0.55);
       font-family: "Nunito", sans-serif;
       font-size: 15px;
     }
@@ -106,16 +118,16 @@
       border-radius: 22px;
       text-decoration: none;
       color: inherit;
-      border: 1px solid rgba(255, 255, 255, 0.12);
-      background: rgba(255, 255, 255, 0.03);
+      border: 1px solid rgba(var(--ink-rgb), 0.12);
+      background: rgba(var(--ink-rgb), 0.03);
       backdrop-filter: blur(6px);
       overflow: hidden;
       transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
     }
     .card:hover, .card:focus-visible {
       transform: translateY(-6px);
-      border-color: rgba(255, 255, 255, 0.3);
-      background: rgba(255, 255, 255, 0.06);
+      border-color: rgba(var(--ink-rgb), 0.3);
+      background: rgba(var(--ink-rgb), 0.06);
     }
     .card::before {
       content: "";
@@ -145,7 +157,7 @@
       font-family: "Nunito", sans-serif;
       font-size: 13.5px;
       line-height: 1.55;
-      color: rgba(245, 243, 255, 0.65);
+      color: rgba(var(--ink-rgb), 0.65);
       position: relative;
     }
     .card .go {
@@ -167,7 +179,7 @@
       margin-top: 6vh;
       font-family: "Nunito", sans-serif;
       font-size: 12.5px;
-      color: rgba(245, 243, 255, 0.35);
+      color: rgba(var(--ink-rgb), 0.35);
       text-align: center;
     }
     footer a { color: inherit; }

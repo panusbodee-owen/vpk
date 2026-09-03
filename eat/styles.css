@@ -5,8 +5,8 @@
 html, body {
   margin: 0;
   min-height: 100%;
-  background: #05030f;
-  color: #f5f3ff;
+  background: var(--bg);
+  color: rgb(var(--ink-rgb));
   font-family: "Kanit", "Nunito", system-ui, sans-serif;
 }
 
@@ -22,8 +22,8 @@ body::before {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 60% 45% at 18% 15%, rgba(244, 63, 94, 0.16) 0%, transparent 70%),
-    radial-gradient(ellipse 55% 45% at 85% 80%, rgba(139, 92, 246, 0.18) 0%, transparent 70%);
+    radial-gradient(ellipse 60% 45% at 18% 15%, var(--glow-a) 0%, transparent 70%),
+    radial-gradient(ellipse 55% 45% at 85% 80%, var(--glow-b) 0%, transparent 70%);
   pointer-events: none;
 }
 
@@ -33,11 +33,11 @@ body::before {
   top: 16px;
   z-index: 50;
   font-size: 12px;
-  color: rgba(245, 243, 255, 0.4);
+  color: rgba(var(--ink-rgb), 0.4);
   text-decoration: none;
   transition: color 0.2s ease;
 }
-.back-link:hover { color: rgba(245, 243, 255, 0.8); }
+.back-link:hover { color: rgba(var(--ink-rgb), 0.8); }
 
 main {
   position: relative;
@@ -57,7 +57,7 @@ main {
   font-size: 12px;
   letter-spacing: 0.35em;
   text-transform: uppercase;
-  color: rgba(245, 243, 255, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin: 0 0 14px;
 }
 
@@ -68,7 +68,7 @@ h1 {
   line-height: 1.15;
 }
 h1 span {
-  background: linear-gradient(90deg, #f43f5e, #f472b6, #a78bfa);
+  background: var(--accent-grad-3);
   -webkit-background-clip: text;
   background-clip: text;
   color: transparent;
@@ -80,7 +80,7 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-size: 15px;
   line-height: 1.65;
-  color: rgba(245, 243, 255, 0.65);
+  color: rgba(var(--ink-rgb), 0.65);
 }
 
 /* ---------- Filters ---------- */
@@ -96,19 +96,19 @@ h1 span {
   font-family: "Kanit", sans-serif;
   font-size: 14px;
   font-weight: 500;
-  color: rgba(245, 243, 255, 0.75);
-  background: rgba(255, 255, 255, 0.05);
-  border: 1px solid rgba(255, 255, 255, 0.14);
+  color: rgba(var(--ink-rgb), 0.75);
+  background: rgba(var(--ink-rgb), 0.05);
+  border: 1px solid rgba(var(--ink-rgb), 0.14);
   border-radius: 999px;
   padding: 9px 18px;
   cursor: pointer;
   transition: all 0.2s ease;
 }
-.filter-btn:hover { background: rgba(255, 255, 255, 0.09); }
+.filter-btn:hover { background: rgba(var(--ink-rgb), 0.09); }
 .filter-btn.active {
-  background: linear-gradient(90deg, #f43f5e, #fb7185);
+  background: var(--accent-grad-2);
   border-color: transparent;
-  color: #fff;
+  color: var(--on-accent);
 }
 
 /* ---------- Spin button ---------- */
@@ -125,13 +125,13 @@ h1 span {
   font-family: "Kanit", sans-serif;
   font-size: 16px;
   font-weight: 600;
-  color: #fff;
-  background: linear-gradient(90deg, #f43f5e, #fb7185);
+  color: var(--on-accent);
+  background: var(--accent-grad-2);
   border: none;
   border-radius: 14px;
   padding: 15px 32px;
   cursor: pointer;
-  box-shadow: 0 10px 30px -12px rgba(244, 63, 94, 0.6);
+  box-shadow: 0 10px 30px -12px rgba(var(--accent-2-rgb), 0.6);
   transition: transform 0.15s ease, box-shadow 0.15s ease, opacity 0.15s ease;
 }
 .spin-btn:hover { transform: translateY(-2px); }
@@ -148,18 +148,18 @@ h1 span {
 .result-wrap { position: relative; }
 
 .empty-state {
-  border: 1px dashed rgba(255, 255, 255, 0.18);
+  border: 1px dashed rgba(var(--ink-rgb), 0.18);
   border-radius: 18px;
   padding: 40px 24px;
   text-align: center;
   font-family: "Nunito", sans-serif;
   font-size: 14px;
-  color: rgba(245, 243, 255, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
 }
 
 .result-card {
-  border: 1px solid rgba(255, 255, 255, 0.14);
-  background: rgba(255, 255, 255, 0.04);
+  border: 1px solid rgba(var(--ink-rgb), 0.14);
+  background: rgba(var(--ink-rgb), 0.04);
   backdrop-filter: blur(6px);
   border-radius: 22px;
   padding: 28px 26px;
@@ -173,7 +173,7 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
   font-weight: 700;
-  color: #fb7185;
+  color: var(--accent-2);
   margin-bottom: 10px;
 }
 
@@ -186,7 +186,7 @@ h1 span {
 .result-area {
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
-  color: rgba(245, 243, 255, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin-bottom: 14px;
 }
 
@@ -194,7 +194,7 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-size: 14px;
   line-height: 1.7;
-  color: rgba(245, 243, 255, 0.8);
+  color: rgba(var(--ink-rgb), 0.8);
   margin: 0 0 16px;
 }
 
@@ -207,12 +207,13 @@ h1 span {
 .tag {
   font-family: "Nunito", sans-serif;
   font-size: 11px;
-  color: rgba(245, 243, 255, 0.55);
-  background: rgba(255, 255, 255, 0.06);
+  color: rgba(var(--ink-rgb), 0.55);
+  background: rgba(var(--ink-rgb), 0.06);
   border-radius: 999px;
   padding: 4px 10px;
 }
 
+/* ปุ่ม Google Maps ใช้สีเขียวของ Google เอง — ไม่ผูกกับสีธีมของเว็บ */
 .maps-btn {
   display: flex;
   align-items: center;
@@ -235,7 +236,7 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-size: 12px;
   font-weight: 700;
-  color: rgba(245, 243, 255, 0.5);
+  color: rgba(var(--ink-rgb), 0.5);
   margin-bottom: 10px;
   text-align: center;
 }
@@ -246,6 +247,7 @@ h1 span {
   gap: 10px;
 }
 
+/* ปุ่มแอปแต่ละเจ้าใช้สีแบรนด์ของแอปนั้นๆ (ตั้งค่าจาก JS) — ไม่ผูกกับสีธีมของเว็บ */
 .app-btn {
   display: flex;
   align-items: center;
@@ -266,7 +268,7 @@ h1 span {
 .note {
   font-family: "Nunito", sans-serif;
   font-size: 10.5px;
-  color: rgba(245, 243, 255, 0.4);
+  color: rgba(var(--ink-rgb), 0.4);
   text-align: center;
   line-height: 1.6;
   margin: 14px 0 0;
