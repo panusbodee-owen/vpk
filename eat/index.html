@@ -13,14 +13,14 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันให้สุ่มเฉพาะร้านแถวนี้ พร้อมลิงก์ไปหน้าร้านใน Google Maps และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
+  <meta name="description" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างให้สุ่มเฉพาะร้านแถวนั้น พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/eat/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="หิวไรดี?" />
   <meta property="og:title" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ" />
-  <meta property="og:description" content="เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน แล้วกดสุ่ม พร้อมลิงก์ไปหน้าร้านใน Google Maps และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
+  <meta property="og:description" content="เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน แล้วกดสุ่ม พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
   <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/eat/" />
   <link rel="icon" type="image/svg+xml" href="../pood/favicon.svg" />
   <title>หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ</title>
@@ -42,8 +42,8 @@
       <p class="kicker">BANGKOK EATS</p>
       <h1>หิวไร<span>ดี?</span></h1>
       <p class="sub">
-        เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันถ้าอยากได้ร้านแถวนี้ แล้วกดสุ่ม
-        ระบบจะเลือกร้านดังของกรุงเทพฯ ให้ทันที พร้อมลิงก์ไปหน้าร้านใน Google Maps และช่องทางเปิดแอปสั่งอาหาร
+        เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างที่อยากได้ร้านแถวนั้น แล้วกดสุ่ม
+        ระบบจะเลือกร้านดังของกรุงเทพฯ ให้ทันที พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอปสั่งอาหาร
       </p>
     </header>
 
@@ -56,6 +56,22 @@
 
     <div class="location-row">
       <button type="button" id="nearMeBtn" class="location-btn">📍 ใกล้ฉัน</button>
+
+      <div class="zone-row">
+        <span class="zone-label">หรือเลือกโซน/ห้างใกล้ตัว:</span>
+        <div id="zoneButtons" class="zone-buttons" role="group" aria-label="เลือกโซนหรือห้าง">
+          <button type="button" class="zone-btn" data-zone="siam">สยาม</button>
+          <button type="button" class="zone-btn" data-zone="centralworld">เซ็นทรัลเวิลด์</button>
+          <button type="button" class="zone-btn" data-zone="ekkamai">ทองหล่อ-เอกมัย</button>
+          <button type="button" class="zone-btn" data-zone="emquartier">เอ็มควอเทียร์</button>
+          <button type="button" class="zone-btn" data-zone="iconsiam">ไอคอนสยาม</button>
+          <button type="button" class="zone-btn" data-zone="yaowarat">เยาวราช</button>
+          <button type="button" class="zone-btn" data-zone="ari">อารีย์</button>
+          <button type="button" class="zone-btn" data-zone="sathorn">สาทร</button>
+        </div>
+      </div>
+
+      <p id="locationSource" class="location-source" hidden></p>
       <p id="locationStatus" class="location-status" hidden></p>
 
       <div id="radiusRow" class="radius-row" hidden>
@@ -90,13 +106,18 @@
         <p id="resultDesc" class="result-desc"></p>
         <div id="resultTags" class="tags"></div>
 
-        <a id="mapsLink" href="#" target="_blank" rel="noopener noreferrer" class="maps-btn">
-          📍 ดูร้านนี้ใน Google Maps
-        </a>
+        <div class="primary-links">
+          <a id="mapsLink" href="#" target="_blank" rel="noopener noreferrer" class="maps-btn">
+            📍 ดูร้านนี้ใน Google Maps
+          </a>
+          <a id="wongnaiLink" href="#" target="_blank" rel="noopener noreferrer" class="wongnai-btn">
+            📖 อ่านรีวิวใน Wongnai
+          </a>
+        </div>
 
         <div class="order-label">หรือเปิดแอปสั่งอาหารแล้วค้นหาชื่อร้านต่อ</div>
         <div id="appLinks" class="app-links"></div>
-        <p class="note">ปุ่ม Google Maps พาไปหน้าร้านนี้โดยตรง — ปุ่มแอปด้านล่างเปิดหน้าแรกของแต่ละแอป เพราะแพลตฟอร์มเหล่านี้ไม่มีลิงก์ค้นหาสาธารณะที่พาไปหน้าร้านตรงๆ ได้</p>
+        <p class="note">ปุ่ม Google Maps/Wongnai พาไปหน้าค้นหาร้านนี้โดยตรง — ปุ่มแอปด้านล่างเปิดหน้าแรกของแต่ละแอป เพราะแพลตฟอร์มสั่งอาหารเหล่านี้ไม่มีลิงก์ค้นหาสาธารณะที่พาไปหน้าร้านตรงๆ ได้</p>
       </section>
     </div>
   </main>
