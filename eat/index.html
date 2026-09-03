@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน แล้วกดสุ่ม พร้อมลิงก์สั่งผ่าน LINE MAN, Grab, ShopeeFood" />
+  <meta name="author" content="Panusbodee Pisutsuwimon" />
+  <meta name="theme-color" content="#0b1022" />
+  <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/eat/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="หิวไรดี?" />
+  <meta property="og:title" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ" />
+  <meta property="og:description" content="เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน แล้วกดสุ่ม พร้อมลิงก์สั่งผ่าน LINE MAN, Grab, ShopeeFood" />
+  <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/eat/" />
+  <link rel="icon" type="image/svg+xml" href="../pood/favicon.svg" />
+  <title>หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <a class="back-link" href="../" title="กลับหน้ารวมโปรเจกต์">← Panusbodee's Lab</a>
+
+  <main>
+    <header class="intro">
+      <p class="kicker">BANGKOK EATS</p>
+      <h1>หิวไร<span>ดี?</span></h1>
+      <p class="sub">
+        เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน แล้วกดสุ่ม
+        ระบบจะเลือกร้านดังของกรุงเทพฯ ให้ทันที พร้อมช่องทางสั่งผ่าน LINE MAN, Grab และ ShopeeFood
+      </p>
+    </header>
+
+    <div id="filterButtons" class="filters" role="group" aria-label="เลือกหมวดหมู่">
+      <button type="button" class="filter-btn active" data-filter="all">🎲 ทั้งหมด</button>
+      <button type="button" class="filter-btn" data-filter="food">🍜 อาหาร</button>
+      <button type="button" class="filter-btn" data-filter="drink">🧋 เครื่องดื่ม</button>
+      <button type="button" class="filter-btn" data-filter="dessert">🍰 ของหวาน</button>
+    </div>
+
+    <div class="spin-wrap">
+      <button type="button" id="spinBtn" class="spin-btn">
+        <span class="dice" aria-hidden="true">🎲</span>
+        <span id="spinLabel">สุ่มร้านเลย</span>
+      </button>
+    </div>
+
+    <div class="result-wrap">
+      <div id="emptyState" class="empty-state">
+        กดปุ่ม “สุ่มร้านเลย” เพื่อเริ่มค้นหาร้านเด็ดของกรุงเทพฯ
+      </div>
+
+      <section id="resultCard" class="result-card" hidden>
+        <div id="catBadge" class="cat-badge"></div>
+        <h2 id="resultName" class="result-name"></h2>
+        <div class="result-area">📍 <span id="resultArea"></span></div>
+        <p id="resultDesc" class="result-desc"></p>
+        <div id="resultTags" class="tags"></div>
+
+        <div class="order-label">สั่งร้านนี้ผ่านแอปเดลิเวอรี</div>
+        <div id="orderLinks" class="order-links"></div>
+        <p class="note">ลิงก์จะพาไปหน้าค้นหาชื่อร้านบนแต่ละแพลตฟอร์ม เพื่อยืนยันสาขาก่อนสั่ง</p>
+      </section>
+    </div>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
