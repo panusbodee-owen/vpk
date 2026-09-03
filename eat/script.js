@@ -23,6 +23,9 @@
     { id: "baankhunmae", name: "บ้านคุณแม่ สยามสแควร์", category: "food", area: "สยามสแควร์ ซอย 8", lat: 13.7458, lng: 100.5325, description: "อาหารไทยจานเดียวและกับข้าวรสชาติเป็นกันเอง เหมาะสำหรับมื้อกลางวัน", tags: ["อาหารไทย", "จานเดียว"] },
     { id: "mkrestaurant", name: "MK สุกี้ สาขาสยามพารากอน", category: "food", area: "สยามพารากอน", lat: 13.7460, lng: 100.5347, description: "สุกี้แบรนด์คนไทยที่คุ้นเคย บริการเร็ว เมนูครบ เหมาะกับมื้อครอบครัว", tags: ["สุกี้", "แบรนด์คนไทย"] },
     { id: "nahm", name: "Nahm", category: "food", area: "สาทร", lat: 13.7223, lng: 100.5288, description: "อาหารไทยร่วมสมัยแนวไฟน์ไดนิ่ง ตีความสูตรโบราณให้ทันสมัย ติดมิชลิน", tags: ["ไฟน์ไดนิ่ง", "มิชลิน"] },
+    { id: "greyhound", name: "Greyhound Café สาขาเอ็มควอเทียร์", category: "food", area: "เอ็มควอเทียร์", lat: 13.7300, lng: 100.5695, description: "ร้านอาหารไทยฟิวชันสไตล์อาร์ตี้ เมนูซิกเนเจอร์คือสปาเกตตีขี้เมาทะเล", tags: ["ฟิวชัน", "อาหารไทยประยุกต์"] },
+    { id: "peaor", name: "Pe Aor Tom Yum Kung", category: "food", area: "ถนนสี่พระยา", lat: 13.7245, lng: 100.5310, description: "ต้มยำกุ้งซีฟู้ดสูตรเข้มข้น ร้านดังที่นักท่องเที่ยวต้องแวะ", tags: ["ต้มยำกุ้ง", "ซีฟู้ด"] },
+    { id: "err", name: "Err Urban Rustic Thai", category: "food", area: "ท่าเตียน", lat: 13.7460, lng: 100.4913, description: "อาหารไทยสไตล์ลูกทุ่งประยุกต์ บรรยากาศเก๋ใกล้แม่น้ำเจ้าพระยาและวัดโพธิ์", tags: ["อาหารไทย", "ริมแม่น้ำ"] },
     // เครื่องดื่ม
     { id: "rocketcoffeebar", name: "Rocket Coffeebar", category: "drink", area: "เอกมัย ซอย 10", lat: 13.7195, lng: 100.5860, description: "ร้านกาแฟสเปเชียลตี้บรรยากาศดี เมล็ดกาแฟคุณภาพ เหมาะนั่งทำงานหรือนัดเพื่อน", tags: ["กาแฟ", "สเปเชียลตี้"] },
     { id: "casalapin", name: "Casa Lapin สาขาเอกมัย", category: "drink", area: "เอกมัย ซอย 3", lat: 13.7215, lng: 100.5840, description: "คาเฟ่สไตล์มินิมอลชื่อดัง เมนูกาแฟและเลมอนซอร์เบ็ตเป็นซิกเนเจอร์", tags: ["คาเฟ่", "กาแฟ"] },
@@ -35,6 +38,9 @@
     { id: "koithe", name: "KOI Thé สาขาสยามสแควร์วัน", category: "drink", area: "สยามสแควร์วัน", lat: 13.7455, lng: 100.5345, description: "ชานมไข่มุกและชาผลไม้สไตล์ไต้หวัน เมนูฮิตคือชานมไข่มุกทองคำ", tags: ["ชานมไข่มุก", "ไต้หวัน"] },
     { id: "mistercoconut", name: "Mister Coconut สาขาสยามสแควร์", category: "drink", area: "สยามสแควร์", lat: 13.7460, lng: 100.5335, description: "น้ำมะพร้าวสดและเครื่องดื่มจากมะพร้าวคลายร้อนสไตล์ไทย", tags: ["น้ำมะพร้าว", "เครื่องดื่มสดชื่น"] },
     { id: "bearhouse", name: "Bearhouse สาขาสยามสแควร์", category: "drink", area: "สยามสแควร์", lat: 13.7458, lng: 100.5338, description: "คาเฟ่หมีสุดฮิต ฮันนี่โทสต์คู่ไอศกรีมซอฟต์เสิร์ฟรสธรรมชาติ เมนูซิกเนเจอร์คือหมีบราวน์", tags: ["ฮันนี่โทสต์", "ไอศกรีม", "คาเฟ่หมี"] },
+    { id: "roast", name: "Roast สาขาเอ็มควอเทียร์", category: "drink", area: "เอ็มควอเทียร์", lat: 13.7300, lng: 100.5698, description: "คาเฟ่และร้านอาหารเช้าชื่อดัง เมนูกาแฟและเบเกอรีครบครัน บรรยากาศดีย่านพร้อมพงษ์", tags: ["คาเฟ่", "เบเกอรี"] },
+    { id: "arabica", name: "% Arabica สาขาไอคอนสยาม", category: "drink", area: "ไอคอนสยาม", lat: 13.7267, lng: 100.5099, description: "ร้านกาแฟญี่ปุ่นชื่อดังระดับโลก วิวริมแม่น้ำเจ้าพระยา", tags: ["กาแฟ", "วิวแม่น้ำ"] },
+    { id: "kolour", name: "Kolour by Kolour Coffee Project", category: "drink", area: "อารีย์", lat: 13.7793, lng: 100.5452, description: "คาเฟ่กาแฟสายสีสันสดใส ตกแต่งสวยงามเหมาะถ่ายรูป ย่านอารีย์", tags: ["กาแฟ", "คาเฟ่สวย"] },
     // ของหวาน
     { id: "afteryou", name: "After You สาขาเซ็นทรัลเวิลด์", category: "dessert", area: "เซ็นทรัลเวิลด์", lat: 13.7466, lng: 100.5393, description: "ต้นตำรับชิบูย่าโทสต์และฮันนี่โทสต์สุดฟิน เมนูขนมหวานยอดนิยมของคนกรุงเทพฯ", tags: ["ฮันนี่โทสต์", "คาเฟ่ขนมหวาน"] },
     { id: "montnomsod", name: "มนต์นมสด (Mont Nom Sod)", category: "dessert", area: "บางลำพู", lat: 13.7596, lng: 100.4967, description: "ขนมปังปิ้งนมสดต้นตำรับที่เปิดมานาน เมนูซิกเนเจอร์คือขนมปังปิ้งหน้าสังขยา", tags: ["ขนมปังปิ้ง", "ร้านเก่าแก่"] },
@@ -45,6 +51,19 @@
     { id: "erawantearoom", name: "Erawan Tea Room", category: "dessert", area: "ราชประสงค์", lat: 13.7440, lng: 100.5405, description: "ข้าวเหนียวมะม่วงและขนมไทยประยุกต์ในบรรยากาศหรูใจกลางเมือง", tags: ["ข้าวเหนียวมะม่วง", "ขนมไทย"] },
     { id: "bualoynana", name: "บัวลอยเยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7401, lng: 100.5093, description: "บัวลอยไข่หวานร้อนๆ สูตรดั้งเดิมย่านไชน่าทาวน์ ของหวานเรียกความทรงจำวัยเด็ก", tags: ["บัวลอย", "ไชน่าทาวน์"] },
     { id: "douhua", name: "เต้าฮวยเจ้าเก่า เยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7396, lng: 100.5087, description: "เต้าฮวยนุ่มละมุนราดน้ำขิงหอมกรุ่น ของหวานต้นตำรับย่านเยาวราช", tags: ["เต้าฮวย", "ไชน่าทาวน์"] },
+    { id: "gussdamngood", name: "Guss Damn Good สาขาอารีย์", category: "dessert", area: "อารีย์", lat: 13.7788, lng: 100.5440, description: "ไอศกรีมโฮมเมดรสชาติแปลกใหม่ เปลี่ยนเมนูตามฤดูกาล ร้านดังย่านอารีย์", tags: ["ไอศกรีม", "โฮมเมด"] },
+  ];
+
+  // ---------- โซน/ห้างยอดฮิต — เลือกแทนการขอตำแหน่ง GPS ก็ได้ ----------
+  var ZONES = [
+    { id: "siam", name: "สยาม", lat: 13.7458, lng: 100.5340 },
+    { id: "centralworld", name: "เซ็นทรัลเวิลด์", lat: 13.7466, lng: 100.5393 },
+    { id: "ekkamai", name: "ทองหล่อ-เอกมัย", lat: 13.7250, lng: 100.5820 },
+    { id: "emquartier", name: "เอ็มควอเทียร์", lat: 13.7300, lng: 100.5695 },
+    { id: "iconsiam", name: "ไอคอนสยาม", lat: 13.7267, lng: 100.5099 },
+    { id: "yaowarat", name: "เยาวราช", lat: 13.7398, lng: 100.5088 },
+    { id: "ari", name: "อารีย์", lat: 13.7793, lng: 100.5448 },
+    { id: "sathorn", name: "สาทร", lat: 13.7215, lng: 100.5295 },
   ];
 
   /**
@@ -54,6 +73,12 @@
   function getMapsLink(name, area) {
     var q = encodeURIComponent(name + " " + area + " กรุงเทพ");
     return "https://www.google.com/maps/search/?api=1&query=" + q;
+  }
+
+  /** ลิงก์ไปหน้าค้นหาร้านนี้บน Wongnai — สำหรับอ่านรีวิว/ดูเมนู/ราคาก่อนตัดสินใจ */
+  function getWongnaiLink(name, area) {
+    var q = encodeURIComponent(name + " " + area);
+    return "https://www.wongnai.com/search?q=" + q;
   }
 
   /**
@@ -102,6 +127,8 @@
     userLoc: null, // { lat, lng }
     locating: false,
     radiusKm: 5, // ระยะที่ผู้ใช้กำหนดเอง
+    locationLabel: "", // ข้อความบอกว่ากำลังอิงตำแหน่งไหนอยู่ (GPS หรือชื่อโซน)
+    activeZoneId: null, // id ของโซนที่เลือกอยู่ (null = ใช้ GPS)
   };
 
   var els = {
@@ -122,7 +149,10 @@
     desc: document.getElementById("resultDesc"),
     tags: document.getElementById("resultTags"),
     mapsLink: document.getElementById("mapsLink"),
+    wongnaiLink: document.getElementById("wongnaiLink"),
     appLinks: document.getElementById("appLinks"),
+    zoneButtons: document.getElementById("zoneButtons"),
+    locationSource: document.getElementById("locationSource"),
   };
 
   function categoryPool() {
@@ -180,7 +210,7 @@
     if (state.nearMe && state.userLoc) {
       var km = distanceKm(state.userLoc.lat, state.userLoc.lng, state.result.lat, state.result.lng);
       els.distance.hidden = false;
-      els.distance.textContent = "· ห่างจากคุณประมาณ " + km.toFixed(1) + " กม.";
+      els.distance.textContent = "· ห่างประมาณ " + km.toFixed(1) + " กม. (เส้นตรง)";
     } else {
       els.distance.hidden = true;
     }
@@ -194,6 +224,7 @@
     });
 
     els.mapsLink.href = getMapsLink(state.result.name, state.result.area);
+    els.wongnaiLink.href = getWongnaiLink(state.result.name, state.result.area);
 
     els.appLinks.innerHTML = "";
     getAppLinks().forEach(function (link) {
@@ -224,7 +255,21 @@
     els.nearMeBtn.classList.toggle("active", state.nearMe);
     els.nearMeBtn.classList.toggle("is-locating", state.locating);
     els.radiusRow.hidden = !state.nearMe;
+    if (state.nearMe && state.locationLabel) {
+      els.locationSource.hidden = false;
+      els.locationSource.textContent = "📍 อิงตำแหน่ง: " + state.locationLabel;
+    } else {
+      els.locationSource.hidden = true;
+    }
+    setZoneUI();
     updateRadiusCount();
+  }
+
+  function setZoneUI() {
+    var buttons = els.zoneButtons.querySelectorAll("button");
+    buttons.forEach(function (btn) {
+      btn.classList.toggle("active", state.nearMe && btn.dataset.zone === state.activeZoneId);
+    });
   }
 
   function setRadiusUI() {
@@ -265,6 +310,8 @@
         state.userLoc = { lat: pos.coords.latitude, lng: pos.coords.longitude };
         state.nearMe = true;
         state.locating = false;
+        state.activeZoneId = null;
+        state.locationLabel = "ตำแหน่งปัจจุบันของคุณ";
         setNearMeUI();
         setLocationStatus("");
         render(false);
@@ -316,6 +363,20 @@
       return;
     }
     requestLocation();
+  });
+
+  els.zoneButtons.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-zone]");
+    if (!btn || state.spinning || state.locating) return;
+    var zone = ZONES.filter(function (z) { return z.id === btn.dataset.zone; })[0];
+    if (!zone) return;
+    state.userLoc = { lat: zone.lat, lng: zone.lng };
+    state.nearMe = true;
+    state.activeZoneId = zone.id;
+    state.locationLabel = zone.name;
+    setLocationStatus("");
+    setNearMeUI();
+    render(false);
   });
 
   els.spinBtn.addEventListener("click", function () {

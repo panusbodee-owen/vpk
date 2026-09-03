@@ -149,6 +149,54 @@ h1 span {
   max-width: 320px;
 }
 
+.location-source {
+  font-family: "Nunito", sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent-2);
+  text-align: center;
+  margin: 0;
+}
+
+.zone-row {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 6px;
+}
+
+.zone-label {
+  font-family: "Nunito", sans-serif;
+  font-size: 11px;
+  color: rgba(var(--ink-rgb), 0.45);
+}
+
+.zone-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+  max-width: 460px;
+}
+
+.zone-btn {
+  font-family: "Kanit", sans-serif;
+  font-size: 12px;
+  color: rgba(var(--ink-rgb), 0.65);
+  background: rgba(var(--ink-rgb), 0.05);
+  border: 1px solid rgba(var(--ink-rgb), 0.12);
+  border-radius: 999px;
+  padding: 5px 12px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.zone-btn:hover { background: rgba(var(--ink-rgb), 0.09); }
+.zone-btn.active {
+  background: var(--accent-grad-2);
+  border-color: transparent;
+  color: var(--on-accent);
+}
+
 .radius-row {
   display: flex;
   flex-direction: column;
@@ -299,6 +347,13 @@ h1 span {
   padding: 4px 10px;
 }
 
+.primary-links {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
 /* ปุ่ม Google Maps ใช้สีเขียวของ Google เอง — ไม่ผูกกับสีธีมของเว็บ */
 .maps-btn {
   display: flex;
@@ -306,17 +361,38 @@ h1 span {
   justify-content: center;
   gap: 8px;
   font-family: "Kanit", sans-serif;
-  font-size: 15px;
+  font-size: 14px;
   font-weight: 600;
   color: #05030f;
   text-decoration: none;
   background: linear-gradient(90deg, #4ade80, #22c55e);
   border-radius: 14px;
-  padding: 14px 16px;
-  margin-bottom: 20px;
+  padding: 14px 12px;
   transition: filter 0.15s ease, transform 0.15s ease;
 }
 .maps-btn:hover { filter: brightness(1.06); transform: translateY(-1px); }
+
+/* ปุ่ม Wongnai ใช้สีแบรนด์ของ Wongnai เอง (แดง) — ไม่ผูกกับสีธีมของเว็บ */
+.wongnai-btn {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  font-family: "Kanit", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: #fff;
+  text-decoration: none;
+  background: #ee3d43;
+  border-radius: 14px;
+  padding: 14px 12px;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.wongnai-btn:hover { filter: brightness(1.08); transform: translateY(-1px); }
+
+@media (max-width: 420px) {
+  .primary-links { grid-template-columns: 1fr; }
+}
 
 .order-label {
   font-family: "Nunito", sans-serif;
