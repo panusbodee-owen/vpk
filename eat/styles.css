@@ -328,6 +328,7 @@ h1 span {
 }
 .result-area #resultDistance { color: var(--accent-2); font-weight: 600; }
 .result-area #resultDistance.out-of-range { color: #fbbf24; }
+.result-source { color: rgba(var(--ink-rgb), 0.4); font-size: 11px; }
 
 .result-desc {
   font-family: "Nunito", sans-serif;

@@ -72,15 +72,21 @@
   /**
    * ลิงก์ Google Maps ไปยังร้านนี้โดยตรง — คลิกแล้วเจอร้านจริงเสมอ (ไม่ต้องล็อกอิน)
    * ส่วนใหญ่ร้านดังจะมีปุ่ม "สั่งอาหาร" ต่อไปยัง LINE MAN/Grab/ShopeeFood ให้ในหน้า Maps เลย ถ้าร้านนั้นเปิดให้บริการ
+   *
+   * ร้านจาก OSM มีพิกัดจริงติดมาด้วย (มาจาก OpenStreetMap ตรงๆ) จึงใช้พิกัดเปิด Maps ตรงจุดได้เป๊ะ
+   * ส่วนร้านคัดสรรของเราใช้ชื่อ+ย่านค้นหาแทน เพราะพิกัดที่ตั้งไว้เป็นค่าประมาณของย่าน ไม่ใช่หน้าร้านเป๊ะๆ
    */
-  function getMapsLink(name, area) {
-    var q = encodeURIComponent(name + " " + area + " กรุงเทพ");
+  function getMapsLink(result) {
+    if (result.isOsm) {
+      return "https://www.google.com/maps/search/?api=1&query=" + result.lat + "," + result.lng;
+    }
+    var q = encodeURIComponent(result.name + " " + result.area + " กรุงเทพ");
     return "https://www.google.com/maps/search/?api=1&query=" + q;
   }
 
   /** ลิงก์ไปหน้าค้นหาร้านนี้บน Wongnai — สำหรับอ่านรีวิว/ดูเมนู/ราคาก่อนตัดสินใจ */
-  function getWongnaiLink(name, area) {
-    var q = encodeURIComponent(name + " " + area);
+  function getWongnaiLink(result) {
+    var q = encodeURIComponent(result.isOsm ? result.name : result.name + " " + result.area);
     return "https://www.wongnai.com/search?q=" + q;
   }
 
@@ -121,6 +127,75 @@
 
   var RADIUS_OPTIONS = [1, 3, 5, 10, 20]; // กม. — ตัวเลือกที่ผู้ใช้กำหนดเองได้
 
+  /**
+   * ค้นหาร้านใกล้ตัวแบบ "สด" จาก OpenStreetMap (Overpass API) — ฟรี ไม่ต้องมี API key
+   * ใช้เมื่อร้านในรายการคัดสรรของเรามีในระยะที่เลือกน้อยเกินไป (เช่นอยู่นอกโซนที่เก็บข้อมูลไว้)
+   * เพื่อให้ "ใกล้ฉัน" ใช้ได้จริงไม่ว่าจะอยู่ที่ไหนในกรุงเทพฯ พิกัดที่ได้มาจาก OSM ตรงๆ
+   * จึงเอาไปเปิด Google Maps ได้ตรงตำแหน่งจริงเสมอ (ไม่ใช่การเดาที่อยู่เหมือนก่อนหน้านี้)
+   */
+  var OSM_ENDPOINT = "https://overpass-api.de/api/interpreter";
+  var OSM_QUERY_MIN_CURATED = 3; // ถ้าร้านคัดสรรในระยะมีน้อยกว่านี้ ค่อยไปถาม OSM เพิ่ม
+  var OSM_TAG_QUERY = {
+    food: '["amenity"~"^(restaurant|fast_food|food_court)$"]',
+    drink: '["amenity"~"^(cafe|bar|pub)$"]',
+    dessert: '["amenity"~"^(ice_cream|cafe)$"]',
+    all: '["amenity"~"^(restaurant|fast_food|food_court|cafe|bar|pub|ice_cream)$"]',
+  };
+
+  function osmAmenityToCategory(tags) {
+    var a = (tags && tags.amenity) || "";
+    if (a === "cafe" || a === "bar" || a === "pub") return "drink";
+    if (a === "ice_cream") return "dessert";
+    return "food";
+  }
+
+  function osmKeyFor(lat, lng, radiusKm, filter) {
+    return lat.toFixed(3) + "," + lng.toFixed(3) + "|" + radiusKm + "|" + filter;
+  }
+
+  /** ยิง query ไปหา Overpass API แล้วแปลงผลลัพธ์ให้อยู่ในรูปแบบเดียวกับร้านในรายการคัดสรร */
+  function fetchOsmNearby(lat, lng, radiusKm, filter, done) {
+    var tagQuery = OSM_TAG_QUERY[filter] || OSM_TAG_QUERY.all;
+    var radiusM = Math.round(Math.min(radiusKm, 20) * 1000);
+    var q = "[out:json][timeout:15];node" + tagQuery + "(around:" + radiusM + "," + lat + "," + lng + ");out body 40;";
+
+    fetch(OSM_ENDPOINT, {
+      method: "POST",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: "data=" + encodeURIComponent(q),
+    })
+      .then(function (res) {
+        if (!res.ok) throw new Error("HTTP " + res.status);
+        return res.json();
+      })
+      .then(function (json) {
+        var seenNames = {};
+        var list = [];
+        (json.elements || []).forEach(function (el) {
+          if (!el.tags || !el.tags.name) return;
+          if (seenNames[el.tags.name]) return;
+          seenNames[el.tags.name] = true;
+          var cat = filter === "all" ? osmAmenityToCategory(el.tags) : filter;
+          var cuisine = el.tags.cuisine ? el.tags.cuisine.split(";").slice(0, 2) : [];
+          list.push({
+            id: "osm-" + el.id,
+            name: el.tags.name,
+            category: cat,
+            area: el.tags["addr:street"] || el.tags["addr:suburb"] || el.tags["addr:district"] || "ใกล้ตำแหน่งนี้",
+            lat: el.lat,
+            lng: el.lon,
+            description: "ร้านจากฐานข้อมูลชุมชน OpenStreetMap ใกล้ตำแหน่งที่เลือก" + (cuisine.length ? " · เมนู: " + cuisine.join(", ") : ""),
+            tags: cuisine,
+            isOsm: true,
+          });
+        });
+        done(list, null);
+      })
+      .catch(function (err) {
+        done([], err);
+      });
+  }
+
   var state = {
     filter: "all",
     result: null,
@@ -132,6 +207,7 @@
     radiusKm: 5, // ระยะที่ผู้ใช้กำหนดเอง
     locationLabel: "", // ข้อความบอกว่ากำลังอิงตำแหน่งไหนอยู่ (GPS หรือชื่อโซน)
     activeZoneId: null, // id ของโซนที่เลือกอยู่ (null = ใช้ GPS)
+    osm: { key: "", status: "idle", data: [], pending: [] }, // status: idle | loading | done | error
   };
 
   var els = {
@@ -149,6 +225,7 @@
     name: document.getElementById("resultName"),
     area: document.getElementById("resultArea"),
     distance: document.getElementById("resultDistance"),
+    source: document.getElementById("resultSource"),
     desc: document.getElementById("resultDesc"),
     tags: document.getElementById("resultTags"),
     mapsLink: document.getElementById("mapsLink"),
@@ -177,15 +254,75 @@
     return { within: within, nearest: withDist };
   }
 
+  /** ผลลัพธ์ OSM ที่ cache ไว้ — ใช้ได้ก็ต่อเมื่อ key ตรงกับตัวกรอง/ตำแหน่ง/ระยะปัจจุบันเป๊ะๆ */
+  function getOsmDataForCurrentContext() {
+    if (!state.userLoc) return [];
+    var key = osmKeyFor(state.userLoc.lat, state.userLoc.lng, state.radiusKm, state.filter);
+    if (state.osm.key === key && state.osm.status === "done") return state.osm.data;
+    return [];
+  }
+
   function pool() {
     var base = categoryPool();
     if (!state.nearMe || !state.userLoc) return base;
 
     var result = withinRadius();
-    // ไม่มีร้านในระยะที่เลือก — fallback ไปเอาร้านที่ใกล้ที่สุด 5 ร้านแทน (ไม่ใช่แค่ร้านเดียว)
+    var curated = result.within.map(function (x) { return x.r; });
+    var osm = getOsmDataForCurrentContext();
+    var combined = curated.concat(osm);
+    if (combined.length > 0) return combined;
+
+    // ไม่มีร้านเลยแม้จะลองถาม OSM แล้ว — fallback ไปเอาร้านคัดสรรที่ใกล้ที่สุด 5 ร้านแทน
     // เพื่อให้ "สุ่มใหม่" ยังสุ่มได้จริง ไม่ใช่ได้ร้านเดิมซ้ำทุกครั้ง
-    var chosen = result.within.length > 0 ? result.within : result.nearest.slice(0, 5);
-    return chosen.map(function (x) { return x.r; });
+    return result.nearest.slice(0, 5).map(function (x) { return x.r; });
+  }
+
+  /**
+   * เรียกก่อนสุ่ม/แสดงผลทุกครั้งที่ตำแหน่ง/ระยะ/หมวดหมู่เปลี่ยน — ถ้าร้านคัดสรรในระยะมีพอแล้วจะ
+   * เรียก cb() ทันที (ไม่ยิง network), ถ้าน้อยเกินไปจะไปถาม OSM เพิ่ม (แคชผลไว้กันยิงซ้ำ)
+   */
+  function ensureNearbyData(cb) {
+    if (!state.nearMe || !state.userLoc) { cb(); return; }
+    if (withinRadius().within.length >= OSM_QUERY_MIN_CURATED) { cb(); return; }
+
+    var key = osmKeyFor(state.userLoc.lat, state.userLoc.lng, state.radiusKm, state.filter);
+
+    if (state.osm.key === key) {
+      if (state.osm.status === "done" || state.osm.status === "error") { cb(); return; }
+      if (state.osm.status === "loading") { state.osm.pending.push(cb); return; }
+    }
+
+    state.osm.key = key;
+    state.osm.status = "loading";
+    state.osm.pending = [];
+    updateRadiusCount();
+    setSpinLoadingUI(true);
+
+    fetchOsmNearby(state.userLoc.lat, state.userLoc.lng, state.radiusKm, state.filter, function (list, err) {
+      var isCurrent = state.osm.key === key;
+      if (isCurrent) {
+        state.osm.status = err ? "error" : "done";
+        state.osm.data = list;
+        updateRadiusCount();
+      }
+      setSpinLoadingUI(false);
+      cb();
+      if (isCurrent) {
+        var pending = state.osm.pending;
+        state.osm.pending = [];
+        pending.forEach(function (fn) { fn(); });
+      }
+    });
+  }
+
+  function setSpinLoadingUI(isLoading) {
+    if (isLoading) {
+      els.spinBtn.disabled = true;
+      els.spinLabel.textContent = "🔎 กำลังหาร้านใกล้ๆ...";
+    } else if (!state.spinning) {
+      els.spinBtn.disabled = false;
+      els.spinLabel.textContent = state.result ? "สุ่มใหม่" : "สุ่มร้านเลย";
+    }
   }
 
   function pickRandom(excludeId) {
@@ -223,6 +360,13 @@
       els.distance.classList.remove("out-of-range");
     }
 
+    if (state.result.isOsm) {
+      els.source.hidden = false;
+      els.source.textContent = "· 📡 จาก OpenStreetMap";
+    } else {
+      els.source.hidden = true;
+    }
+
     els.tags.innerHTML = "";
     state.result.tags.forEach(function (tag) {
       var span = document.createElement("span");
@@ -231,8 +375,8 @@
       els.tags.appendChild(span);
     });
 
-    els.mapsLink.href = getMapsLink(state.result.name, state.result.area);
-    els.wongnaiLink.href = getWongnaiLink(state.result.name, state.result.area);
+    els.mapsLink.href = getMapsLink(state.result);
+    els.wongnaiLink.href = getWongnaiLink(state.result);
 
     els.appLinks.innerHTML = "";
     getAppLinks().forEach(function (link) {
@@ -293,16 +437,34 @@
       return;
     }
     var result = withinRadius();
+    var curatedCount = result.within.length;
     els.radiusCount.hidden = false;
-    if (result.within.length > 0) {
-      els.radiusCount.textContent = "พบ " + result.within.length + " ร้านในระยะ " + state.radiusKm + " กม.";
-      els.radiusCount.classList.remove("warn");
-    } else {
-      var nearestKm = result.nearest.length > 0 ? result.nearest[0].km.toFixed(1) : "?";
-      els.radiusCount.textContent =
-        "⚠️ ไม่มีร้านในระยะ " + state.radiusKm + " กม. — ร้านที่ใกล้ที่สุดอยู่ห่าง " + nearestKm + " กม. (จะสุ่มจาก 5 ร้านที่ใกล้ที่สุดแทน)";
-      els.radiusCount.classList.add("warn");
+    els.radiusCount.classList.remove("warn");
+
+    if (curatedCount >= OSM_QUERY_MIN_CURATED) {
+      els.radiusCount.textContent = "พบ " + curatedCount + " ร้านในระยะ " + state.radiusKm + " กม.";
+      return;
     }
+
+    if (state.osm.status === "loading") {
+      els.radiusCount.textContent = "🔎 ร้านคัดสรรมีน้อยแถวนี้ กำลังหาร้านใกล้ๆ เพิ่มจาก OpenStreetMap...";
+      return;
+    }
+
+    var osmList = getOsmDataForCurrentContext();
+    var total = curatedCount + osmList.length;
+    if (total > 0) {
+      els.radiusCount.textContent =
+        "พบ " + total + " ร้านในระยะ " + state.radiusKm + " กม." +
+        (osmList.length > 0 ? " (" + curatedCount + " จากรายการคัดสรร + " + osmList.length + " จาก OpenStreetMap)" : "");
+      return;
+    }
+
+    var nearestKm = result.nearest.length > 0 ? result.nearest[0].km.toFixed(1) : "?";
+    var osmNote = state.osm.status === "error" ? " (ค้นหาร้านเพิ่มจาก OpenStreetMap ไม่สำเร็จ)" : "";
+    els.radiusCount.textContent =
+      "⚠️ ไม่มีร้านในระยะ " + state.radiusKm + " กม." + osmNote + " — ร้านคัดสรรที่ใกล้ที่สุดอยู่ห่าง " + nearestKm + " กม. (จะสุ่มจาก 5 ร้านที่ใกล้ที่สุดแทน)";
+    els.radiusCount.classList.add("warn");
   }
 
   function requestLocation() {
@@ -326,6 +488,7 @@
         setNearMeUI();
         setLocationStatus("");
         render(false);
+        ensureNearbyData(function () {});
       },
       function (err) {
         state.locating = false;
@@ -347,6 +510,7 @@
     state.filter = btn.dataset.filter;
     setFilterUI();
     updateRadiusCount();
+    ensureNearbyData(function () {});
   });
 
   els.radiusButtons.addEventListener("click", function (e) {
@@ -355,6 +519,7 @@
     state.radiusKm = Number(btn.dataset.radius);
     setRadiusUI();
     updateRadiusCount();
+    ensureNearbyData(function () {});
   });
 
   els.nearMeBtn.addEventListener("click", function () {
@@ -371,6 +536,7 @@
       state.nearMe = true;
       setNearMeUI();
       render(false);
+      ensureNearbyData(function () {});
       return;
     }
     requestLocation();
@@ -388,10 +554,10 @@
     setLocationStatus("");
     setNearMeUI();
     render(false);
+    ensureNearbyData(function () {});
   });
 
-  els.spinBtn.addEventListener("click", function () {
-    if (state.spinning || pool().length === 0) return;
+  function runSpin() {
     state.spinning = true;
     els.spinBtn.disabled = true;
     els.spinBtn.classList.add("spinning");
@@ -415,6 +581,16 @@
         els.spinLabel.textContent = "สุ่มใหม่";
       }
     }, 80);
+  }
+
+  els.spinBtn.addEventListener("click", function () {
+    if (state.spinning) return;
+    // ถ้าร้านคัดสรรแถวนี้มีน้อย จะรอถามร้านใกล้ๆ จาก OSM ก่อน (ปุ่มจะโชว์ "กำลังหาร้านใกล้ๆ...")
+    // แล้วค่อยเริ่มสุ่มจากรายการที่ครบแล้ว
+    ensureNearbyData(function () {
+      if (pool().length === 0) return;
+      runSpin();
+    });
   });
 
   setFilterUI();
