@@ -2,6 +2,16 @@
 <html lang="th">
 <head>
   <meta charset="UTF-8" />
+  <script>
+    // ป้องกันหน้าวูบ (FOUC): อ่านธีมที่บันทึกไว้แล้วตั้งค่าก่อนวาดหน้า ต้องรันก่อน stylesheet เสมอ
+    (function () {
+      try {
+        if (localStorage.getItem("vpk-theme") === "light") document.documentElement.dataset.theme = "light";
+        var a = localStorage.getItem("vpk-accent");
+        if (a && a !== "aurora") document.documentElement.dataset.accent = a;
+      } catch (e) {}
+    })();
+  </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <meta name="description" content="นาฬิกาชีวิต — เห็นชีวิตทั้งหมดของคุณเป็นตารางสัปดาห์ กรอกวันเกิดแล้วดูว่าผ่านไปแล้วเท่าไหร่ เหลืออีกเท่าไหร่" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
@@ -20,7 +30,9 @@
     href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
     rel="stylesheet"
   />
+  <link rel="stylesheet" href="../theme.css" />
   <link rel="stylesheet" href="styles.css" />
+  <script src="../theme.js" defer></script>
 </head>
 <body>
   <a class="back-link" href="../" title="กลับหน้ารวมโปรเจกต์">← Panusbodee's Lab</a>

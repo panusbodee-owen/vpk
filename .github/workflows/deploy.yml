@@ -45,6 +45,7 @@ jobs:
         run: |
           mkdir -p site
           cp vpk/index.html site/
+          cp vpk/theme.css vpk/theme.js site/
           cp -r vpk/pood site/pood
           cp -r vpk/life site/life
           cp -r vpk/eat site/eat

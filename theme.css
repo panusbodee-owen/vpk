@@ -1,0 +1,116 @@
+/* ============================================================
+   Site-wide theme tokens — shared by every page in Panusbodee's Lab
+   (include this before each page's own stylesheet)
+
+   - Light / dark:  set  data-theme="light"  on <html>  (default = dark)
+   - Accent color:  set  data-accent="ocean|forest|sunset"  on <html>
+                    (default = "aurora", no attribute needed)
+
+   theme.js reads/writes these via localStorage and injects the
+   floating toggle widget (.theme-widget) styled at the bottom.
+   ============================================================ */
+
+:root {
+  color-scheme: dark;
+
+  --bg: #05030f;
+  --ink-rgb: 245, 243, 255; /* base text / surface tint — "light ink" on a dark page */
+  --on-accent: #1a0b2e; /* text sitting on top of a bright accent-gradient button */
+  --marker: #ffffff; /* "current / now" marker dot (life page's week grid) */
+  --marker-glow: rgba(255, 255, 255, 0.8);
+  --glow-a: rgba(237, 155, 76, 0.16);
+  --glow-b: rgba(139, 92, 246, 0.2);
+  --glow-vignette: rgba(11, 16, 34, 0.9);
+
+  --accent-1: #ed9b4c;
+  --accent-2: #f472b6;
+  --accent-3: #a78bfa;
+  --accent-2-rgb: 244, 114, 182;
+  --accent-grad-3: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
+  --accent-grad-2: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+}
+
+:root[data-theme="light"] {
+  color-scheme: light;
+  --bg: #f6f4fb;
+  --ink-rgb: 28, 23, 48; /* "dark ink" on a light page */
+  --marker: #1c1730;
+  --marker-glow: rgba(28, 23, 48, 0.45);
+  --glow-a: rgba(237, 155, 76, 0.12);
+  --glow-b: rgba(139, 92, 246, 0.12);
+  --glow-vignette: rgba(246, 244, 251, 0.9);
+}
+
+/* ---------- Accent palettes ---------- */
+:root[data-accent="ocean"] {
+  --accent-1: #22d3ee;
+  --accent-2: #38bdf8;
+  --accent-3: #6366f1;
+  --accent-2-rgb: 56, 189, 248;
+}
+:root[data-accent="forest"] {
+  --accent-1: #a3e635;
+  --accent-2: #4ade80;
+  --accent-3: #16a34a;
+  --accent-2-rgb: 74, 222, 128;
+}
+:root[data-accent="sunset"] {
+  --accent-1: #fb923c;
+  --accent-2: #f43f5e;
+  --accent-3: #ec4899;
+  --accent-2-rgb: 244, 63, 94;
+}
+
+/* ---------- Floating theme widget (markup injected by theme.js) ---------- */
+.theme-widget {
+  position: fixed;
+  right: 14px;
+  bottom: 14px;
+  z-index: 999;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px;
+  border-radius: 999px;
+  background: rgba(var(--ink-rgb), 0.07);
+  border: 1px solid rgba(var(--ink-rgb), 0.16);
+  backdrop-filter: blur(10px);
+  font-family: "Kanit", "Nunito", system-ui, sans-serif;
+}
+.theme-widget__toggle {
+  width: 30px;
+  height: 30px;
+  flex-shrink: 0;
+  border-radius: 50%;
+  border: none;
+  background: rgba(var(--ink-rgb), 0.12);
+  color: rgb(var(--ink-rgb));
+  font-size: 15px;
+  line-height: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+  transition: background 0.15s ease, transform 0.15s ease;
+}
+.theme-widget__toggle:hover { background: rgba(var(--ink-rgb), 0.2); transform: scale(1.06); }
+
+.theme-widget__swatches { display: flex; gap: 5px; padding: 0 4px; }
+.theme-widget__swatch {
+  width: 18px;
+  height: 18px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  padding: 0;
+  cursor: pointer;
+  background: var(--swatch-grad);
+  transition: transform 0.15s ease, border-color 0.15s ease;
+}
+.theme-widget__swatch:hover { transform: scale(1.14); }
+.theme-widget__swatch.is-active { border-color: rgb(var(--ink-rgb)); }
+
+@media (max-width: 480px) {
+  .theme-widget { right: 10px; bottom: 10px; padding: 5px; gap: 5px; }
+  .theme-widget__toggle { width: 26px; height: 26px; font-size: 13px; }
+  .theme-widget__swatch { width: 15px; height: 15px; }
+}
