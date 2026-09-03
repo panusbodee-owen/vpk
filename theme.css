@@ -150,3 +150,37 @@
     animation: none !important;
   }
 }
+
+/* ---------- Floating decorative particles (life/, eat/) ----------
+   A handful of themed emoji drifting slowly upward behind the content.
+   Each .particle sets its own --x/--size/--dur/--delay/--drift/--opacity
+   inline for organic variety. Purely decorative: sits behind main
+   content, ignores pointer events, and disappears under reduced motion
+   rather than freezing mid-animation in an odd spot. */
+.particles {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+  overflow: hidden;
+  pointer-events: none;
+}
+.particle {
+  position: absolute;
+  bottom: -10%;
+  left: var(--x, 50%);
+  font-size: var(--size, 20px);
+  opacity: 0;
+  will-change: transform, opacity;
+  animation: particle-float var(--dur, 24s) linear infinite;
+  animation-delay: var(--delay, 0s);
+}
+@keyframes particle-float {
+  0%   { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+  8%   { opacity: var(--opacity, 0.3); }
+  50%  { transform: translateY(-55vh) translateX(var(--drift, 24px)) rotate(12deg); }
+  92%  { opacity: var(--opacity, 0.3); }
+  100% { transform: translateY(-105vh) translateX(calc(var(--drift, 24px) * -1)) rotate(-12deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .particles { display: none; }
+}
