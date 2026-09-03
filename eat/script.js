@@ -8,40 +8,43 @@
   ];
 
   // ---------- ข้อมูลร้าน — แก้ไข/เพิ่มร้านได้ตรงนี้ ----------
-  // lat/lng เป็นพิกัดโดยประมาณของย่านที่ร้านตั้งอยู่ ใช้สำหรับคำนวณระยะทางกับ "ใกล้ฉัน" เท่านั้น
+  // lat/lng ต้องเป็นพิกัดของ "จุดเดียวกับที่ area สื่อถึง" เป๊ะๆ เพราะปุ่ม Google Maps ค้นหาจากชื่อร้าน+area
+  // ถ้าพิกัดกับข้อความค้นหาคนละจุดกัน ระยะทางที่คำนวณ (ใกล้ฉัน) กับพิกัดที่ Maps เปิดจริงจะไม่ตรงกัน —
+  // ร้านที่มีหลายสาขาจึงตั้ง area เป็นชื่อสาขาที่เจาะจงสาขาเดียว ไม่ใช้ "หลายสาขา" แบบกว้างๆ
   var RESTAURANTS = [
     // อาหาร
-    { id: "jayfai", name: "เจ๊ไฝ (Jay Fai)", category: "food", area: "เสาชิงช้า", lat: 13.7524, lng: 100.5019, description: "ไข่เจียวปูและผัดขี้เมาทะเลระดับมิชลินสตาร์ ต้นตำรับสตรีทฟู้ดชื่อดังของกรุงเทพฯ", tags: ["มิชลิน", "สตรีทฟู้ด", "ไข่เจียวปู"] },
-    { id: "thipsamai", name: "ทิพย์สมัย ผัดไทยประตูผี", category: "food", area: "ประตูผี", lat: 13.7539, lng: 100.5057, description: "ผัดไทยห่อไข่สูตรดั้งเดิมที่เปิดมากว่า 80 ปี เมนูต้องสั่งเมื่อมาเยือนย่านเมืองเก่า", tags: ["ผัดไทย", "ร้านเก่าแก่"] },
-    { id: "kruaapsorn", name: "ครัวอัปษร (Krua Apsorn)", category: "food", area: "บวรนิเวศ", lat: 13.7599, lng: 100.4986, description: "อาหารไทยรสมือแม่ เมนูเด็ดคือปูผัดผงกะหรี่และยำผักกระเฉดกุ้งสด", tags: ["อาหารไทย", "ปูผัดผงกะหรี่"] },
-    { id: "somtamnua", name: "ส้มตำนัว สยามสแควร์", category: "food", area: "สยามสแควร์", lat: 13.7460, lng: 100.5340, description: "ส้มตำและอาหารอีสานรสจัดจ้าน คิวยาวตลอดวันแต่คุ้มค่าการรอ", tags: ["อีสาน", "ส้มตำ"] },
-    { id: "wattanapanich", name: "วัฒนาพานิช เนื้อตุ๋น", category: "food", area: "เอกมัย", lat: 13.7204, lng: 100.5853, description: "ก๋วยเตี๋ยวเนื้อตุ๋นน้ำซุปข้นที่เคี่ยวต่อเนื่องมากว่า 50 ปี", tags: ["ก๋วยเตี๋ยวเนื้อ", "ร้านเก่าแก่"] },
-    { id: "sukiteenoi", name: "สุกี้ตี๋น้อย", category: "food", area: "หลายสาขา", lat: 13.7650, lng: 100.5750, description: "สุกี้บุฟเฟต์ราคาคุ้มค่า เปิดดึก มีทั้งน้ำจิ้มสูตรพิเศษและวัตถุดิบให้เลือกจุใจ", tags: ["สุกี้", "บุฟเฟต์"] },
-    { id: "boatnoodle", name: "ก๋วยเตี๋ยวเรือประตูน้ำ", category: "food", area: "ประตูน้ำ", lat: 13.7500, lng: 100.5400, description: "ก๋วยเตี๋ยวเรือรสจัดชามเล็กราคาย่อมเยา สั่งได้หลายชามไม่มีเบื่อ", tags: ["ก๋วยเตี๋ยวเรือ", "สตรีทฟู้ด"] },
-    { id: "baankhunmae", name: "บ้านคุณแม่ สยามสแควร์", category: "food", area: "สยามสแควร์", lat: 13.7455, lng: 100.5330, description: "อาหารไทยจานเดียวและกับข้าวรสชาติเป็นกันเอง เหมาะสำหรับมื้อกลางวัน", tags: ["อาหารไทย", "จานเดียว"] },
-    { id: "mkrestaurant", name: "MK สุกี้", category: "food", area: "หลายสาขา", lat: 13.7460, lng: 100.5350, description: "สุกี้แบรนด์คนไทยที่คุ้นเคย บริการเร็ว เมนูครบ เหมาะกับมื้อครอบครัว", tags: ["สุกี้", "แบรนด์คนไทย"] },
-    { id: "nahm", name: "Nahm", category: "food", area: "สาทร", lat: 13.7220, lng: 100.5290, description: "อาหารไทยร่วมสมัยแนวไฟน์ไดนิ่ง ตีความสูตรโบราณให้ทันสมัย ติดมิชลิน", tags: ["ไฟน์ไดนิ่ง", "มิชลิน"] },
+    { id: "jayfai", name: "เจ๊ไฝ (Jay Fai)", category: "food", area: "เสาชิงช้า", lat: 13.7526, lng: 100.5017, description: "ไข่เจียวปูและผัดขี้เมาทะเลระดับมิชลินสตาร์ ต้นตำรับสตรีทฟู้ดชื่อดังของกรุงเทพฯ", tags: ["มิชลิน", "สตรีทฟู้ด", "ไข่เจียวปู"] },
+    { id: "thipsamai", name: "ทิพย์สมัย ผัดไทยประตูผี", category: "food", area: "ประตูผี", lat: 13.7538, lng: 100.5057, description: "ผัดไทยห่อไข่สูตรดั้งเดิมที่เปิดมากว่า 80 ปี เมนูต้องสั่งเมื่อมาเยือนย่านเมืองเก่า", tags: ["ผัดไทย", "ร้านเก่าแก่"] },
+    { id: "kruaapsorn", name: "ครัวอัปษร (Krua Apsorn)", category: "food", area: "ถนนดินสอ", lat: 13.7566, lng: 100.5017, description: "อาหารไทยรสมือแม่ เมนูเด็ดคือปูผัดผงกะหรี่และยำผักกระเฉดกุ้งสด", tags: ["อาหารไทย", "ปูผัดผงกะหรี่"] },
+    { id: "somtamnua", name: "ส้มตำนัว สยามสแควร์", category: "food", area: "สยามสแควร์ ซอย 5", lat: 13.7458, lng: 100.5342, description: "ส้มตำและอาหารอีสานรสจัดจ้าน คิวยาวตลอดวันแต่คุ้มค่าการรอ", tags: ["อีสาน", "ส้มตำ"] },
+    { id: "wattanapanich", name: "วัฒนาพานิช เนื้อตุ๋น", category: "food", area: "สุขุมวิท ซอย 55 (ทองหล่อ)", lat: 13.7256, lng: 100.5814, description: "ก๋วยเตี๋ยวเนื้อตุ๋นน้ำซุปข้นที่เคี่ยวต่อเนื่องมากว่า 50 ปี", tags: ["ก๋วยเตี๋ยวเนื้อ", "ร้านเก่าแก่"] },
+    { id: "sukiteenoi", name: "สุกี้ตี๋น้อย สาขาเซ็นทรัลเวิลด์", category: "food", area: "เซ็นทรัลเวิลด์", lat: 13.7466, lng: 100.5393, description: "สุกี้บุฟเฟต์ราคาคุ้มค่า เปิดดึก มีทั้งน้ำจิ้มสูตรพิเศษและวัตถุดิบให้เลือกจุใจ", tags: ["สุกี้", "บุฟเฟต์"] },
+    { id: "boatnoodle", name: "ก๋วยเตี๋ยวเรือประตูน้ำ", category: "food", area: "ประตูน้ำ", lat: 13.7517, lng: 100.5397, description: "ก๋วยเตี๋ยวเรือรสจัดชามเล็กราคาย่อมเยา สั่งได้หลายชามไม่มีเบื่อ", tags: ["ก๋วยเตี๋ยวเรือ", "สตรีทฟู้ด"] },
+    { id: "baankhunmae", name: "บ้านคุณแม่ สยามสแควร์", category: "food", area: "สยามสแควร์ ซอย 8", lat: 13.7458, lng: 100.5325, description: "อาหารไทยจานเดียวและกับข้าวรสชาติเป็นกันเอง เหมาะสำหรับมื้อกลางวัน", tags: ["อาหารไทย", "จานเดียว"] },
+    { id: "mkrestaurant", name: "MK สุกี้ สาขาสยามพารากอน", category: "food", area: "สยามพารากอน", lat: 13.7460, lng: 100.5347, description: "สุกี้แบรนด์คนไทยที่คุ้นเคย บริการเร็ว เมนูครบ เหมาะกับมื้อครอบครัว", tags: ["สุกี้", "แบรนด์คนไทย"] },
+    { id: "nahm", name: "Nahm", category: "food", area: "สาทร", lat: 13.7223, lng: 100.5288, description: "อาหารไทยร่วมสมัยแนวไฟน์ไดนิ่ง ตีความสูตรโบราณให้ทันสมัย ติดมิชลิน", tags: ["ไฟน์ไดนิ่ง", "มิชลิน"] },
     // เครื่องดื่ม
-    { id: "rocketcoffeebar", name: "Rocket Coffeebar", category: "drink", area: "ทองหล่อ", lat: 13.7300, lng: 100.5800, description: "ร้านกาแฟสเปเชียลตี้บรรยากาศดี เมล็ดกาแฟคุณภาพ เหมาะนั่งทำงานหรือนัดเพื่อน", tags: ["กาแฟ", "สเปเชียลตี้"] },
-    { id: "casalapin", name: "Casa Lapin", category: "drink", area: "หลายสาขา", lat: 13.7280, lng: 100.5790, description: "คาเฟ่สไตล์มินิมอลชื่อดัง เมนูกาแฟและเลมอนซอร์เบ็ตเป็นซิกเนเจอร์", tags: ["คาเฟ่", "กาแฟ"] },
-    { id: "factorycoffee", name: "Factory Coffee", category: "drink", area: "เอกมัย", lat: 13.7190, lng: 100.5850, description: "โรงคั่วกาแฟและร้านกาแฟที่คอกาแฟตัวจริงต้องแวะ รสชาติกลมกล่อมคัดสรรพิเศษ", tags: ["กาแฟ", "โรงคั่ว"] },
-    { id: "ceresia", name: "Ceresia Coffee Roasters", category: "drink", area: "สุขุมวิท", lat: 13.7300, lng: 100.5600, description: "ร้านกาแฟคั่วเอง บรรยากาศอบอุ่น เหมาะกับการนั่งจิบกาแฟช้าๆ", tags: ["กาแฟ", "โรงคั่ว"] },
-    { id: "rootscoffee", name: "Roots Coffee Roaster", category: "drink", area: "ทองหล่อ", lat: 13.7320, lng: 100.5810, description: "หนึ่งในร้านกาแฟที่บุกเบิกวงการกาแฟสเปเชียลตี้ในกรุงเทพฯ", tags: ["กาแฟ", "สเปเชียลตี้"] },
-    { id: "chatramue", name: "ชาตรามือ (Cha Tra Mue)", category: "drink", area: "หลายสาขา", lat: 13.7400, lng: 100.5080, description: "ชาไทยแบรนด์ต้นตำรับ รสเข้มข้นหอมมัน เมนูคลาสสิกที่ทุกคนรู้จัก", tags: ["ชาไทย", "แบรนด์ไทย"] },
-    { id: "ichinihontea", name: "Ichi Nihon Tea", category: "drink", area: "หลายสาขา", lat: 13.7450, lng: 100.5350, description: "ชาเขียวมัทฉะและชาญี่ปุ่นแท้ต้นตำรับ เมนูยอดฮิตคือลาเต้มัทฉะ", tags: ["ชาเขียว", "มัทฉะ"] },
-    { id: "bluecup", name: "Bluecup Coffee", category: "drink", area: "หลายสาขา", lat: 13.7500, lng: 100.5300, description: "ร้านกาแฟสายเขียวรักษ์โลก เมนูเครื่องดื่มหลากหลายราคาจับต้องได้", tags: ["กาแฟ", "ราคาคุ้มค่า"] },
-    { id: "koithe", name: "KOI Thé", category: "drink", area: "หลายสาขา", lat: 13.7460, lng: 100.5340, description: "ชานมไข่มุกและชาผลไม้สไตล์ไต้หวัน เมนูฮิตคือชานมไข่มุกทองคำ", tags: ["ชานมไข่มุก", "ไต้หวัน"] },
-    { id: "mistercoconut", name: "Mister Coconut", category: "drink", area: "หลายสาขา", lat: 13.7460, lng: 100.5340, description: "น้ำมะพร้าวสดและเครื่องดื่มจากมะพร้าวคลายร้อนสไตล์ไทย", tags: ["น้ำมะพร้าว", "เครื่องดื่มสดชื่น"] },
+    { id: "rocketcoffeebar", name: "Rocket Coffeebar", category: "drink", area: "เอกมัย ซอย 10", lat: 13.7195, lng: 100.5860, description: "ร้านกาแฟสเปเชียลตี้บรรยากาศดี เมล็ดกาแฟคุณภาพ เหมาะนั่งทำงานหรือนัดเพื่อน", tags: ["กาแฟ", "สเปเชียลตี้"] },
+    { id: "casalapin", name: "Casa Lapin สาขาเอกมัย", category: "drink", area: "เอกมัย ซอย 3", lat: 13.7215, lng: 100.5840, description: "คาเฟ่สไตล์มินิมอลชื่อดัง เมนูกาแฟและเลมอนซอร์เบ็ตเป็นซิกเนเจอร์", tags: ["คาเฟ่", "กาแฟ"] },
+    { id: "factorycoffee", name: "Factory Coffee", category: "drink", area: "เอกมัย", lat: 13.7188, lng: 100.5847, description: "โรงคั่วกาแฟและร้านกาแฟที่คอกาแฟตัวจริงต้องแวะ รสชาติกลมกล่อมคัดสรรพิเศษ", tags: ["กาแฟ", "โรงคั่ว"] },
+    { id: "ceresia", name: "Ceresia Coffee Roasters", category: "drink", area: "สาทร ซอย 11", lat: 13.7205, lng: 100.5290, description: "ร้านกาแฟคั่วเอง บรรยากาศอบอุ่น เหมาะกับการนั่งจิบกาแฟช้าๆ", tags: ["กาแฟ", "โรงคั่ว"] },
+    { id: "rootscoffee", name: "Roots Coffee Roaster", category: "drink", area: "ทองหล่อ ซอย 10", lat: 13.7295, lng: 100.5795, description: "หนึ่งในร้านกาแฟที่บุกเบิกวงการกาแฟสเปเชียลตี้ในกรุงเทพฯ", tags: ["กาแฟ", "สเปเชียลตี้"] },
+    { id: "chatramue", name: "ชาตรามือ สาขาเยาวราช", category: "drink", area: "เยาวราช", lat: 13.7398, lng: 100.5085, description: "ชาไทยแบรนด์ต้นตำรับ รสเข้มข้นหอมมัน เมนูคลาสสิกที่ทุกคนรู้จัก", tags: ["ชาไทย", "แบรนด์ไทย"] },
+    { id: "ichinihontea", name: "Ichi Nihon Tea สาขาสยามสแควร์วัน", category: "drink", area: "สยามสแควร์วัน", lat: 13.7457, lng: 100.5347, description: "ชาเขียวมัทฉะและชาญี่ปุ่นแท้ต้นตำรับ เมนูยอดฮิตคือลาเต้มัทฉะ", tags: ["ชาเขียว", "มัทฉะ"] },
+    { id: "bluecup", name: "Bluecup Coffee สาขาอารีย์", category: "drink", area: "อารีย์", lat: 13.7797, lng: 100.5448, description: "ร้านกาแฟสายเขียวรักษ์โลก เมนูเครื่องดื่มหลากหลายราคาจับต้องได้", tags: ["กาแฟ", "ราคาคุ้มค่า"] },
+    { id: "koithe", name: "KOI Thé สาขาสยามสแควร์วัน", category: "drink", area: "สยามสแควร์วัน", lat: 13.7455, lng: 100.5345, description: "ชานมไข่มุกและชาผลไม้สไตล์ไต้หวัน เมนูฮิตคือชานมไข่มุกทองคำ", tags: ["ชานมไข่มุก", "ไต้หวัน"] },
+    { id: "mistercoconut", name: "Mister Coconut สาขาสยามสแควร์", category: "drink", area: "สยามสแควร์", lat: 13.7460, lng: 100.5335, description: "น้ำมะพร้าวสดและเครื่องดื่มจากมะพร้าวคลายร้อนสไตล์ไทย", tags: ["น้ำมะพร้าว", "เครื่องดื่มสดชื่น"] },
+    { id: "bearhouse", name: "Bearhouse สาขาสยามสแควร์", category: "drink", area: "สยามสแควร์", lat: 13.7458, lng: 100.5338, description: "คาเฟ่หมีสุดฮิต ฮันนี่โทสต์คู่ไอศกรีมซอฟต์เสิร์ฟรสธรรมชาติ เมนูซิกเนเจอร์คือหมีบราวน์", tags: ["ฮันนี่โทสต์", "ไอศกรีม", "คาเฟ่หมี"] },
     // ของหวาน
-    { id: "afteryou", name: "After You Dessert Café", category: "dessert", area: "หลายสาขา", lat: 13.7440, lng: 100.5460, description: "ต้นตำรับชิบูย่าโทสต์และฮันนี่โทสต์สุดฟิน เมนูขนมหวานยอดนิยมของคนกรุงเทพฯ", tags: ["ฮันนี่โทสต์", "คาเฟ่ขนมหวาน"] },
-    { id: "montnomsod", name: "มนต์นมสด (Mont Nom Sod)", category: "dessert", area: "บางลำพู", lat: 13.7590, lng: 100.4970, description: "ขนมปังปิ้งนมสดต้นตำรับที่เปิดมานาน เมนูซิกเนเจอร์คือขนมปังปิ้งหน้าสังขยา", tags: ["ขนมปังปิ้ง", "ร้านเก่าแก่"] },
-    { id: "korpanich", name: "ข้าวเหนียวมูนกรอบเนียน ก่อพานิช", category: "dessert", area: "บางรัก", lat: 13.7230, lng: 100.5240, description: "ข้าวเหนียวมะม่วงและข้าวเหนียวมูนต้นตำรับที่คนต่อคิวซื้อกลับบ้านทุกวัน", tags: ["ข้าวเหนียวมะม่วง", "ร้านเก่าแก่"] },
-    { id: "iberry", name: "iberry Garden", category: "dessert", area: "ประเวศ", lat: 13.7150, lng: 100.6500, description: "คาเฟ่ไอศกรีมโฮมเมดท่ามกลางสวนสีเขียว บรรยากาศร่มรื่นเหมาะพักผ่อน", tags: ["ไอศกรีม", "คาเฟ่สวน"] },
-    { id: "kadkokoa", name: "Kad Kokoa", category: "dessert", area: "เอกมัย", lat: 13.7195, lng: 100.5845, description: "ร้านช็อกโกแลตและขนมหวานโฮมเมด เมนูเด็ดคือฮ็อตช็อกโกแลตข้นเข้ม", tags: ["ช็อกโกแลต", "คาเฟ่"] },
-    { id: "cheevitcheeva", name: "Cheevit Cheeva", category: "dessert", area: "เอกมัย", lat: 13.7185, lng: 100.5840, description: "คาเฟ่ขนมหวานสไตล์มินิมอล เมนูซิกเนเจอร์คือเค้กและขนมโฮมเมดหน้าตาน่ารัก", tags: ["เค้ก", "คาเฟ่มินิมอล"] },
-    { id: "erawantearoom", name: "Erawan Tea Room", category: "dessert", area: "ราชประสงค์", lat: 13.7440, lng: 100.5400, description: "ข้าวเหนียวมะม่วงและขนมไทยประยุกต์ในบรรยากาศหรูใจกลางเมือง", tags: ["ข้าวเหนียวมะม่วง", "ขนมไทย"] },
-    { id: "bualoynana", name: "บัวลอยเยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7400, lng: 100.5090, description: "บัวลอยไข่หวานร้อนๆ สูตรดั้งเดิมย่านไชน่าทาวน์ ของหวานเรียกความทรงจำวัยเด็ก", tags: ["บัวลอย", "ไชน่าทาวน์"] },
-    { id: "douhua", name: "เต้าฮวยเจ้าเก่า เยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7395, lng: 100.5085, description: "เต้าฮวยนุ่มละมุนราดน้ำขิงหอมกรุ่น ของหวานต้นตำรับย่านเยาวราช", tags: ["เต้าฮวย", "ไชน่าทาวน์"] },
+    { id: "afteryou", name: "After You สาขาเซ็นทรัลเวิลด์", category: "dessert", area: "เซ็นทรัลเวิลด์", lat: 13.7466, lng: 100.5393, description: "ต้นตำรับชิบูย่าโทสต์และฮันนี่โทสต์สุดฟิน เมนูขนมหวานยอดนิยมของคนกรุงเทพฯ", tags: ["ฮันนี่โทสต์", "คาเฟ่ขนมหวาน"] },
+    { id: "montnomsod", name: "มนต์นมสด (Mont Nom Sod)", category: "dessert", area: "บางลำพู", lat: 13.7596, lng: 100.4967, description: "ขนมปังปิ้งนมสดต้นตำรับที่เปิดมานาน เมนูซิกเนเจอร์คือขนมปังปิ้งหน้าสังขยา", tags: ["ขนมปังปิ้ง", "ร้านเก่าแก่"] },
+    { id: "korpanich", name: "ข้าวเหนียวมูนกรอบเนียน ก่อพานิช", category: "dessert", area: "ถนนตะนาว", lat: 13.7524, lng: 100.4970, description: "ข้าวเหนียวมะม่วงและข้าวเหนียวมูนต้นตำรับที่คนต่อคิวซื้อกลับบ้านทุกวัน", tags: ["ข้าวเหนียวมะม่วง", "ร้านเก่าแก่"] },
+    { id: "iberry", name: "iberry Garden", category: "dessert", area: "อ่อนนุช", lat: 13.7050, lng: 100.6030, description: "คาเฟ่ไอศกรีมโฮมเมดท่ามกลางสวนสีเขียว บรรยากาศร่มรื่นเหมาะพักผ่อน", tags: ["ไอศกรีม", "คาเฟ่สวน"] },
+    { id: "kadkokoa", name: "Kad Kokoa", category: "dessert", area: "เอกมัย ซอย 12", lat: 13.7183, lng: 100.5865, description: "ร้านช็อกโกแลตและขนมหวานโฮมเมด เมนูเด็ดคือฮ็อตช็อกโกแลตข้นเข้ม", tags: ["ช็อกโกแลต", "คาเฟ่"] },
+    { id: "cheevitcheeva", name: "Cheevit Cheeva", category: "dessert", area: "เอกมัย", lat: 13.7180, lng: 100.5830, description: "คาเฟ่ขนมหวานสไตล์มินิมอล เมนูซิกเนเจอร์คือเค้กและขนมโฮมเมดหน้าตาน่ารัก", tags: ["เค้ก", "คาเฟ่มินิมอล"] },
+    { id: "erawantearoom", name: "Erawan Tea Room", category: "dessert", area: "ราชประสงค์", lat: 13.7440, lng: 100.5405, description: "ข้าวเหนียวมะม่วงและขนมไทยประยุกต์ในบรรยากาศหรูใจกลางเมือง", tags: ["ข้าวเหนียวมะม่วง", "ขนมไทย"] },
+    { id: "bualoynana", name: "บัวลอยเยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7401, lng: 100.5093, description: "บัวลอยไข่หวานร้อนๆ สูตรดั้งเดิมย่านไชน่าทาวน์ ของหวานเรียกความทรงจำวัยเด็ก", tags: ["บัวลอย", "ไชน่าทาวน์"] },
+    { id: "douhua", name: "เต้าฮวยเจ้าเก่า เยาวราช", category: "dessert", area: "เยาวราช", lat: 13.7396, lng: 100.5087, description: "เต้าฮวยนุ่มละมุนราดน้ำขิงหอมกรุ่น ของหวานต้นตำรับย่านเยาวราช", tags: ["เต้าฮวย", "ไชน่าทาวน์"] },
   ];
 
   /**
@@ -88,6 +91,8 @@
     return R * c;
   }
 
+  var RADIUS_OPTIONS = [1, 3, 5, 10, 20]; // กม. — ตัวเลือกที่ผู้ใช้กำหนดเองได้
+
   var state = {
     filter: "all",
     result: null,
@@ -96,12 +101,16 @@
     nearMe: false, // true = จำกัดการสุ่มให้เฉพาะร้านใกล้ตัว
     userLoc: null, // { lat, lng }
     locating: false,
+    radiusKm: 5, // ระยะที่ผู้ใช้กำหนดเอง
   };
 
   var els = {
     filters: document.getElementById("filterButtons"),
     nearMeBtn: document.getElementById("nearMeBtn"),
     locationStatus: document.getElementById("locationStatus"),
+    radiusRow: document.getElementById("radiusRow"),
+    radiusButtons: document.getElementById("radiusButtons"),
+    radiusCount: document.getElementById("radiusCount"),
     spinBtn: document.getElementById("spinBtn"),
     spinLabel: document.getElementById("spinLabel"),
     empty: document.getElementById("emptyState"),
@@ -122,27 +131,25 @@
   }
 
   /**
-   * รายชื่อร้านให้สุ่ม — ถ้าเปิด "ใกล้ฉัน" จะจำกัดเฉพาะร้านที่อยู่ในรัศมีที่ใกล้ที่สุด
-   * (ขยายรัศมีทีละขั้นถ้าเจอน้อยเกินไป เพื่อให้ยังสุ่มได้เสมอ)
+   * รายชื่อร้านให้สุ่ม — ถ้าเปิด "ใกล้ฉัน" จะจำกัดเฉพาะร้านที่อยู่ในระยะที่ผู้ใช้กำหนด (state.radiusKm)
+   * ถ้าไม่มีร้านเลยในระยะนั้น จะ fallback ไปหาร้านที่ใกล้ที่สุดเท่าที่มีแทน (กันสุ่มไม่ออก)
    */
-  function pool() {
+  function withinRadius() {
     var base = categoryPool();
-    if (!state.nearMe || !state.userLoc) return base;
-
     var withDist = base.map(function (r) {
       return { r: r, km: distanceKm(state.userLoc.lat, state.userLoc.lng, r.lat, r.lng) };
     });
     withDist.sort(function (a, b) { return a.km - b.km; });
+    var within = withDist.filter(function (x) { return x.km <= state.radiusKm; });
+    return { within: within, nearest: withDist };
+  }
 
-    var radii = [5, 10, 20];
-    var chosen = withDist;
-    for (var i = 0; i < radii.length; i++) {
-      var within = withDist.filter(function (x) { return x.km <= radii[i]; });
-      if (within.length >= 3) {
-        chosen = within;
-        break;
-      }
-    }
+  function pool() {
+    var base = categoryPool();
+    if (!state.nearMe || !state.userLoc) return base;
+
+    var result = withinRadius();
+    var chosen = result.within.length > 0 ? result.within : result.nearest.slice(0, 1);
     return chosen.map(function (x) { return x.r; });
   }
 
@@ -216,6 +223,30 @@
   function setNearMeUI() {
     els.nearMeBtn.classList.toggle("active", state.nearMe);
     els.nearMeBtn.classList.toggle("is-locating", state.locating);
+    els.radiusRow.hidden = !state.nearMe;
+    updateRadiusCount();
+  }
+
+  function setRadiusUI() {
+    var buttons = els.radiusButtons.querySelectorAll("button");
+    buttons.forEach(function (btn) {
+      btn.classList.toggle("active", Number(btn.dataset.radius) === state.radiusKm);
+    });
+  }
+
+  function updateRadiusCount() {
+    if (!state.nearMe || !state.userLoc) {
+      els.radiusCount.hidden = true;
+      return;
+    }
+    var result = withinRadius();
+    els.radiusCount.hidden = false;
+    if (result.within.length > 0) {
+      els.radiusCount.textContent = "พบ " + result.within.length + " ร้านในระยะ " + state.radiusKm + " กม.";
+    } else {
+      els.radiusCount.textContent =
+        "ไม่มีร้านในระยะ " + state.radiusKm + " กม. — เอาร้านที่ใกล้ที่สุดให้แทน";
+    }
   }
 
   function requestLocation() {
@@ -257,6 +288,15 @@
     if (!btn || state.spinning) return;
     state.filter = btn.dataset.filter;
     setFilterUI();
+    updateRadiusCount();
+  });
+
+  els.radiusButtons.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-radius]");
+    if (!btn || state.spinning) return;
+    state.radiusKm = Number(btn.dataset.radius);
+    setRadiusUI();
+    updateRadiusCount();
   });
 
   els.nearMeBtn.addEventListener("click", function () {
@@ -306,6 +346,7 @@
   });
 
   setFilterUI();
+  setRadiusUI();
   setNearMeUI();
   render(false);
 })();

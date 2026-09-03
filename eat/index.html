@@ -57,6 +57,18 @@
     <div class="location-row">
       <button type="button" id="nearMeBtn" class="location-btn">📍 ใกล้ฉัน</button>
       <p id="locationStatus" class="location-status" hidden></p>
+
+      <div id="radiusRow" class="radius-row" hidden>
+        <span class="radius-label">ระยะ:</span>
+        <div id="radiusButtons" class="radius-buttons" role="group" aria-label="เลือกระยะทาง">
+          <button type="button" class="radius-btn" data-radius="1">1 กม.</button>
+          <button type="button" class="radius-btn" data-radius="3">3 กม.</button>
+          <button type="button" class="radius-btn active" data-radius="5">5 กม.</button>
+          <button type="button" class="radius-btn" data-radius="10">10 กม.</button>
+          <button type="button" class="radius-btn" data-radius="20">20 กม.</button>
+        </div>
+        <p id="radiusCount" class="radius-count" hidden></p>
+      </div>
     </div>
 
     <div class="spin-wrap">
