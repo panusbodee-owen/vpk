@@ -3,14 +3,14 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ และนาฬิกาชีวิต" />
+  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ, นาฬิกาชีวิต และหิวไรดี? สุ่มร้านเด็ดกรุงเทพฯ" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Panusbodee's Lab" />
   <meta property="og:title" content="เลือกโปรเจกต์ — Panusbodee's Lab" />
-  <meta property="og:description" content="พูดทำไม? เว็บฝึกพูดฉับพลัน · ไล่ล่าสเกลจักรวาล · นาฬิกาชีวิต" />
+  <meta property="og:description" content="พูดทำไม? เว็บฝึกพูดฉับพลัน · ไล่ล่าสเกลจักรวาล · นาฬิกาชีวิต · หิวไรดี?" />
   <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/" />
   <link rel="icon" type="image/svg+xml" href="pood/favicon.svg" />
   <link rel="apple-touch-icon" href="pood/favicon.svg" />
@@ -85,12 +85,12 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: repeat(3, minmax(220px, 300px));
+      grid-template-columns: repeat(4, minmax(200px, 250px));
       gap: 24px;
       width: 100%;
-      max-width: 980px;
+      max-width: 1060px;
     }
-    @media (max-width: 900px) {
+    @media (max-width: 1020px) {
       .cards { grid-template-columns: repeat(2, minmax(220px, 320px)); max-width: 680px; }
     }
     @media (max-width: 620px) {
@@ -133,6 +133,7 @@
     .card-pood { --glow-color: #ed9b4c; }
     .card-scale { --glow-color: #a855f7; }
     .card-life { --glow-color: #f472b6; }
+    .card-eat { --glow-color: #f43f5e; }
     .card .emoji { font-size: 44px; position: relative; }
     .card h2 {
       font-size: 22px;
@@ -159,6 +160,7 @@
     .card-pood .go { color: #ed9b4c; }
     .card-scale .go { color: #c084fc; }
     .card-life .go { color: #f472b6; }
+    .card-eat .go { color: #fb7185; }
     footer {
       position: relative;
       z-index: 1;
@@ -206,6 +208,15 @@
         <p>กรอกวันเกิด เห็นชีวิตทั้งหมดเป็นตารางสัปดาห์ แถมดูดวงกวนๆ ให้ด้วย</p>
       </div>
       <span class="go">ดูนาฬิกาชีวิต →</span>
+    </a>
+
+    <a class="card card-eat" href="eat/">
+      <div>
+        <span class="emoji">🎲</span>
+        <h2>หิวไรดี?</h2>
+        <p>สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม ของหวาน แล้วสั่งผ่าน LINE MAN, Grab, ShopeeFood ได้เลย</p>
+      </div>
+      <span class="go">สุ่มร้านเลย →</span>
     </a>
   </div>
 
