@@ -28,6 +28,15 @@
   --accent-2-rgb: 244, 114, 182;
   --accent-grad-3: linear-gradient(90deg, var(--accent-1), var(--accent-2), var(--accent-3));
   --accent-grad-2: linear-gradient(90deg, var(--accent-1), var(--accent-2));
+
+  /* Card/surface tokens — dark default: a faint tint of the page ink, no shadow needed
+     since the glow background already gives depth. */
+  --card-bg: rgba(var(--ink-rgb), 0.03);
+  --card-bg-hover: rgba(var(--ink-rgb), 0.06);
+  --card-border: rgba(var(--ink-rgb), 0.12);
+  --card-border-hover: rgba(var(--ink-rgb), 0.3);
+  --card-shadow: none;
+  --card-shadow-hover: none;
 }
 
 :root[data-theme="light"] {
@@ -39,6 +48,15 @@
   --glow-a: rgba(237, 155, 76, 0.12);
   --glow-b: rgba(139, 92, 246, 0.12);
   --glow-vignette: rgba(246, 244, 251, 0.9);
+
+  /* Light mode: real white cards floating with a soft shadow, closer to a bright
+     product-marketing look than a faint tint on a lavender page would give. */
+  --card-bg: #ffffff;
+  --card-bg-hover: #ffffff;
+  --card-border: rgba(20, 10, 40, 0.06);
+  --card-border-hover: rgba(20, 10, 40, 0.12);
+  --card-shadow: 0 6px 24px rgba(20, 10, 40, 0.06);
+  --card-shadow-hover: 0 18px 40px rgba(20, 10, 40, 0.12);
 }
 
 /* ---------- Accent palettes ---------- */

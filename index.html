@@ -115,21 +115,23 @@
       display: flex;
       flex-direction: column;
       justify-content: space-between;
-      min-height: 240px;
+      min-height: 280px;
       padding: 28px 26px;
       border-radius: 22px;
       text-decoration: none;
       color: inherit;
-      border: 1px solid rgba(var(--ink-rgb), 0.12);
-      background: rgba(var(--ink-rgb), 0.03);
+      border: 1px solid var(--card-border);
+      background: var(--card-bg);
+      box-shadow: var(--card-shadow);
       backdrop-filter: blur(6px);
       overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease;
+      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
     }
     .card:hover, .card:focus-visible {
       transform: translateY(-6px);
-      border-color: rgba(var(--ink-rgb), 0.3);
-      background: rgba(var(--ink-rgb), 0.06);
+      border-color: var(--card-border-hover);
+      background: var(--card-bg-hover);
+      box-shadow: var(--card-shadow-hover);
     }
     .card::before {
       content: "";
@@ -144,11 +146,33 @@
       pointer-events: none;
     }
     .card:hover::before, .card:focus-visible::before { opacity: 0.85; }
-    .card-pood { --glow-color: #ed9b4c; }
-    .card-scale { --glow-color: #a855f7; }
-    .card-life { --glow-color: #f472b6; }
-    .card-eat { --glow-color: #f43f5e; }
+    .card-pood { --glow-color: #ed9b4c; --tile-bg: rgba(237, 155, 76, 0.14); }
+    .card-scale { --glow-color: #a855f7; --tile-bg: rgba(168, 85, 247, 0.14); }
+    .card-life { --glow-color: #f472b6; --tile-bg: rgba(244, 114, 182, 0.14); }
+    .card-eat { --glow-color: #f43f5e; --tile-bg: rgba(244, 63, 94, 0.14); }
     .card .emoji { font-size: 44px; position: relative; }
+    .stat-tile {
+      display: inline-flex;
+      flex-direction: column;
+      gap: 1px;
+      margin-top: 14px;
+      padding: 8px 12px;
+      border-radius: 12px;
+      background: var(--tile-bg);
+      position: relative;
+    }
+    .stat-tile .stat-num {
+      font-family: "Kanit", sans-serif;
+      font-weight: 700;
+      font-size: 19px;
+      color: var(--glow-color);
+      line-height: 1.1;
+    }
+    .stat-tile .stat-label {
+      font-family: "Nunito", sans-serif;
+      font-size: 10px;
+      color: rgba(var(--ink-rgb), 0.55);
+    }
     .card h2 {
       font-size: 22px;
       margin: 18px 0 6px;
@@ -202,6 +226,7 @@
         <span class="emoji">🗣️</span>
         <h2>พูดทำไม?</h2>
         <p>สุ่มหัวข้อฝึกพูดฉับพลัน เลือกระดับ จับเวลา แล้วลองพูดให้ฟังได้เลย</p>
+        <div class="stat-tile"><span class="stat-num">60</span><span class="stat-label">วินาทีต่อรอบ</span></div>
       </div>
       <span class="go">เข้าไปพูด →</span>
     </a>
@@ -211,6 +236,7 @@
         <span class="emoji">🔭</span>
         <h2>ไล่ล่าสเกลจักรวาล</h2>
         <p>เลื่อนสกอลล์ซูมออกจากควาร์กเล็กจิ๋ว ไปจนถึงเอกภพที่สังเกตได้ทั้งหมด</p>
+        <div class="stat-tile"><span class="stat-num">10²⁷ ม.</span><span class="stat-label">ระยะซูมสูงสุด</span></div>
       </div>
       <span class="go">เริ่มซูม →</span>
     </a>
@@ -220,6 +246,7 @@
         <span class="emoji">⏳</span>
         <h2>นาฬิกาชีวิต</h2>
         <p>กรอกวันเกิด เห็นชีวิตทั้งหมดเป็นตารางสัปดาห์ แถมดูดวงกวนๆ ให้ด้วย</p>
+        <div class="stat-tile"><span class="stat-num">52</span><span class="stat-label">สัปดาห์ต่อปี</span></div>
       </div>
       <span class="go">ดูนาฬิกาชีวิต →</span>
     </a>
@@ -229,6 +256,7 @@
         <span class="emoji">🎲</span>
         <h2>หิวไรดี?</h2>
         <p>สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม ของหวาน แล้วดูร้านใน Google Maps หรือเปิด LINE MAN, Grab, ShopeeFood ได้เลย</p>
+        <div class="stat-tile"><span class="stat-num">30+</span><span class="stat-label">ร้านให้สุ่ม</span></div>
       </div>
       <span class="go">สุ่มร้านเลย →</span>
     </a>
