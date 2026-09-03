@@ -13,7 +13,7 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน แล้วกดสุ่ม พร้อมลิงก์ไปหน้าร้านใน Google Maps และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
+  <meta name="description" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันให้สุ่มเฉพาะร้านแถวนี้ พร้อมลิงก์ไปหน้าร้านใน Google Maps และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/eat/" />
@@ -42,7 +42,7 @@
       <p class="kicker">BANGKOK EATS</p>
       <h1>หิวไร<span>ดี?</span></h1>
       <p class="sub">
-        เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน แล้วกดสุ่ม
+        เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันถ้าอยากได้ร้านแถวนี้ แล้วกดสุ่ม
         ระบบจะเลือกร้านดังของกรุงเทพฯ ให้ทันที พร้อมลิงก์ไปหน้าร้านใน Google Maps และช่องทางเปิดแอปสั่งอาหาร
       </p>
     </header>
@@ -52,6 +52,11 @@
       <button type="button" class="filter-btn" data-filter="food">🍜 อาหาร</button>
       <button type="button" class="filter-btn" data-filter="drink">🧋 เครื่องดื่ม</button>
       <button type="button" class="filter-btn" data-filter="dessert">🍰 ของหวาน</button>
+    </div>
+
+    <div class="location-row">
+      <button type="button" id="nearMeBtn" class="location-btn">📍 ใกล้ฉัน</button>
+      <p id="locationStatus" class="location-status" hidden></p>
     </div>
 
     <div class="spin-wrap">
@@ -69,7 +74,7 @@
       <section id="resultCard" class="result-card" hidden>
         <div id="catBadge" class="cat-badge"></div>
         <h2 id="resultName" class="result-name"></h2>
-        <div class="result-area">📍 <span id="resultArea"></span></div>
+        <div class="result-area">📍 <span id="resultArea"></span> <span id="resultDistance" hidden></span></div>
         <p id="resultDesc" class="result-desc"></p>
         <div id="resultTags" class="tags"></div>
 
