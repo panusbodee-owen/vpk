@@ -360,13 +360,36 @@ h1 span {
   margin-bottom: 20px;
 }
 
+.menu-label-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 10px;
+  margin-bottom: 10px;
+}
+
 .menu-label {
   font-family: "Nunito", sans-serif;
   font-size: 12px;
   font-weight: 700;
   color: rgba(var(--ink-rgb), 0.5);
-  margin-bottom: 10px;
 }
+
+.menu-random-btn {
+  flex-shrink: 0;
+  font-family: "Kanit", sans-serif;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--accent-2);
+  background: rgba(var(--accent-2-rgb), 0.12);
+  border: none;
+  border-radius: 999px;
+  padding: 6px 12px;
+  cursor: pointer;
+  transition: filter 0.15s ease, transform 0.15s ease;
+}
+.menu-random-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
+.menu-random-btn:active { transform: translateY(0); }
 
 .menu-chips {
   display: flex;
