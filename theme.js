@@ -102,4 +102,61 @@
   } else {
     buildWidget();
   }
+
+  /**
+   * ชิ้นใหญ่แบบ interactive — markup มาจากแต่ละหน้าเอง (.big-object ที่ .big-objects)
+   * ไม่มีก็ไม่ทำอะไร (no-op) เลยเรียกจากทุกหน้าได้เหมือนกันหมด
+   * - ขยับตามเมาส์แบบ parallax (ความลึกต่างกันตาม data-depth ของแต่ละชิ้น)
+   * - แตะ/คลิกแล้วเด้งสนุกๆ พร้อมสลับอิโมจิใหม่แบบสุ่ม (data-emojis คั่นด้วย ,)
+   */
+  function initBigObjects() {
+    var objects = document.querySelectorAll(".big-object");
+    if (!objects.length) return;
+
+    var rafId = null;
+    function handleMove(clientX, clientY) {
+      if (rafId) return;
+      rafId = requestAnimationFrame(function () {
+        rafId = null;
+        var cx = window.innerWidth / 2;
+        var cy = window.innerHeight / 2;
+        var dx = clientX - cx;
+        var dy = clientY - cy;
+        objects.forEach(function (el) {
+          var depth = parseFloat(el.dataset.depth || "0.02");
+          el.style.setProperty("--px", (dx * depth).toFixed(1) + "px");
+          el.style.setProperty("--py", (dy * depth).toFixed(1) + "px");
+        });
+      });
+    }
+    window.addEventListener("mousemove", function (e) {
+      handleMove(e.clientX, e.clientY);
+    });
+
+    objects.forEach(function (el) {
+      el.addEventListener("click", function () {
+        el.classList.remove("is-popping");
+        void el.offsetWidth; // force reflow กัน animation ไม่ retrigger เวลากดรัวๆ
+        el.classList.add("is-popping");
+        el.style.setProperty("--rot", (Math.random() * 30 - 15).toFixed(1) + "deg");
+
+        var pool = (el.dataset.emojis || "").split(",").map(function (s) { return s.trim(); }).filter(Boolean);
+        if (pool.length > 1) {
+          var current = el.textContent;
+          var next = current;
+          while (next === current) next = pool[Math.floor(Math.random() * pool.length)];
+          el.textContent = next;
+        }
+      });
+      el.addEventListener("animationend", function () {
+        el.classList.remove("is-popping");
+      });
+    });
+  }
+
+  if (document.readyState === "loading") {
+    document.addEventListener("DOMContentLoaded", initBigObjects);
+  } else {
+    initBigObjects();
+  }
 })();

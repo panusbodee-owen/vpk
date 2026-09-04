@@ -184,3 +184,55 @@
 @media (prefers-reduced-motion: reduce) {
   .particles { display: none; }
 }
+
+/* ---------- Big interactive floating objects (life/, eat/) ----------
+   A handful of large themed emoji the visitor can actually play with:
+   they drift slightly toward the mouse cursor (parallax, depth set per
+   piece via data-depth) and bounce with a fresh random emoji on
+   click/tap (data-emojis, comma-separated). Positioned near the
+   viewport edges so they never sit over the readable content column,
+   and z-index'd above <main> (which has no content way out there) so
+   they stay clickable everywhere rather than getting swallowed by
+   main's own (invisible) padding box. theme.js wires up the behavior;
+   with no .big-object on the page it's a no-op. */
+.big-objects {
+  position: fixed;
+  inset: 0;
+  z-index: 4;
+  pointer-events: none;
+}
+.big-object {
+  position: absolute;
+  left: var(--bx, 50%);
+  top: var(--by, 50%);
+  font-size: var(--bsize, 64px);
+  line-height: 1;
+  padding: 0;
+  margin: 0;
+  border: none;
+  background: none;
+  cursor: pointer;
+  pointer-events: auto;
+  opacity: 0.5;
+  filter: drop-shadow(0 10px 24px rgba(0, 0, 0, 0.18));
+  transform: translate(-50%, -50%) translate(var(--px, 0px), var(--py, 0px)) rotate(var(--rot, 0deg));
+  transition: transform 0.7s cubic-bezier(0.2, 0.9, 0.3, 1.3), opacity 0.25s ease, filter 0.25s ease;
+}
+.big-object:hover { opacity: 0.9; filter: drop-shadow(0 14px 30px rgba(0, 0, 0, 0.24)); }
+.big-object:active { opacity: 1; }
+.big-object.is-popping { animation: big-object-pop 0.6s cubic-bezier(0.2, 0.9, 0.3, 1.3); }
+@keyframes big-object-pop {
+  0%   { transform: translate(-50%, -50%) translate(var(--px, 0px), var(--py, 0px)) rotate(var(--rot, 0deg)) scale(1); }
+  35%  { transform: translate(-50%, -50%) translate(var(--px, 0px), var(--py, 0px)) rotate(var(--rot, 0deg)) scale(1.5); }
+  65%  { transform: translate(-50%, -50%) translate(var(--px, 0px), var(--py, 0px)) rotate(var(--rot, 0deg)) scale(0.85); }
+  100% { transform: translate(-50%, -50%) translate(var(--px, 0px), var(--py, 0px)) rotate(var(--rot, 0deg)) scale(1); }
+}
+
+@media (max-width: 640px) {
+  .big-object { font-size: calc(var(--bsize, 64px) * 0.65); opacity: 0.4; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .big-object { transition: none; }
+  .big-object.is-popping { animation: none; }
+}
