@@ -354,6 +354,54 @@ h1 span {
   padding: 4px 10px;
 }
 
+.menu-section {
+  border-top: 1px dashed var(--card-border);
+  padding-top: 18px;
+  margin-bottom: 20px;
+}
+
+.menu-label {
+  font-family: "Nunito", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(var(--ink-rgb), 0.5);
+  margin-bottom: 10px;
+}
+
+.menu-chips {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.menu-chip {
+  font-family: "Kanit", sans-serif;
+  font-size: 13px;
+  color: rgb(var(--ink-rgb));
+  background: rgba(var(--ink-rgb), 0.05);
+  border: 1.5px solid var(--card-border);
+  border-radius: 999px;
+  padding: 7px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.menu-chip:hover { background: rgba(var(--ink-rgb), 0.09); }
+.menu-chip.is-selected {
+  background: var(--accent-grad-2);
+  border-color: transparent;
+  color: var(--on-accent);
+  font-weight: 600;
+}
+.menu-chip.is-selected::before { content: "✓ "; }
+
+.menu-note {
+  font-family: "Nunito", sans-serif;
+  font-size: 12px;
+  color: rgba(var(--ink-rgb), 0.45);
+  line-height: 1.6;
+  margin: 0;
+}
+
 .primary-links {
   display: grid;
   grid-template-columns: 1fr 1fr;
