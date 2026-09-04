@@ -232,6 +232,7 @@
     menuSection: document.getElementById("menuSection"),
     menuChips: document.getElementById("menuChips"),
     menuNote: document.getElementById("menuNote"),
+    menuRandomBtn: document.getElementById("menuRandomBtn"),
     mapsLink: document.getElementById("mapsLink"),
     wongnaiLink: document.getElementById("wongnaiLink"),
     appLinks: document.getElementById("appLinks"),
@@ -344,10 +345,12 @@
       els.menuChips.innerHTML = "";
       els.menuChips.hidden = true;
       els.menuNote.hidden = false;
+      els.menuRandomBtn.hidden = true;
       return;
     }
     els.menuNote.hidden = true;
     els.menuChips.hidden = false;
+    els.menuRandomBtn.hidden = menu.length < 2;
     els.menuChips.innerHTML = "";
     menu.forEach(function (item) {
       var btn = document.createElement("button");
@@ -361,6 +364,15 @@
       els.menuChips.appendChild(btn);
     });
   }
+
+  /** สุ่มเลือกเมนู 1 อย่างจากร้านปัจจุบัน — เลี่ยงอันเดิมถ้ามีให้เลือกมากกว่า 1 อย่าง */
+  els.menuRandomBtn.addEventListener("click", function () {
+    var menu = state.result && state.result.menu;
+    if (!menu || menu.length === 0) return;
+    var options = menu.length > 1 ? menu.filter(function (m) { return m !== state.selectedMenu; }) : menu;
+    state.selectedMenu = options[Math.floor(Math.random() * options.length)];
+    renderMenu();
+  });
 
   function render(isSpinning) {
     if (!state.result) {
