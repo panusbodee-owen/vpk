@@ -85,6 +85,39 @@ h1 span {
   color: rgba(var(--ink-rgb), 0.65);
 }
 
+/* ---------- Mode tabs (สุ่มร้าน / สุ่มเมนู) ---------- */
+.mode-tabs {
+  display: flex;
+  justify-content: center;
+  gap: 6px;
+  max-width: 360px;
+  margin: 0 auto 20px;
+  padding: 5px;
+  border-radius: 999px;
+  background: rgba(var(--ink-rgb), 0.05);
+  border: 1px solid rgba(var(--ink-rgb), 0.12);
+}
+
+.mode-tab {
+  flex: 1;
+  font-family: "Kanit", sans-serif;
+  font-size: 15px;
+  font-weight: 600;
+  color: rgba(var(--ink-rgb), 0.6);
+  background: transparent;
+  border: none;
+  border-radius: 999px;
+  padding: 10px 14px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.mode-tab:hover { color: rgba(var(--ink-rgb), 0.85); }
+.mode-tab.active {
+  background: var(--accent-grad-3);
+  color: var(--on-accent);
+  box-shadow: var(--card-shadow);
+}
+
 /* ---------- Filters ---------- */
 .filters {
   display: flex;
@@ -321,6 +354,15 @@ h1 span {
   margin: 0 0 6px;
 }
 
+/* โหมดสุ่มเมนู: บอกว่าเมนูที่สุ่มได้มาจากร้านไหน ต่อท้ายชื่อเมนู (headline) */
+.result-subline {
+  font-family: "Nunito", sans-serif;
+  font-size: 13px;
+  font-weight: 700;
+  color: var(--accent-2);
+  margin: 0 0 10px;
+}
+
 .result-area {
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
@@ -374,22 +416,6 @@ h1 span {
   font-weight: 700;
   color: rgba(var(--ink-rgb), 0.5);
 }
-
-.menu-random-btn {
-  flex-shrink: 0;
-  font-family: "Kanit", sans-serif;
-  font-size: 12px;
-  font-weight: 600;
-  color: var(--accent-2);
-  background: rgba(var(--accent-2-rgb), 0.12);
-  border: none;
-  border-radius: 999px;
-  padding: 6px 12px;
-  cursor: pointer;
-  transition: filter 0.15s ease, transform 0.15s ease;
-}
-.menu-random-btn:hover { filter: brightness(1.1); transform: translateY(-1px); }
-.menu-random-btn:active { transform: translateY(0); }
 
 .menu-chips {
   display: flex;
