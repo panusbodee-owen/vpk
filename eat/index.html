@@ -13,7 +13,7 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="หิวไรดี? — สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างให้สุ่มเฉพาะร้านแถวนั้น พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
+  <meta name="description" content="หิวไรดี? — สุ่มร้านหรือสุ่มเมนูเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างให้สุ่มเฉพาะร้านแถวนั้น พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/eat/" />
@@ -70,11 +70,16 @@
       <p class="kicker">BANGKOK EATS</p>
       <h1>หิวไร<span>ดี?</span></h1>
       <p class="sub">
-        เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างที่อยากได้ร้านแถวนั้น แล้วกดสุ่ม
-        ระบบจะเลือกร้านดังของกรุงเทพฯ ให้ทันที — ถ้าแถวนั้นร้านคัดสรรมีน้อย จะค้นร้านใกล้ๆ เพิ่มแบบสดจาก OpenStreetMap ให้ด้วย
+        เลือกโหมด "สุ่มร้าน" หรือ "สุ่มเมนู" เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน
+        กดใกล้ฉันหรือเลือกโซน/ห้างที่อยากได้ร้านแถวนั้น แล้วกดสุ่ม — โหมดสุ่มเมนูจะสุ่มเมนูก่อนแล้วบอกว่าร้านไหนมีขาย
         พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอปสั่งอาหาร
       </p>
     </header>
+
+    <div id="modeTabs" class="mode-tabs" role="group" aria-label="เลือกโหมดการสุ่ม">
+      <button type="button" class="mode-tab active" data-mode="restaurant">🎲 สุ่มร้าน</button>
+      <button type="button" class="mode-tab" data-mode="menu">🍽️ สุ่มเมนู</button>
+    </div>
 
     <div id="filterButtons" class="filters" role="group" aria-label="เลือกหมวดหมู่">
       <button type="button" class="filter-btn active" data-filter="all">🎲 ทั้งหมด</button>
@@ -131,7 +136,8 @@
 
       <section id="resultCard" class="result-card" hidden>
         <div id="catBadge" class="cat-badge"></div>
-        <h2 id="resultName" class="result-name"></h2>
+        <h2 id="resultHeadline" class="result-name"></h2>
+        <div id="resultSubline" class="result-subline" hidden></div>
         <div class="result-area">📍 <span id="resultArea"></span> <span id="resultDistance" hidden></span> <span id="resultSource" class="result-source" hidden></span></div>
         <p id="resultDesc" class="result-desc"></p>
         <div id="resultTags" class="tags"></div>
@@ -139,7 +145,6 @@
         <div id="menuSection" class="menu-section">
           <div class="menu-label-row">
             <div class="menu-label">🍽️ เมนูแนะนำ — กดเลือกเมนูที่จะสั่ง</div>
-            <button type="button" id="menuRandomBtn" class="menu-random-btn">🎲 สุ่มเมนู</button>
           </div>
           <div id="menuChips" class="menu-chips"></div>
           <p id="menuNote" class="menu-note" hidden>ร้านนี้มาจากข้อมูลสด ยังไม่มีเมนูแนะนำในระบบ — ลองดูเมนูใน Wongnai ด้านล่างได้เลย</p>

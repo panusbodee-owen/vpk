@@ -56,6 +56,24 @@
     { id: "afteryouladprao", name: "After You สาขาเซ็นทรัลลาดพร้าว", category: "dessert", area: "เซ็นทรัลลาดพร้าว", lat: 13.8154, lng: 100.5613, description: "ต้นตำรับชิบูย่าโทสต์และฮันนี่โทสต์ สาขาย่านลาดพร้าว-จตุจักร ใกล้รถไฟฟ้าหมอชิต", tags: ["ฮันนี่โทสต์", "คาเฟ่ขนมหวาน"], menu: ["ชิบูย่าฮันนี่โทสต์", "บราวนี่ซันเดย์"] },
   ];
 
+  // ---------- โหมด "สุ่มเมนู" — แตกเมนูของทุกร้านออกมาเป็นรายการแบนๆ ----------
+  // แต่ละชิ้นมีหน้าตาเหมือนร้าน (category/lat/lng) เพื่อให้ categoryPool()/withinRadius()/pool()
+  // เดิมใช้ซ้ำได้ทั้งสองโหมดโดยไม่ต้องแยกโค้ด ส่วน .restaurant เก็บร้านต้นทางไว้ไปโชว์ตอน render
+  var MENU_ITEMS = [];
+  RESTAURANTS.forEach(function (r) {
+    (r.menu || []).forEach(function (item, idx) {
+      MENU_ITEMS.push({
+        id: r.id + "-menu-" + idx,
+        name: item,
+        category: r.category,
+        area: r.area,
+        lat: r.lat,
+        lng: r.lng,
+        restaurant: r,
+      });
+    });
+  });
+
   // ---------- โซน/ห้างยอดฮิต — เลือกแทนการขอตำแหน่ง GPS ก็ได้ ----------
   var ZONES = [
     { id: "siam", name: "สยาม", lat: 13.7458, lng: 100.5340 },
@@ -84,10 +102,20 @@
     return "https://www.google.com/maps/search/?api=1&query=" + q;
   }
 
-  /** ลิงก์ไปหน้าค้นหาร้านนี้บน Wongnai — สำหรับอ่านรีวิว/ดูเมนู/ราคาก่อนตัดสินใจ */
-  function getWongnaiLink(result) {
-    var q = encodeURIComponent(result.isOsm ? result.name : result.name + " " + result.area);
-    return "https://www.wongnai.com/search?q=" + q;
+  /**
+   * ลิงก์ไปหน้าค้นหาร้านนี้บน Wongnai — สำหรับอ่านรีวิว/ดูเมนู/ราคาก่อนตัดสินใจ
+   * ถ้าระบุ menuName มาด้วย (โหมดสุ่มเมนู) จะค้นด้วยชื่อร้าน+ชื่อเมนู แทนชื่อร้าน+ย่าน เพื่อพาไปหน้าที่เกี่ยวกับเมนูนั้นตรงๆ มากขึ้น
+   */
+  function getWongnaiLink(result, menuName) {
+    var q;
+    if (result.isOsm) {
+      q = result.name;
+    } else if (menuName) {
+      q = result.name + " " + menuName;
+    } else {
+      q = result.name + " " + result.area;
+    }
+    return "https://www.wongnai.com/search?q=" + encodeURIComponent(q);
   }
 
   /**
@@ -197,6 +225,7 @@
   }
 
   var state = {
+    mode: "restaurant", // "restaurant" = สุ่มร้านแล้วโชว์เมนู | "menu" = สุ่มเมนูก่อนแล้วโชว์ร้านที่มีขาย
     filter: "all",
     result: null,
     spinning: false,
@@ -212,6 +241,7 @@
   };
 
   var els = {
+    modeTabs: document.getElementById("modeTabs"),
     filters: document.getElementById("filterButtons"),
     nearMeBtn: document.getElementById("nearMeBtn"),
     locationStatus: document.getElementById("locationStatus"),
@@ -223,7 +253,8 @@
     empty: document.getElementById("emptyState"),
     card: document.getElementById("resultCard"),
     catBadge: document.getElementById("catBadge"),
-    name: document.getElementById("resultName"),
+    headline: document.getElementById("resultHeadline"),
+    subline: document.getElementById("resultSubline"),
     area: document.getElementById("resultArea"),
     distance: document.getElementById("resultDistance"),
     source: document.getElementById("resultSource"),
@@ -232,7 +263,6 @@
     menuSection: document.getElementById("menuSection"),
     menuChips: document.getElementById("menuChips"),
     menuNote: document.getElementById("menuNote"),
-    menuRandomBtn: document.getElementById("menuRandomBtn"),
     mapsLink: document.getElementById("mapsLink"),
     wongnaiLink: document.getElementById("wongnaiLink"),
     appLinks: document.getElementById("appLinks"),
@@ -241,8 +271,9 @@
   };
 
   function categoryPool() {
-    if (state.filter === "all") return RESTAURANTS;
-    return RESTAURANTS.filter(function (r) { return r.category === state.filter; });
+    var base = state.mode === "menu" ? MENU_ITEMS : RESTAURANTS;
+    if (state.filter === "all") return base;
+    return base.filter(function (r) { return r.category === state.filter; });
   }
 
   /**
@@ -273,20 +304,23 @@
 
     var result = withinRadius();
     var curated = result.within.map(function (x) { return x.r; });
-    var osm = getOsmDataForCurrentContext();
+    // โหมดสุ่มเมนู: OSM ไม่มีข้อมูลเมนูติดมาด้วย เลยไม่ผสมร้านจาก OSM เข้ามาในโหมดนี้
+    var osm = state.mode === "menu" ? [] : getOsmDataForCurrentContext();
     var combined = curated.concat(osm);
     if (combined.length > 0) return combined;
 
-    // ไม่มีร้านเลยแม้จะลองถาม OSM แล้ว — fallback ไปเอาร้านคัดสรรที่ใกล้ที่สุด 5 ร้านแทน
-    // เพื่อให้ "สุ่มใหม่" ยังสุ่มได้จริง ไม่ใช่ได้ร้านเดิมซ้ำทุกครั้ง
+    // ไม่มีร้าน/เมนูเลยแม้จะลองถาม OSM แล้ว — fallback ไปเอา 5 รายการที่ใกล้ที่สุดแทน
+    // เพื่อให้ "สุ่มใหม่" ยังสุ่มได้จริง ไม่ใช่ได้อันเดิมซ้ำทุกครั้ง
     return result.nearest.slice(0, 5).map(function (x) { return x.r; });
   }
 
   /**
    * เรียกก่อนสุ่ม/แสดงผลทุกครั้งที่ตำแหน่ง/ระยะ/หมวดหมู่เปลี่ยน — ถ้าร้านคัดสรรในระยะมีพอแล้วจะ
    * เรียก cb() ทันที (ไม่ยิง network), ถ้าน้อยเกินไปจะไปถาม OSM เพิ่ม (แคชผลไว้กันยิงซ้ำ)
+   * โหมดสุ่มเมนูไม่ใช้ OSM เลย (ไม่มีข้อมูลเมนูให้ผูกกับร้านจาก OSM ได้) จึงข้ามไปเรียก cb() ทันที
    */
   function ensureNearbyData(cb) {
+    if (state.mode === "menu") { cb(); return; }
     if (!state.nearMe || !state.userLoc) { cb(); return; }
     if (withinRadius().within.length >= OSM_QUERY_MIN_CURATED) { cb(); return; }
 
@@ -320,13 +354,19 @@
     });
   }
 
+  /** ข้อความปุ่มสุ่มตอนว่าง — ขึ้นกับโหมดปัจจุบันและว่ามีผลลัพธ์อยู่แล้วหรือยัง */
+  function spinIdleLabel() {
+    if (state.mode === "menu") return state.result ? "สุ่มเมนูใหม่" : "สุ่มเมนูเลย";
+    return state.result ? "สุ่มใหม่" : "สุ่มร้านเลย";
+  }
+
   function setSpinLoadingUI(isLoading) {
     if (isLoading) {
       els.spinBtn.disabled = true;
-      els.spinLabel.textContent = "🔎 กำลังหาร้านใกล้ๆ...";
+      els.spinLabel.textContent = state.mode === "menu" ? "🔎 กำลังหาเมนูใกล้ๆ..." : "🔎 กำลังหาร้านใกล้ๆ...";
     } else if (!state.spinning) {
       els.spinBtn.disabled = false;
-      els.spinLabel.textContent = state.result ? "สุ่มใหม่" : "สุ่มร้านเลย";
+      els.spinLabel.textContent = spinIdleLabel();
     }
   }
 
@@ -338,19 +378,20 @@
     return options[Math.floor(Math.random() * options.length)];
   }
 
-  /** เมนูแนะนำของร้านที่สุ่มได้ — ให้กดเลือกได้ว่าจะสั่งอันไหน (ร้านจาก OSM ไม่มีข้อมูลเมนู เลยโชว์โน้ตแทน) */
+  /**
+   * เมนูแนะนำของร้านที่สุ่มได้ — ให้กดเลือกได้ว่าจะสั่งอันไหน (ร้านจาก OSM ไม่มีข้อมูลเมนู เลยโชว์โน้ตแทน)
+   * ใช้เฉพาะโหมด "สุ่มร้าน" — โหมด "สุ่มเมนู" เลือกเมนูให้แล้วตั้งแต่ตอนสุ่ม เลยไม่ต้องมีตัวเลือกซ้ำ
+   */
   function renderMenu() {
     var menu = state.result.menu;
     if (!menu || menu.length === 0) {
       els.menuChips.innerHTML = "";
       els.menuChips.hidden = true;
       els.menuNote.hidden = false;
-      els.menuRandomBtn.hidden = true;
       return;
     }
     els.menuNote.hidden = true;
     els.menuChips.hidden = false;
-    els.menuRandomBtn.hidden = menu.length < 2;
     els.menuChips.innerHTML = "";
     menu.forEach(function (item) {
       var btn = document.createElement("button");
@@ -365,15 +406,6 @@
     });
   }
 
-  /** สุ่มเลือกเมนู 1 อย่างจากร้านปัจจุบัน — เลี่ยงอันเดิมถ้ามีให้เลือกมากกว่า 1 อย่าง */
-  els.menuRandomBtn.addEventListener("click", function () {
-    var menu = state.result && state.result.menu;
-    if (!menu || menu.length === 0) return;
-    var options = menu.length > 1 ? menu.filter(function (m) { return m !== state.selectedMenu; }) : menu;
-    state.selectedMenu = options[Math.floor(Math.random() * options.length)];
-    renderMenu();
-  });
-
   function render(isSpinning) {
     if (!state.result) {
       els.empty.hidden = false;
@@ -384,11 +416,25 @@
     els.card.hidden = false;
     els.card.style.opacity = isSpinning ? "0.6" : "1";
 
+    var isMenuMode = state.mode === "menu";
+    // โหมดสุ่มเมนู: state.result คือ "เมนู" (มี .restaurant ผูกกับร้านต้นทาง) — เอาชื่อร้าน/ย่าน/
+    // คำอธิบาย/แท็ก/ลิงก์มาจากร้านนั้นแทน ส่วนโหมดสุ่มร้าน state.result คือร้านเลย
+    var restaurant = isMenuMode ? state.result.restaurant : state.result;
+
     var meta = catMeta(state.result.category);
     els.catBadge.textContent = meta ? meta.emoji + " " + meta.label : "";
-    els.name.textContent = state.result.name;
-    els.area.textContent = state.result.area;
-    els.desc.textContent = state.result.description;
+
+    if (isMenuMode) {
+      els.headline.textContent = "🍽️ " + state.result.name;
+      els.subline.hidden = false;
+      els.subline.textContent = "จากร้าน: " + restaurant.name;
+    } else {
+      els.headline.textContent = state.result.name;
+      els.subline.hidden = true;
+    }
+
+    els.area.textContent = restaurant.area;
+    els.desc.textContent = restaurant.description;
 
     if (state.nearMe && state.userLoc) {
       var km = distanceKm(state.userLoc.lat, state.userLoc.lng, state.result.lat, state.result.lng);
@@ -409,17 +455,19 @@
     }
 
     els.tags.innerHTML = "";
-    state.result.tags.forEach(function (tag) {
+    restaurant.tags.forEach(function (tag) {
       var span = document.createElement("span");
       span.className = "tag";
       span.textContent = "#" + tag;
       els.tags.appendChild(span);
     });
 
-    renderMenu();
+    // โหมดสุ่มเมนู: เมนูถูกสุ่มมาให้แล้วตั้งแต่ต้น เลยไม่ต้องมีชิปให้เลือกซ้ำอีกที
+    els.menuSection.hidden = isMenuMode;
+    if (!isMenuMode) renderMenu();
 
-    els.mapsLink.href = getMapsLink(state.result);
-    els.wongnaiLink.href = getWongnaiLink(state.result);
+    els.mapsLink.href = getMapsLink(restaurant);
+    els.wongnaiLink.href = getWongnaiLink(restaurant, isMenuMode ? state.result.name : null);
 
     els.appLinks.innerHTML = "";
     getAppLinks().forEach(function (link) {
@@ -484,6 +532,19 @@
     els.radiusCount.hidden = false;
     els.radiusCount.classList.remove("warn");
 
+    // โหมดสุ่มเมนูไม่ใช้ OSM เลย เลยมีแค่สองสถานะ: เจอ/ไม่เจอในระยะที่เลือก
+    if (state.mode === "menu") {
+      if (curatedCount > 0) {
+        els.radiusCount.textContent = "พบ " + curatedCount + " เมนูในระยะ " + state.radiusKm + " กม.";
+        return;
+      }
+      var nearestMenuKm = result.nearest.length > 0 ? result.nearest[0].km.toFixed(1) : "?";
+      els.radiusCount.textContent =
+        "⚠️ ไม่มีเมนูในระยะ " + state.radiusKm + " กม. — เมนูที่ใกล้ที่สุดอยู่ห่าง " + nearestMenuKm + " กม. (จะสุ่มจาก 5 เมนูที่ใกล้ที่สุดแทน)";
+      els.radiusCount.classList.add("warn");
+      return;
+    }
+
     if (curatedCount >= OSM_QUERY_MIN_CURATED) {
       els.radiusCount.textContent = "พบ " + curatedCount + " ร้านในระยะ " + state.radiusKm + " กม.";
       return;
@@ -546,6 +607,32 @@
       { enableHighAccuracy: false, timeout: 10000, maximumAge: 5 * 60 * 1000 }
     );
   }
+
+  /** ข้อความในกล่องว่าง (ก่อนกดสุ่มครั้งแรก) — ขึ้นกับโหมดปัจจุบัน */
+  function updateEmptyStateText() {
+    els.empty.textContent =
+      state.mode === "menu"
+        ? "กดปุ่ม “สุ่มเมนูเลย” เพื่อสุ่มเมนูเด็ดของกรุงเทพฯ แล้วดูว่าร้านไหนมีขาย"
+        : "กดปุ่ม “สุ่มร้านเลย” เพื่อเริ่มค้นหาร้านเด็ดของกรุงเทพฯ";
+  }
+
+  els.modeTabs.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-mode]");
+    if (!btn || state.spinning) return;
+    var mode = btn.dataset.mode;
+    if (mode === state.mode) return;
+    state.mode = mode;
+    state.result = null;
+    state.selectedMenu = null;
+    els.modeTabs.querySelectorAll("button").forEach(function (b) {
+      b.classList.toggle("active", b.dataset.mode === mode);
+    });
+    updateEmptyStateText();
+    setSpinLoadingUI(false);
+    updateRadiusCount();
+    render(false);
+    ensureNearbyData(function () {});
+  });
 
   els.filters.addEventListener("click", function (e) {
     var btn = e.target.closest("button[data-filter]");
@@ -622,7 +709,7 @@
         state.spinning = false;
         els.spinBtn.disabled = false;
         els.spinBtn.classList.remove("spinning");
-        els.spinLabel.textContent = "สุ่มใหม่";
+        els.spinLabel.textContent = spinIdleLabel();
       }
     }, 80);
   }
@@ -640,5 +727,6 @@
   setFilterUI();
   setRadiusUI();
   setNearMeUI();
+  updateEmptyStateText();
   render(false);
 })();
