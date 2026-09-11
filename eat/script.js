@@ -224,8 +224,73 @@
       });
   }
 
+  // ---------- เกมแบล็คแจ็คชิงสิทธิ์เลือกร้าน ----------
+  // สำรับหน้าตาปกติ (A, 2-10, J, Q, K) แต่เปลี่ยนดอกเป็นอาหาร 4 อย่างให้เข้ากับหน้านี้
+  var BJ_SUITS = [
+    { id: "noodle", emoji: "🍜" },
+    { id: "boba", emoji: "🧋" },
+    { id: "cake", emoji: "🍰" },
+    { id: "pizza", emoji: "🍕" },
+  ];
+  var BJ_RANKS = ["A", "2", "3", "4", "5", "6", "7", "8", "9", "10", "J", "Q", "K"];
+  var BJ_STATS_KEY = "vpk-eat-blackjack";
+  var BJ_DEALER_STANDS_AT = 17; // เจ้ามือจั่วจนถึง 17 แล้วหยุด (กติกามาตรฐาน)
+  var BJ_RESHUFFLE_AT = 15; // เหลือไพ่น้อยกว่านี้แล้วสับสำรับใหม่
+
+  function bjNewDeck() {
+    var deck = [];
+    BJ_SUITS.forEach(function (suit) {
+      BJ_RANKS.forEach(function (rank) { deck.push({ rank: rank, suit: suit }); });
+    });
+    // สับไพ่แบบ Fisher-Yates
+    for (var i = deck.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = deck[i];
+      deck[i] = deck[j];
+      deck[j] = tmp;
+    }
+    return deck;
+  }
+
+  /** แต้มของมือหนึ่งมือ — A นับ 11 ก่อน แล้วลดเป็น 1 ทีละใบถ้าเกิน 21 */
+  function bjHandValue(hand) {
+    var total = 0;
+    var aces = 0;
+    hand.forEach(function (card) {
+      if (card.rank === "A") { aces += 1; total += 11; }
+      else if (card.rank === "J" || card.rank === "Q" || card.rank === "K") total += 10;
+      else total += Number(card.rank);
+    });
+    while (total > 21 && aces > 0) { total -= 10; aces -= 1; }
+    return total;
+  }
+
+  /** แบล็คแจ็คจริงๆ = 21 จากไพ่สองใบแรกเท่านั้น (ชนะ 21 ที่จั่วมาทีหลัง) */
+  function bjIsBlackjack(hand) {
+    return hand.length === 2 && bjHandValue(hand) === 21;
+  }
+
+  function bjLoadStats() {
+    var fallback = { win: 0, lose: 0, push: 0, streak: 0, best: 0 };
+    try {
+      var raw = localStorage.getItem(BJ_STATS_KEY);
+      if (!raw) return fallback;
+      var saved = JSON.parse(raw);
+      if (!saved || typeof saved !== "object") return fallback;
+      return {
+        win: saved.win || 0,
+        lose: saved.lose || 0,
+        push: saved.push || 0,
+        streak: saved.streak || 0,
+        best: saved.best || 0,
+      };
+    } catch (e) {
+      return fallback;
+    }
+  }
+
   var state = {
-    mode: "restaurant", // "restaurant" = สุ่มร้านแล้วโชว์เมนู | "menu" = สุ่มเมนูก่อนแล้วโชว์ร้านที่มีขาย
+    mode: "restaurant", // "restaurant" = สุ่มร้านแล้วโชว์เมนู | "menu" = สุ่มเมนูก่อนแล้วโชว์ร้านที่มีขาย | "blackjack" = เล่นไพ่ชิงสิทธิ์เลือกร้าน
     filter: "all",
     result: null,
     spinning: false,
@@ -238,6 +303,16 @@
     activeZoneId: null, // id ของโซนที่เลือกอยู่ (null = ใช้ GPS)
     osm: { key: "", status: "idle", data: [], pending: [] }, // status: idle | loading | done | error
     selectedMenu: null, // เมนูที่ผู้ใช้เลือกไว้สำหรับร้านที่สุ่มได้ (รีเซ็ตทุกครั้งที่สุ่มใหม่)
+    blackjack: {
+      deck: [],
+      player: [],
+      dealer: [],
+      phase: "idle", // idle = ยังไม่แจกไพ่ | playing = ตาผู้เล่น | dealer = เจ้ามือกำลังจั่ว | done = จบตา
+      outcome: null, // blackjack | win | push | lose
+      timer: null,
+      prizeOptions: [], // ร้านให้เลือกตอนชนะ
+      stats: bjLoadStats(),
+    },
   };
 
   var els = {
@@ -248,8 +323,20 @@
     radiusRow: document.getElementById("radiusRow"),
     radiusButtons: document.getElementById("radiusButtons"),
     radiusCount: document.getElementById("radiusCount"),
+    spinWrap: document.getElementById("spinWrap"),
     spinBtn: document.getElementById("spinBtn"),
     spinLabel: document.getElementById("spinLabel"),
+    bjPanel: document.getElementById("blackjackPanel"),
+    bjStats: document.getElementById("bjStats"),
+    bjDealerCards: document.getElementById("bjDealerCards"),
+    bjDealerScore: document.getElementById("bjDealerScore"),
+    bjPlayerCards: document.getElementById("bjPlayerCards"),
+    bjPlayerScore: document.getElementById("bjPlayerScore"),
+    bjMessage: document.getElementById("bjMessage"),
+    bjDealBtn: document.getElementById("bjDealBtn"),
+    bjHitBtn: document.getElementById("bjHitBtn"),
+    bjStandBtn: document.getElementById("bjStandBtn"),
+    bjPrize: document.getElementById("bjPrize"),
     empty: document.getElementById("emptyState"),
     card: document.getElementById("resultCard"),
     catBadge: document.getElementById("catBadge"),
@@ -482,6 +569,285 @@
     });
   }
 
+  // ---------- เกมแบล็คแจ็ค: วาดโต๊ะ + เดินเกม ----------
+
+  /** จั่วไพ่ 1 ใบ — สับสำรับใหม่อัตโนมัติเมื่อไพ่ใกล้หมด */
+  function bjDraw() {
+    var bj = state.blackjack;
+    if (bj.deck.length < BJ_RESHUFFLE_AT) bj.deck = bjNewDeck();
+    return bj.deck.pop();
+  }
+
+  function bjCardEl(card, faceDown) {
+    var el = document.createElement("div");
+    el.className = "bj-card" + (faceDown ? " is-back" : "");
+    if (faceDown) {
+      el.textContent = "🍴";
+      el.setAttribute("aria-label", "ไพ่คว่ำ");
+      return el;
+    }
+    var rank = document.createElement("span");
+    rank.className = "bj-card-rank";
+    rank.textContent = card.rank;
+    var suit = document.createElement("span");
+    suit.className = "bj-card-suit";
+    suit.textContent = card.suit.emoji;
+    el.appendChild(rank);
+    el.appendChild(suit);
+    el.setAttribute("aria-label", card.rank + " " + card.suit.emoji);
+    return el;
+  }
+
+  function bjRenderHands() {
+    var bj = state.blackjack;
+    // ระหว่างตาผู้เล่น ไพ่ใบที่สองของเจ้ามือยังคว่ำอยู่ (กติกามาตรฐาน)
+    var holeHidden = bj.phase === "playing";
+
+    els.bjPlayerCards.innerHTML = "";
+    bj.player.forEach(function (card) { els.bjPlayerCards.appendChild(bjCardEl(card, false)); });
+    els.bjPlayerScore.textContent = bj.player.length ? bjHandValue(bj.player) : "";
+
+    els.bjDealerCards.innerHTML = "";
+    bj.dealer.forEach(function (card, i) {
+      els.bjDealerCards.appendChild(bjCardEl(card, holeHidden && i === 1));
+    });
+    if (!bj.dealer.length) els.bjDealerScore.textContent = "";
+    else if (holeHidden) els.bjDealerScore.textContent = bjHandValue([bj.dealer[0]]) + " + ?";
+    else els.bjDealerScore.textContent = bjHandValue(bj.dealer);
+  }
+
+  function bjRenderControls() {
+    var phase = state.blackjack.phase;
+    els.bjHitBtn.hidden = phase !== "playing";
+    els.bjStandBtn.hidden = phase !== "playing";
+    els.bjDealBtn.hidden = phase === "playing" || phase === "dealer";
+    els.bjDealBtn.textContent = phase === "done" ? "🃏 เล่นอีกรอบ" : "🃏 แจกไพ่";
+  }
+
+  function bjRenderStats() {
+    var s = state.blackjack.stats;
+    var text = "ชนะ " + s.win + " · แพ้ " + s.lose + " · เสมอ " + s.push;
+    if (s.streak > 1) text += " · 🔥 ชนะติดกัน " + s.streak;
+    if (s.best > 1) text += " (สถิติสูงสุด " + s.best + ")";
+    els.bjStats.textContent = text;
+  }
+
+  function bjSaveStats() {
+    try {
+      localStorage.setItem(BJ_STATS_KEY, JSON.stringify(state.blackjack.stats));
+    } catch (e) {}
+  }
+
+  function bjSetMessage(text, tone) {
+    els.bjMessage.textContent = text;
+    els.bjMessage.className = "bj-message" + (tone ? " is-" + tone : "");
+  }
+
+  /** ล้างโต๊ะกลับสู่สถานะก่อนแจกไพ่ — ใช้ตอนเข้าโหมดหรือออกจากโหมด */
+  function bjResetTable() {
+    var bj = state.blackjack;
+    if (bj.timer) { clearInterval(bj.timer); bj.timer = null; }
+    bj.player = [];
+    bj.dealer = [];
+    bj.phase = "idle";
+    bj.outcome = null;
+    bj.prizeOptions = [];
+    els.bjPrize.hidden = true;
+    els.bjPrize.innerHTML = "";
+    bjRenderHands();
+    bjRenderControls();
+    bjRenderStats();
+    bjSetMessage("กด “แจกไพ่” เพื่อท้าเจ้ามือ — ใครเข้าใกล้ 21 กว่าโดยไม่เกิน คนนั้นชนะ", "");
+  }
+
+  function bjDeal() {
+    var bj = state.blackjack;
+    if (bj.phase === "playing" || bj.phase === "dealer") return;
+
+    // เริ่มตาใหม่ = ล้างผลร้านของตาที่แล้วออกจากการ์ดผลลัพธ์ด้วย
+    state.result = null;
+    state.selectedMenu = null;
+    els.bjPrize.hidden = true;
+    els.bjPrize.innerHTML = "";
+    render(false);
+
+    bj.player = [bjDraw(), bjDraw()];
+    bj.dealer = [bjDraw(), bjDraw()];
+    bj.phase = "playing";
+    bj.outcome = null;
+    bjRenderHands();
+    bjRenderControls();
+
+    if (bjIsBlackjack(bj.player) || bjIsBlackjack(bj.dealer)) {
+      bjSetMessage("มีแบล็คแจ็คตั้งแต่แจก — เปิดไพ่เลย!", "");
+      bjStand();
+      return;
+    }
+    bjSetMessage("ไพ่คุณได้ " + bjHandValue(bj.player) + " แต้ม — จะขอเพิ่มหรือพอแล้ว?", "");
+  }
+
+  function bjHit() {
+    var bj = state.blackjack;
+    if (bj.phase !== "playing") return;
+    bj.player.push(bjDraw());
+    bjRenderHands();
+
+    var value = bjHandValue(bj.player);
+    if (value > 21) {
+      bj.phase = "dealer"; // เปิดไพ่คว่ำของเจ้ามือให้ดูก่อนสรุปผล
+      bjRenderHands();
+      bjSettle();
+    } else if (value === 21) {
+      bjSetMessage("21 พอดี! ส่งต่อให้เจ้ามือ", "");
+      bjStand();
+    } else {
+      bjSetMessage("ไพ่คุณได้ " + value + " แต้ม — เอาอีกไหม?", "");
+    }
+  }
+
+  function bjStand() {
+    var bj = state.blackjack;
+    if (bj.phase !== "playing") return;
+    bj.phase = "dealer";
+    bjRenderHands();
+    bjRenderControls();
+
+    // มีแบล็คแจ็คฝั่งใดฝั่งหนึ่ง = จบทันที เจ้ามือไม่ต้องจั่วต่อ
+    if (bjIsBlackjack(bj.player) || bjIsBlackjack(bj.dealer)) { bjSettle(); return; }
+
+    bjSetMessage("เจ้ามือเปิดไพ่...", "");
+    bj.timer = setInterval(function () {
+      if (bjHandValue(bj.dealer) < BJ_DEALER_STANDS_AT) {
+        bj.dealer.push(bjDraw());
+        bjRenderHands();
+        return;
+      }
+      clearInterval(bj.timer);
+      bj.timer = null;
+      bjSettle();
+    }, 550);
+  }
+
+  /** ตัดสินผลตานี้ตามกติกามาตรฐาน แล้วอัปเดตสถิติ/ข้อความ/รางวัล */
+  function bjSettle() {
+    var bj = state.blackjack;
+    var player = bjHandValue(bj.player);
+    var dealer = bjHandValue(bj.dealer);
+    var playerBj = bjIsBlackjack(bj.player);
+    var dealerBj = bjIsBlackjack(bj.dealer);
+    var outcome;
+
+    if (player > 21) outcome = "lose";
+    else if (playerBj && dealerBj) outcome = "push";
+    else if (playerBj) outcome = "blackjack";
+    else if (dealerBj) outcome = "lose";
+    else if (dealer > 21) outcome = "win";
+    else if (player > dealer) outcome = "win";
+    else if (player < dealer) outcome = "lose";
+    else outcome = "push";
+
+    bj.outcome = outcome;
+    bj.phase = "done";
+    bjRenderHands();
+    bjRenderControls();
+
+    var s = bj.stats;
+    if (outcome === "win" || outcome === "blackjack") {
+      s.win += 1;
+      s.streak += 1;
+      if (s.streak > s.best) s.best = s.streak;
+    } else if (outcome === "lose") {
+      s.lose += 1;
+      s.streak = 0;
+    } else {
+      s.push += 1;
+    }
+    bjSaveStats();
+    bjRenderStats();
+
+    if (outcome === "blackjack") {
+      bjSetMessage("🃏 แบล็คแจ็ค! ชนะสวยๆ — เลือกร้านที่จะกินเองได้เลย", "win");
+    } else if (outcome === "win") {
+      bjSetMessage(
+        (dealer > 21 ? "💥 เจ้ามือแตก (" + dealer + ")! " : "") +
+          "🎉 คุณชนะ " + player + " ต่อ " + dealer + " — เลือกร้านที่จะกินเองได้เลย",
+        "win"
+      );
+    } else if (outcome === "push") {
+      bjSetMessage("🤝 เสมอกันที่ " + player + " — เจ้ามือใจดี สุ่มร้านให้ 1 ร้าน", "push");
+    } else if (player > 21) {
+      bjSetMessage("💥 ไพ่คุณแตก (" + player + ")! เจ้ามือฟันธงร้านให้เลย ห้ามเถียง", "lose");
+    } else {
+      bjSetMessage("😈 เจ้ามือชนะ " + dealer + " ต่อ " + player + " — เจ้ามือฟันธงร้านให้เลย ห้ามเถียง", "lose");
+    }
+
+    bjAwardPrize(outcome);
+  }
+
+  /** สุ่มร้านมา n ร้านแบบไม่ซ้ำกัน จากรายการเดียวกับที่โหมดสุ่มร้านใช้ */
+  function bjPickDistinct(n) {
+    var options = pool().slice();
+    for (var i = options.length - 1; i > 0; i--) {
+      var j = Math.floor(Math.random() * (i + 1));
+      var tmp = options[i];
+      options[i] = options[j];
+      options[j] = tmp;
+    }
+    return options.slice(0, n);
+  }
+
+  /** ชนะ = ได้เลือกร้านเองจาก 3 ตัวเลือก, เสมอ/แพ้ = สุ่มให้ 1 ร้านแล้วโชว์การ์ดผลลัพธ์เลย */
+  function bjAwardPrize(outcome) {
+    // ร้านที่เป็นเดิมพันอิงหมวด/โซน/ระยะด้านบน จึงต้องรอข้อมูลร้านใกล้ตัวให้ครบก่อน
+    ensureNearbyData(function () {
+      if (state.mode !== "blackjack" || state.blackjack.outcome !== outcome) return;
+      if (pool().length === 0) return;
+
+      if (outcome === "win" || outcome === "blackjack") {
+        state.blackjack.prizeOptions = bjPickDistinct(3);
+        bjRenderPrizeChoices();
+        return;
+      }
+      els.bjPrize.hidden = true;
+      els.bjPrize.innerHTML = "";
+      state.result = pickRandom();
+      state.selectedMenu = null;
+      render(false);
+    });
+  }
+
+  function bjRenderPrizeChoices() {
+    els.bjPrize.hidden = false;
+    els.bjPrize.innerHTML = "";
+
+    var label = document.createElement("div");
+    label.className = "bj-prize-label";
+    label.textContent = "🏆 รางวัล: เลือกร้านที่จะกินได้เอง 1 ร้าน";
+    els.bjPrize.appendChild(label);
+
+    var row = document.createElement("div");
+    row.className = "bj-prize-choices";
+    state.blackjack.prizeOptions.forEach(function (restaurant) {
+      var meta = catMeta(restaurant.category);
+      var btn = document.createElement("button");
+      btn.type = "button";
+      btn.className = "bj-prize-btn";
+      btn.textContent = (meta ? meta.emoji + " " : "") + restaurant.name;
+      btn.addEventListener("click", function () {
+        state.result = restaurant;
+        state.selectedMenu = null;
+        els.bjPrize.hidden = true;
+        render(false);
+      });
+      row.appendChild(btn);
+    });
+    els.bjPrize.appendChild(row);
+  }
+
+  els.bjDealBtn.addEventListener("click", bjDeal);
+  els.bjHitBtn.addEventListener("click", bjHit);
+  els.bjStandBtn.addEventListener("click", bjStand);
+
   function setFilterUI() {
     var buttons = els.filters.querySelectorAll("button");
     buttons.forEach(function (btn) {
@@ -608,12 +974,25 @@
     );
   }
 
-  /** ข้อความในกล่องว่าง (ก่อนกดสุ่มครั้งแรก) — ขึ้นกับโหมดปัจจุบัน */
+  /** ข้อความในกล่องว่าง (ก่อนมีผลลัพธ์) — ขึ้นกับโหมดปัจจุบัน */
   function updateEmptyStateText() {
+    if (state.mode === "blackjack") {
+      els.empty.textContent = "ยังไม่มีร้านบนโต๊ะ — เอาชนะเจ้ามือแล้วเลือกร้านเองได้เลย 🃏";
+      return;
+    }
     els.empty.textContent =
       state.mode === "menu"
         ? "กดปุ่ม “สุ่มเมนูเลย” เพื่อสุ่มเมนูเด็ดของกรุงเทพฯ แล้วดูว่าร้านไหนมีขาย"
         : "กดปุ่ม “สุ่มร้านเลย” เพื่อเริ่มค้นหาร้านเด็ดของกรุงเทพฯ";
+  }
+
+  /** สลับหน้าตาหลักให้ตรงโหมด — โหมดแบล็คแจ็คใช้โต๊ะไพ่แทนปุ่มสุ่ม */
+  function applyModeUI() {
+    var isGame = state.mode === "blackjack";
+    els.spinWrap.hidden = isGame;
+    els.bjPanel.hidden = !isGame;
+    // เรียกทุกครั้งที่เข้า/ออกโหมดเกม เพื่อล้างโต๊ะและหยุดจังหวะจั่วไพ่ของเจ้ามือที่ค้างอยู่
+    bjResetTable();
   }
 
   els.modeTabs.addEventListener("click", function (e) {
@@ -627,6 +1006,7 @@
     els.modeTabs.querySelectorAll("button").forEach(function (b) {
       b.classList.toggle("active", b.dataset.mode === mode);
     });
+    applyModeUI();
     updateEmptyStateText();
     setSpinLoadingUI(false);
     updateRadiusCount();
@@ -727,6 +1107,7 @@
   setFilterUI();
   setRadiusUI();
   setNearMeUI();
+  applyModeUI();
   updateEmptyStateText();
   render(false);
 })();

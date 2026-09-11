@@ -90,7 +90,7 @@ h1 span {
   display: flex;
   justify-content: center;
   gap: 6px;
-  max-width: 360px;
+  max-width: 480px;
   margin: 0 auto 20px;
   padding: 5px;
   border-radius: 999px;
@@ -116,6 +116,11 @@ h1 span {
   background: var(--accent-grad-3);
   color: var(--on-accent);
   box-shadow: var(--card-shadow);
+}
+
+@media (max-width: 480px) {
+  .mode-tabs { gap: 4px; padding: 4px; }
+  .mode-tab { font-size: 13px; padding: 9px 6px; }
 }
 
 /* ---------- Filters ---------- */
@@ -312,6 +317,191 @@ h1 span {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
+}
+
+/* ---------- Blackjack game (โหมดชิงสิทธิ์เลือกร้าน) ----------
+   ตัวไพ่จงใจใช้สีอ่อนคงที่ทั้งธีมมืด/สว่าง เพราะไพ่เป็น "วัตถุ" บนโต๊ะ
+   ไม่ใช่พื้นผิวของหน้าเว็บ — อ่านง่ายและดูเป็นไพ่จริงทั้งสองธีม */
+.bj-panel {
+  border: 1px solid var(--card-border);
+  background: var(--card-bg);
+  box-shadow: var(--card-shadow);
+  backdrop-filter: blur(6px);
+  border-radius: 22px;
+  padding: 22px 20px;
+  margin-bottom: 28px;
+}
+
+.bj-hint {
+  font-family: "Nunito", sans-serif;
+  font-size: 12px;
+  line-height: 1.7;
+  color: rgba(var(--ink-rgb), 0.5);
+  text-align: center;
+  margin: 0 0 10px;
+}
+
+.bj-stats {
+  font-family: "Nunito", sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: var(--accent-2);
+  text-align: center;
+  margin: 0 0 16px;
+}
+
+.bj-table {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+  padding: 18px 14px;
+  border-radius: 16px;
+  background: radial-gradient(circle at 50% 0%, rgba(var(--accent-2-rgb), 0.12), transparent 70%);
+  border: 1px dashed var(--card-border);
+}
+
+.bj-side { display: flex; flex-direction: column; gap: 8px; }
+
+.bj-side-label {
+  font-family: "Nunito", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(var(--ink-rgb), 0.55);
+}
+.bj-score { color: var(--accent-2); }
+
+.bj-cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  min-height: 78px;
+}
+
+.bj-card {
+  width: 54px;
+  height: 76px;
+  flex-shrink: 0;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 2px;
+  border-radius: 8px;
+  background: linear-gradient(160deg, #fffdf8, #f1ebfb);
+  border: 1px solid rgba(20, 10, 40, 0.14);
+  box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+  color: #1c1730;
+  animation: bj-deal 0.32s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+}
+.bj-card-rank {
+  font-family: "Nunito", sans-serif;
+  font-size: 20px;
+  font-weight: 800;
+  line-height: 1;
+}
+.bj-card-suit { font-size: 17px; line-height: 1; }
+.bj-card.is-back {
+  background: var(--accent-grad-3);
+  border-color: transparent;
+  font-size: 24px;
+  color: var(--on-accent);
+}
+
+@keyframes bj-deal {
+  from { transform: translateY(-16px) rotate(-7deg); opacity: 0; }
+  to { transform: translateY(0) rotate(0deg); opacity: 1; }
+}
+
+.bj-message {
+  font-family: "Kanit", sans-serif;
+  font-size: 14px;
+  text-align: center;
+  color: rgba(var(--ink-rgb), 0.75);
+  margin: 16px 0 14px;
+  min-height: 22px;
+}
+.bj-message.is-win { color: #4ade80; font-weight: 600; }
+.bj-message.is-lose { color: #fb7185; font-weight: 600; }
+.bj-message.is-push { color: #fbbf24; font-weight: 600; }
+
+.bj-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 10px;
+}
+
+.bj-btn {
+  font-family: "Kanit", sans-serif;
+  font-size: 14px;
+  font-weight: 600;
+  color: rgb(var(--ink-rgb));
+  background: rgba(var(--ink-rgb), 0.06);
+  border: 1px solid rgba(var(--ink-rgb), 0.16);
+  border-radius: 12px;
+  padding: 11px 22px;
+  cursor: pointer;
+  transition: transform 0.15s ease, background 0.15s ease;
+}
+.bj-btn:hover { background: rgba(var(--ink-rgb), 0.11); transform: translateY(-1px); }
+.bj-btn.is-primary {
+  color: var(--on-accent);
+  background: var(--accent-grad-2);
+  border-color: transparent;
+  box-shadow: 0 10px 26px -14px rgba(var(--accent-2-rgb), 0.7);
+}
+
+.bj-prize {
+  margin-top: 18px;
+  padding-top: 16px;
+  border-top: 1px dashed var(--card-border);
+}
+
+.bj-prize-label {
+  font-family: "Nunito", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  color: rgba(var(--ink-rgb), 0.55);
+  text-align: center;
+  margin-bottom: 10px;
+}
+
+.bj-prize-choices {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.bj-prize-btn {
+  font-family: "Kanit", sans-serif;
+  font-size: 13px;
+  color: rgb(var(--ink-rgb));
+  background: rgba(var(--ink-rgb), 0.05);
+  border: 1.5px solid var(--card-border);
+  border-radius: 999px;
+  padding: 8px 16px;
+  cursor: pointer;
+  transition: all 0.2s ease;
+}
+.bj-prize-btn:hover {
+  border-color: var(--accent-2);
+  background: rgba(var(--accent-2-rgb), 0.1);
+  transform: translateY(-1px);
+}
+
+@media (max-width: 480px) {
+  .bj-panel { padding: 18px 14px; }
+  .bj-card { width: 46px; height: 66px; }
+  .bj-card-rank { font-size: 17px; }
+  .bj-card-suit { font-size: 15px; }
+  .bj-cards { min-height: 68px; gap: 6px; }
+  .bj-btn { padding: 10px 16px; font-size: 13px; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .bj-card { animation: none; }
+  .bj-btn:hover, .bj-prize-btn:hover { transform: none; }
 }
 
 /* ---------- Result ---------- */
