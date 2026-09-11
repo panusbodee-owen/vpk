@@ -13,7 +13,7 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="หิวไรดี? — สุ่มร้านหรือสุ่มเมนูเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างให้สุ่มเฉพาะร้านแถวนั้น พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
+  <meta name="description" content="หิวไรดี? — สุ่มร้าน สุ่มเมนู หรือเล่นแบล็คแจ็คชิงสิทธิ์เลือกร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างให้สุ่มเฉพาะร้านแถวนั้น พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอป LINE MAN, Grab, ShopeeFood" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/eat/" />
@@ -70,15 +70,16 @@
       <p class="kicker">BANGKOK EATS</p>
       <h1>หิวไร<span>ดี?</span></h1>
       <p class="sub">
-        เลือกโหมด "สุ่มร้าน" หรือ "สุ่มเมนู" เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน
-        กดใกล้ฉันหรือเลือกโซน/ห้างที่อยากได้ร้านแถวนั้น แล้วกดสุ่ม — โหมดสุ่มเมนูจะสุ่มเมนูก่อนแล้วบอกว่าร้านไหนมีขาย
-        พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และช่องทางเปิดแอปสั่งอาหาร
+        เลือกหมวดอาหาร เครื่องดื่ม หรือของหวาน กดใกล้ฉันหรือเลือกโซน/ห้างที่อยากได้ร้านแถวนั้น แล้วเลือกโหมด —
+        "สุ่มร้าน" สุ่มร้านให้เลย, "สุ่มเมนู" สุ่มเมนูก่อนแล้วบอกว่าร้านไหนมีขาย,
+        "แบล็คแจ็ค" เล่นไพ่ชิงสิทธิ์เลือกร้านกับเจ้ามือ พร้อมลิงก์ไปหน้าร้านใน Google Maps, Wongnai และแอปสั่งอาหาร
       </p>
     </header>
 
     <div id="modeTabs" class="mode-tabs" role="group" aria-label="เลือกโหมดการสุ่ม">
       <button type="button" class="mode-tab active" data-mode="restaurant">🎲 สุ่มร้าน</button>
       <button type="button" class="mode-tab" data-mode="menu">🍽️ สุ่มเมนู</button>
+      <button type="button" class="mode-tab" data-mode="blackjack">🃏 แบล็คแจ็ค</button>
     </div>
 
     <div id="filterButtons" class="filters" role="group" aria-label="เลือกหมวดหมู่">
@@ -122,12 +123,41 @@
       </div>
     </div>
 
-    <div class="spin-wrap">
+    <div id="spinWrap" class="spin-wrap">
       <button type="button" id="spinBtn" class="spin-btn">
         <span class="dice" aria-hidden="true">🎲</span>
         <span id="spinLabel">สุ่มร้านเลย</span>
       </button>
     </div>
+
+    <section id="blackjackPanel" class="bj-panel" hidden aria-label="เกมแบล็คแจ็คชิงสิทธิ์เลือกร้าน">
+      <p class="bj-hint">
+        🏆 ชนะเจ้ามือ = เลือกร้านเองได้ 3 ตัวเลือก · 🤝 เสมอ = สุ่มให้ 1 ร้าน · 😈 แพ้ = เจ้ามือฟันธงร้านให้ ห้ามเถียง
+        <br />ร้านที่เป็นเดิมพันอิงหมวดหมู่/โซน/ระยะที่เลือกไว้ด้านบน
+      </p>
+      <p id="bjStats" class="bj-stats"></p>
+
+      <div class="bj-table">
+        <div class="bj-side">
+          <div class="bj-side-label">😈 เจ้ามือ <span id="bjDealerScore" class="bj-score"></span></div>
+          <div id="bjDealerCards" class="bj-cards"></div>
+        </div>
+        <div class="bj-side">
+          <div class="bj-side-label">🙋 คุณ <span id="bjPlayerScore" class="bj-score"></span></div>
+          <div id="bjPlayerCards" class="bj-cards"></div>
+        </div>
+      </div>
+
+      <p id="bjMessage" class="bj-message" role="status" aria-live="polite"></p>
+
+      <div class="bj-actions">
+        <button type="button" id="bjDealBtn" class="bj-btn is-primary">🃏 แจกไพ่</button>
+        <button type="button" id="bjHitBtn" class="bj-btn" hidden>🖐️ ขอเพิ่ม</button>
+        <button type="button" id="bjStandBtn" class="bj-btn" hidden>✋ พอแล้ว</button>
+      </div>
+
+      <div id="bjPrize" class="bj-prize" hidden></div>
+    </section>
 
     <div class="result-wrap">
       <div id="emptyState" class="empty-state">
