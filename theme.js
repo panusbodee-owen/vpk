@@ -8,7 +8,7 @@
 (function () {
   "use strict";
 
-  var STORAGE_KEY_THEME = "vpk-theme"; // "dark" | "light"
+  var STORAGE_KEY_THEME = "vpk-theme"; // "dark" | "light" (ค่าตั้งต้นของเว็บคือสว่าง)
   var STORAGE_KEY_ACCENT = "vpk-accent"; // "aurora" | "ocean" | "forest" | "sunset"
 
   var ACCENTS = [
@@ -20,9 +20,9 @@
 
   function getTheme() {
     try {
-      return localStorage.getItem(STORAGE_KEY_THEME) || "dark";
+      return localStorage.getItem(STORAGE_KEY_THEME) === "dark" ? "dark" : "light";
     } catch (e) {
-      return "dark";
+      return "light";
     }
   }
 
