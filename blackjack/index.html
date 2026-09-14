@@ -6,7 +6,7 @@
     // ป้องกันหน้าวูบ (FOUC): อ่านธีมที่บันทึกไว้แล้วตั้งค่าก่อนวาดหน้า ต้องรันก่อน stylesheet เสมอ
     (function () {
       try {
-        if (localStorage.getItem("vpk-theme") === "light") document.documentElement.dataset.theme = "light";
+        if (localStorage.getItem("vpk-theme") !== "dark") document.documentElement.dataset.theme = "light";
         var a = localStorage.getItem("vpk-accent");
         if (a && a !== "aurora") document.documentElement.dataset.accent = a;
       } catch (e) {}

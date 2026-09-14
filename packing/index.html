@@ -100,7 +100,7 @@
         // โหมดมืด/สว่าง: ถ้าหน้านี้ยังไม่เคยถูกตั้งค่าไว้ ให้ตามค่าที่เลือกไว้ใน Lab
         var own = localStorage.getItem("smart_packing_theme_mode");
         if (!own) {
-          var labMode = localStorage.getItem("vpk-theme") === "light" ? "light" : "dark";
+          var labMode = localStorage.getItem("vpk-theme") === "dark" ? "dark" : "light";
           localStorage.setItem("smart_packing_theme_mode", labMode);
           own = labMode;
         }

@@ -4,18 +4,23 @@
   <meta charset="UTF-8" />
   <script>
     // ป้องกันหน้าวูบ (FOUC): อ่านธีมที่บันทึกไว้แล้วตั้งค่าก่อนวาดหน้า ต้องรันก่อน stylesheet เสมอ
+    // หน้านี้ออกแบบมาให้เป็นโทนสว่างเป็นหลัก จึงใช้สว่างเป็นค่าตั้งต้น (จะมืดก็ต่อเมื่อผู้ใช้เลือกเอง)
     (function () {
       try {
-        if (localStorage.getItem("vpk-theme") === "light") document.documentElement.dataset.theme = "light";
+        // ตั้งค่าให้ชัดทั้งสองทาง เพราะสไตล์ของหน้านี้อ้าง [data-theme="dark"] ตรงๆ
+        document.documentElement.dataset.theme =
+          localStorage.getItem("vpk-theme") === "dark" ? "dark" : "light";
         var a = localStorage.getItem("vpk-accent");
         if (a && a !== "aurora") document.documentElement.dataset.accent = a;
-      } catch (e) {}
+      } catch (e) {
+        document.documentElement.dataset.theme = "light";
+      }
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ, นาฬิกาชีวิต, หิวไรดี? สุ่มร้านเด็ดกรุงเทพฯ เจ้ามือใจร้าย แบล็คแจ็คครบเครื่อง และ Smart Packing List จัดกระเป๋าเดินทางตามสภาพอากาศ" />
+  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล, นาฬิกาชีวิต, หิวไรดี? สุ่มร้านเด็ดกรุงเทพฯ, เจ้ามือใจร้าย แบล็คแจ็คครบเครื่อง และ Smart Packing List จัดกระเป๋าเดินทางตามสภาพอากาศ" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
-  <meta name="theme-color" content="#0b1022" />
+  <meta name="theme-color" content="#f7f4ef" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Panusbodee's Lab" />
@@ -28,266 +33,806 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Kanit:wght@400;500;600;700&family=Nunito:wght@400;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Trirong:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   />
   <link rel="stylesheet" href="theme.css" />
   <script src="theme.js" defer></script>
   <style>
+    /* ============================================================
+       หน้ารวมโปรเจกต์ — โทน editorial กระดาษครีม ตัวหัวเป็นเซริฟ
+       สีหลักดึงจาก theme.css (--accent-1/2) เพื่อให้ปุ่มเปลี่ยนโทนสี
+       ของเว็บยังเปลี่ยนหน้านี้ได้เหมือนเดิม
+       ============================================================ */
+    :root {
+      --paper: #f7f4ef;
+      --paper-2: #efe9e0;
+      --surface: #ffffff;
+      --ink: #2a2622;
+      --ink-soft: #6f665d;
+      --ink-faint: #a0968b;
+      --line: rgba(42, 38, 34, 0.1);
+      --line-strong: rgba(42, 38, 34, 0.22);
+      --footer-bg: #1c1917;
+      --footer-ink: #f2ede7;
+      --shadow-sm: 0 2px 10px rgba(42, 38, 34, 0.05);
+      --shadow-md: 0 12px 34px rgba(42, 38, 34, 0.09);
+      --shadow-lg: 0 24px 60px rgba(42, 38, 34, 0.14);
+    }
+
+    :root[data-theme="dark"] {
+      --paper: #141211;
+      --paper-2: #1b1817;
+      --surface: #242020;
+      --ink: #f4efe9;
+      --ink-soft: #a89c90;
+      --ink-faint: #7c7168;
+      --line: rgba(255, 255, 255, 0.1);
+      --line-strong: rgba(255, 255, 255, 0.24);
+      --footer-bg: #0c0b0a;
+      --footer-ink: #f2ede7;
+      --shadow-sm: none;
+      --shadow-md: 0 12px 34px rgba(0, 0, 0, 0.4);
+      --shadow-lg: 0 24px 60px rgba(0, 0, 0, 0.5);
+    }
+
     * { box-sizing: border-box; }
+
+    html { scroll-behavior: smooth; }
+
+    section[id] { scroll-margin-top: 82px; }
+
     html, body {
       margin: 0;
-      min-height: 100%;
-      background: var(--bg);
-      color: rgb(var(--ink-rgb));
-      font-family: "Kanit", "Nunito", system-ui, sans-serif;
+      background: var(--paper);
+      color: var(--ink);
+      font-family: "Sarabun", system-ui, sans-serif;
       overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
     }
-    body {
-      min-height: 100svh;
+
+    body { min-height: 100svh; }
+
+    a { color: inherit; text-decoration: none; }
+
+    .wrap {
+      width: 100%;
+      max-width: 1120px;
+      margin: 0 auto;
+      padding: 0 24px;
+    }
+
+    .serif {
+      font-family: "Trirong", "Sarabun", Georgia, serif;
+      font-weight: 600;
+      letter-spacing: -0.01em;
+    }
+
+    /* ---------- แถบเมนูบนสุด ---------- */
+    .nav {
+      position: sticky;
+      top: 0;
+      z-index: 40;
+      background: color-mix(in srgb, var(--paper) 88%, transparent);
+      backdrop-filter: blur(12px);
+      border-bottom: 1px solid var(--line);
+    }
+    .nav-inner {
+      height: 66px;
       display: flex;
-      flex-direction: column;
       align-items: center;
-      justify-content: center;
-      padding: 8vh 6vw;
-      position: relative;
+      justify-content: space-between;
+      gap: 20px;
     }
-    .glow {
-      position: fixed;
-      inset: 0;
-      z-index: 0;
-      background:
-        radial-gradient(ellipse 60% 45% at 18% 20%, var(--glow-a) 0%, transparent 70%),
-        radial-gradient(ellipse 55% 45% at 85% 75%, var(--glow-b) 0%, transparent 70%),
-        radial-gradient(ellipse 80% 60% at 50% 100%, var(--glow-vignette) 0%, transparent 60%);
-      pointer-events: none;
-      animation: bg-drift 22s ease-in-out infinite;
-      will-change: transform;
-    }
-    header {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      margin-bottom: 5vh;
-    }
-    .kicker {
-      font-size: 12px;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: rgba(var(--ink-rgb), 0.5);
-      margin: 0 0 12px;
-    }
-    h1 {
-      font-size: clamp(28px, 5vw, 48px);
+    .brand {
+      font-family: "Trirong", serif;
       font-weight: 700;
-      margin: 0;
-      line-height: 1.2;
+      font-size: 17px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
     }
-    h1 span {
-      background: var(--accent-grad-3);
+    .nav-links {
+      display: flex;
+      gap: 30px;
+      font-size: 14px;
+      color: var(--ink-soft);
+    }
+    .nav-links a { transition: color 0.2s ease; }
+    .nav-links a:hover { color: var(--ink); }
+    .nav-cta {
+      display: inline-flex;
+      align-items: center;
+      gap: 7px;
+      font-size: 13px;
+      font-weight: 600;
+      padding: 9px 16px;
+      border-radius: 999px;
+      border: 1px solid var(--line-strong);
+      transition: background 0.2s ease, border-color 0.2s ease;
+    }
+    .nav-cta:hover { background: var(--paper-2); border-color: var(--ink); }
+
+    /* ---------- ฮีโร่ ---------- */
+    .hero {
+      display: grid;
+      grid-template-columns: 1.05fr 0.95fr;
+      gap: 48px;
+      align-items: center;
+      padding: 84px 0 72px;
+    }
+
+    .eyebrow {
+      font-size: 11.5px;
+      letter-spacing: 0.34em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+      margin: 0 0 22px;
+    }
+
+    h1 {
+      font-family: "Trirong", serif;
+      font-weight: 600;
+      font-size: clamp(40px, 6.4vw, 68px);
+      line-height: 1.12;
+      letter-spacing: -0.02em;
+      margin: 0;
+    }
+    h1 em {
+      font-style: normal;
+      background: linear-gradient(100deg, var(--accent-1), var(--accent-2));
       -webkit-background-clip: text;
       background-clip: text;
       color: transparent;
     }
-    p.sub {
-      margin: 14px 0 0;
-      color: rgba(var(--ink-rgb), 0.55);
-      font-family: "Nunito", sans-serif;
-      font-size: 15px;
+
+    .lead {
+      max-width: 430px;
+      margin: 24px 0 0;
+      font-size: 15.5px;
+      line-height: 1.85;
+      color: var(--ink-soft);
+      font-weight: 300;
     }
-    .cards {
-      position: relative;
-      z-index: 1;
-      display: grid;
-      grid-template-columns: repeat(3, minmax(210px, 300px));
-      gap: 22px;
-      width: 100%;
-      max-width: 950px;
-    }
-    @media (max-width: 1020px) {
-      .cards { grid-template-columns: repeat(2, minmax(220px, 320px)); max-width: 680px; }
-    }
-    @media (max-width: 620px) {
-      .cards { grid-template-columns: 1fr; max-width: 340px; }
-    }
-    .card {
-      position: relative;
+
+    .hero-cta {
       display: flex;
-      flex-direction: column;
-      justify-content: space-between;
-      min-height: 280px;
-      padding: 28px 26px;
-      border-radius: 22px;
-      text-decoration: none;
-      color: inherit;
-      border: 1px solid var(--card-border);
-      background: var(--card-bg);
-      box-shadow: var(--card-shadow);
-      backdrop-filter: blur(6px);
-      overflow: hidden;
-      transition: transform 0.25s ease, border-color 0.25s ease, background 0.25s ease, box-shadow 0.25s ease;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 22px;
+      margin-top: 34px;
     }
-    .card:hover, .card:focus-visible {
-      transform: translateY(-6px);
-      border-color: var(--card-border-hover);
-      background: var(--card-bg-hover);
-      box-shadow: var(--card-shadow-hover);
-    }
-    .card::before {
-      content: "";
-      position: absolute;
-      inset: -20% -20% auto auto;
-      width: 80%;
-      aspect-ratio: 1;
-      border-radius: 999px;
-      background: radial-gradient(circle, var(--glow-color) 0%, transparent 68%);
-      opacity: 0.55;
-      transition: opacity 0.25s ease;
-      pointer-events: none;
-    }
-    .card:hover::before, .card:focus-visible::before { opacity: 0.85; }
-    .card-pood { --glow-color: #ed9b4c; --tile-bg: rgba(237, 155, 76, 0.14); }
-    .card-scale { --glow-color: #a855f7; --tile-bg: rgba(168, 85, 247, 0.14); }
-    .card-life { --glow-color: #f472b6; --tile-bg: rgba(244, 114, 182, 0.14); }
-    .card-eat { --glow-color: #f43f5e; --tile-bg: rgba(244, 63, 94, 0.14); }
-    .card-blackjack { --glow-color: #10b981; --tile-bg: rgba(16, 185, 129, 0.14); }
-    .card-packing { --glow-color: #38bdf8; --tile-bg: rgba(56, 189, 248, 0.14); }
-    .card .emoji { font-size: 44px; position: relative; }
-    .stat-tile {
-      display: inline-flex;
-      flex-direction: column;
-      gap: 1px;
-      margin-top: 14px;
-      padding: 8px 12px;
-      border-radius: 12px;
-      background: var(--tile-bg);
-      position: relative;
-    }
-    .stat-tile .stat-num {
-      font-family: "Kanit", sans-serif;
-      font-weight: 700;
-      font-size: 19px;
-      color: var(--glow-color);
-      line-height: 1.1;
-    }
-    .stat-tile .stat-label {
-      font-family: "Nunito", sans-serif;
-      font-size: 10px;
-      color: rgba(var(--ink-rgb), 0.55);
-    }
-    .card h2 {
-      font-size: 22px;
-      margin: 18px 0 6px;
-      position: relative;
-    }
-    .card p {
-      margin: 0;
-      font-family: "Nunito", sans-serif;
-      font-size: 13.5px;
-      line-height: 1.55;
-      color: rgba(var(--ink-rgb), 0.65);
-      position: relative;
-    }
-    .card .go {
-      margin-top: 18px;
-      font-size: 13px;
-      font-weight: 600;
+
+    .btn-primary {
       display: inline-flex;
       align-items: center;
-      gap: 6px;
-      position: relative;
+      gap: 9px;
+      padding: 14px 30px;
+      border-radius: 999px;
+      background: var(--accent-1);
+      color: #241708;
+      font-size: 14.5px;
+      font-weight: 600;
+      box-shadow: 0 10px 26px -12px var(--accent-1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease, filter 0.2s ease;
     }
-    .card-pood .go { color: #ed9b4c; }
-    .card-scale .go { color: #c084fc; }
-    .card-life .go { color: #f472b6; }
-    .card-eat .go { color: #fb7185; }
-    .card-blackjack .go { color: #34d399; }
-    .card-packing .go { color: #38bdf8; }
-    footer {
-      position: relative;
-      z-index: 1;
-      margin-top: 6vh;
-      font-family: "Nunito", sans-serif;
+    .btn-primary:hover { transform: translateY(-2px); filter: brightness(1.04); box-shadow: 0 16px 34px -14px var(--accent-1); }
+
+    .btn-link {
+      font-size: 14.5px;
+      font-weight: 500;
+      color: var(--ink-soft);
+      border-bottom: 1px solid var(--line-strong);
+      padding-bottom: 3px;
+      transition: color 0.2s ease, border-color 0.2s ease;
+    }
+    .btn-link:hover { color: var(--ink); border-color: var(--ink); }
+
+    .hero-stat {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      margin-top: 46px;
+    }
+    .hero-stat .num {
+      font-family: "Trirong", serif;
+      font-size: 40px;
+      font-weight: 600;
+      line-height: 1;
+    }
+    .hero-stat .txt {
       font-size: 12.5px;
-      color: rgba(var(--ink-rgb), 0.35);
-      text-align: center;
+      line-height: 1.6;
+      color: var(--ink-soft);
+      max-width: 190px;
     }
-    footer a { color: inherit; }
+
+    /* ---------- ภาพประกอบฮีโร่: การ์ดโปรเจกต์ซ้อนกัน ---------- */
+    .hero-art {
+      position: relative;
+      height: 420px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .art-glow {
+      position: absolute;
+      inset: 8% 4%;
+      border-radius: 50%;
+      background: radial-gradient(circle at 50% 45%, color-mix(in srgb, var(--accent-1) 22%, transparent), transparent 68%);
+      filter: blur(12px);
+    }
+    .art-card {
+      position: absolute;
+      width: 168px;
+      padding: 22px 20px;
+      border-radius: 22px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-md);
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      transition: transform 0.4s cubic-bezier(0.2, 0.8, 0.3, 1);
+    }
+    .art-emoji { font-size: 34px; line-height: 1; }
+    .art-label { font-size: 13.5px; font-weight: 600; }
+    .art-sub { font-size: 11.5px; color: var(--ink-faint); }
+    .art-chip {
+      align-self: flex-start;
+      margin-top: 4px;
+      font-size: 11px;
+      font-weight: 600;
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: color-mix(in srgb, var(--accent-1) 18%, transparent);
+      color: var(--ink);
+    }
+    .art-back { transform: translate(-104px, -100px) rotate(-8deg); }
+    .art-mid { transform: translate(106px, -48px) rotate(7deg); }
+    .art-front { transform: translate(-52px, 96px) rotate(-2deg); box-shadow: var(--shadow-lg); }
+    .hero-art:hover .art-back { transform: translate(-112px, -112px) rotate(-10deg); }
+    .hero-art:hover .art-mid { transform: translate(114px, -56px) rotate(9deg); }
+    .hero-art:hover .art-front { transform: translate(-52px, 88px) rotate(-1deg); }
+
+    .sparkle {
+      position: absolute;
+      color: var(--accent-2);
+      font-size: 18px;
+      opacity: 0.75;
+    }
+    .sparkle.s1 { top: 12%; right: 16%; }
+    .sparkle.s2 { bottom: 16%; right: 26%; font-size: 12px; }
+    .sparkle.s3 { top: 40%; left: 6%; font-size: 14px; }
+
+    /* ---------- แถบคำ ---------- */
+    .strip {
+      border-top: 1px solid var(--line);
+      border-bottom: 1px solid var(--line);
+      background: var(--paper-2);
+    }
+    .strip-inner {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      justify-content: space-between;
+      gap: 20px 34px;
+      padding: 26px 24px;
+    }
+    .strip-item {
+      font-size: 12.5px;
+      font-weight: 600;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+
+    /* ---------- ส่วนเนื้อหา ---------- */
+    .section { padding: 86px 0; }
+
+    .section-head {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 40px;
+      align-items: end;
+      margin-bottom: 46px;
+    }
+    .section-head h2 {
+      font-family: "Trirong", serif;
+      font-weight: 600;
+      font-size: clamp(28px, 4vw, 40px);
+      line-height: 1.22;
+      letter-spacing: -0.015em;
+      margin: 0;
+      position: relative;
+      padding-left: 54px;
+    }
+    .section-head h2::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 0.62em;
+      width: 38px;
+      height: 1.5px;
+      background: var(--ink);
+    }
+    .section-head p {
+      margin: 0;
+      font-size: 14.5px;
+      line-height: 1.85;
+      color: var(--ink-soft);
+      font-weight: 300;
+    }
+
+    /* ---------- การ์ดโปรเจกต์ ---------- */
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 26px;
+    }
+
+    .p-card {
+      display: flex;
+      flex-direction: column;
+      border-radius: 20px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      overflow: hidden;
+      transition: transform 0.25s ease, box-shadow 0.25s ease, border-color 0.25s ease;
+    }
+    .p-card:hover {
+      transform: translateY(-6px);
+      box-shadow: var(--shadow-md);
+      border-color: var(--line-strong);
+    }
+
+    .p-thumb {
+      height: 150px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 54px;
+      background: var(--tile);
+      border-bottom: 1px solid var(--line);
+    }
+
+    .p-body {
+      display: flex;
+      flex-direction: column;
+      flex: 1;
+      padding: 22px 22px 20px;
+    }
+    .p-body h3 {
+      font-family: "Trirong", serif;
+      font-weight: 600;
+      font-size: 19px;
+      margin: 0 0 9px;
+      letter-spacing: -0.01em;
+    }
+    .p-body p {
+      margin: 0 0 16px;
+      font-size: 13.5px;
+      line-height: 1.78;
+      color: var(--ink-soft);
+      font-weight: 300;
+      flex: 1;
+    }
+    .p-stat {
+      align-self: flex-start;
+      font-size: 11.5px;
+      font-weight: 600;
+      color: var(--accent-strong, var(--ink));
+      padding: 5px 12px;
+      border-radius: 999px;
+      background: var(--tile);
+      margin-bottom: 18px;
+    }
+    .p-btn {
+      display: block;
+      text-align: center;
+      padding: 12px 18px;
+      border-radius: 999px;
+      border: 1px solid var(--ink);
+      font-size: 13.5px;
+      font-weight: 600;
+      transition: background 0.2s ease, color 0.2s ease;
+    }
+    .p-card:hover .p-btn { background: var(--ink); color: var(--paper); }
+
+    /* ---------- ทำไมถึงน่าลอง ---------- */
+    .why { background: var(--paper-2); border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); }
+    .why-grid {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 22px;
+    }
+    .why-item {
+      padding: 26px 22px;
+      border-radius: 18px;
+      background: var(--surface);
+      border: 1px solid var(--line);
+    }
+    .why-item .ico { font-size: 24px; }
+    .why-item h3 {
+      font-family: "Trirong", serif;
+      font-size: 16px;
+      font-weight: 600;
+      margin: 14px 0 8px;
+    }
+    .why-item p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      font-weight: 300;
+    }
+
+    /* ---------- อัปเดตล่าสุด ---------- */
+    .updates { display: grid; grid-template-columns: repeat(3, 1fr); gap: 26px; }
+    .u-card {
+      border-radius: 20px;
+      overflow: hidden;
+      background: var(--surface);
+      border: 1px solid var(--line);
+      box-shadow: var(--shadow-sm);
+      transition: transform 0.25s ease, box-shadow 0.25s ease;
+    }
+    .u-card:hover { transform: translateY(-5px); box-shadow: var(--shadow-md); }
+    .u-thumb {
+      height: 128px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 42px;
+      background: var(--tile);
+    }
+    .u-body { padding: 20px 20px 22px; }
+    .u-tag {
+      font-size: 10.5px;
+      font-weight: 700;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      color: var(--ink-faint);
+    }
+    .u-body h3 {
+      font-family: "Trirong", serif;
+      font-size: 16.5px;
+      font-weight: 600;
+      margin: 10px 0 8px;
+      line-height: 1.45;
+    }
+    .u-body p {
+      margin: 0;
+      font-size: 13px;
+      line-height: 1.75;
+      color: var(--ink-soft);
+      font-weight: 300;
+    }
+
+    /* ---------- ฟุตเตอร์ ---------- */
+    .footer {
+      background: var(--footer-bg);
+      color: var(--footer-ink);
+      padding: 64px 0 34px;
+    }
+    .footer-top {
+      display: grid;
+      grid-template-columns: 1.4fr 1fr 1fr 1fr;
+      gap: 40px;
+      padding-bottom: 42px;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.12);
+    }
+    .footer .brand { color: var(--footer-ink); display: inline-block; margin-bottom: 14px; }
+    .footer-about {
+      font-size: 13px;
+      line-height: 1.8;
+      color: rgba(242, 237, 231, 0.6);
+      font-weight: 300;
+      max-width: 280px;
+      margin: 0;
+    }
+    .footer-col h4 {
+      font-size: 11.5px;
+      letter-spacing: 0.18em;
+      text-transform: uppercase;
+      color: rgba(242, 237, 231, 0.45);
+      margin: 0 0 16px;
+      font-weight: 700;
+    }
+    .footer-col a {
+      display: block;
+      font-size: 13.5px;
+      color: rgba(242, 237, 231, 0.82);
+      margin-bottom: 11px;
+      font-weight: 300;
+      transition: color 0.2s ease;
+    }
+    .footer-col a:hover { color: #fff; }
+    .footer-bottom {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 12px;
+      justify-content: space-between;
+      align-items: center;
+      padding-top: 26px;
+      font-size: 12px;
+      color: rgba(242, 237, 231, 0.45);
+      font-weight: 300;
+    }
+
+    /* ---------- จอเล็ก ---------- */
+    @media (max-width: 940px) {
+      .hero { grid-template-columns: 1fr; gap: 20px; padding: 56px 0 48px; }
+      .hero-art { height: 330px; order: -1; }
+      .art-card { width: 146px; padding: 18px 16px; }
+      .art-back { transform: translate(-88px, -84px) rotate(-8deg); }
+      .art-mid { transform: translate(92px, -40px) rotate(7deg); }
+      .art-front { transform: translate(-46px, 82px) rotate(-2deg); }
+      .grid, .updates { grid-template-columns: repeat(2, 1fr); }
+      .why-grid { grid-template-columns: repeat(2, 1fr); }
+      .section-head { grid-template-columns: 1fr; gap: 18px; align-items: start; }
+      .footer-top { grid-template-columns: 1fr 1fr; gap: 32px; }
+      .nav-links { display: none; }
+    }
+
+    @media (max-width: 600px) {
+      .wrap { padding: 0 18px; }
+      .section { padding: 60px 0; }
+      .grid, .updates, .why-grid { grid-template-columns: 1fr; }
+      .footer-top { grid-template-columns: 1fr; }
+      .hero-art { height: 300px; }
+      .strip-inner { justify-content: center; gap: 14px 22px; }
+      .strip-item { font-size: 11px; }
+      .section-head h2 { padding-left: 0; }
+      .section-head h2::before { display: none; }
+    }
+
+    @media (prefers-reduced-motion: reduce) {
+      html { scroll-behavior: auto; }
+      .p-card, .u-card, .art-card, .btn-primary { transition: none; }
+      .hero-art:hover .art-back,
+      .hero-art:hover .art-mid,
+      .hero-art:hover .art-front { transform: none; }
+    }
   </style>
 </head>
 <body>
-  <div class="glow" aria-hidden="true"></div>
-
-  <header>
-    <p class="kicker">Panusbodee's Lab</p>
-    <h1>อยากไปเล่น<span>อะไรดี?</span></h1>
-    <p class="sub">เลือกโปรเจกต์ที่อยากลองด้านล่างได้เลยครับ</p>
+  <header class="nav">
+    <div class="wrap nav-inner">
+      <a class="brand" href="./">Panusbodee</a>
+      <nav class="nav-links">
+        <a href="#projects">โปรเจกต์</a>
+        <a href="#why">ทำไมถึงน่าลอง</a>
+        <a href="#updates">อัปเดตล่าสุด</a>
+      </nav>
+      <a class="nav-cta" href="https://github.com/panusbodee-owen/vpk" target="_blank" rel="noopener noreferrer">ดูโค้ดบน GitHub</a>
+    </div>
   </header>
 
-  <div class="cards">
-    <a class="card card-pood" href="pood/">
-      <div>
-        <span class="emoji">🗣️</span>
-        <h2>พูดทำไม?</h2>
-        <p>สุ่มหัวข้อฝึกพูดฉับพลัน เลือกระดับ จับเวลา แล้วลองพูดให้ฟังได้เลย</p>
-        <div class="stat-tile"><span class="stat-num">60</span><span class="stat-label">วินาทีต่อรอบ</span></div>
+  <main>
+    <section class="wrap hero">
+      <div class="hero-copy">
+        <p class="eyebrow">Panusbodee's Lab</p>
+        <h1>อยากไปเล่น<br /><em>อะไรดี?</em></h1>
+        <p class="lead">
+          ที่นี่คือที่รวมโปรเจกต์เล็กๆ ที่ทำไว้เล่นเอง — ตั้งแต่ฝึกพูดฉับพลัน
+          ไล่ล่าสเกลจักรวาล ดูนาฬิกาชีวิต สุ่มร้านเด็ดกรุงเทพฯ เล่นแบล็คแจ็ค
+          ไปจนถึงจัดกระเป๋าเดินทางตามสภาพอากาศจริง
+        </p>
+        <div class="hero-cta">
+          <a class="btn-primary" href="#projects">เลือกโปรเจกต์เลย →</a>
+          <a class="btn-link" href="#why">ทำไมถึงน่าลอง</a>
+        </div>
+        <div class="hero-stat">
+          <span class="num">6</span>
+          <span class="txt">โปรเจกต์ให้เล่นฟรี ไม่ต้องสมัคร ไม่ต้องติดตั้งอะไรเลย</span>
+        </div>
       </div>
-      <span class="go">เข้าไปพูด →</span>
-    </a>
 
-    <a class="card card-scale" href="scale/">
-      <div>
-        <span class="emoji">🔭</span>
-        <h2>ไล่ล่าสเกลจักรวาล</h2>
-        <p>เลื่อนสกอลล์ซูมออกจากควาร์กเล็กจิ๋ว ไปจนถึงเอกภพที่สังเกตได้ทั้งหมด</p>
-        <div class="stat-tile"><span class="stat-num">10²⁷ ม.</span><span class="stat-label">ระยะซูมสูงสุด</span></div>
+      <div class="hero-art" aria-hidden="true">
+        <div class="art-glow"></div>
+        <div class="art-card art-back">
+          <span class="art-emoji">⏳</span>
+          <span class="art-label">นาฬิกาชีวิต</span>
+          <span class="art-sub">52 สัปดาห์ต่อปี</span>
+        </div>
+        <div class="art-card art-mid">
+          <span class="art-emoji">🃏</span>
+          <span class="art-label">เจ้ามือใจร้าย</span>
+          <span class="art-sub">จ่าย 3:2</span>
+        </div>
+        <div class="art-card art-front">
+          <span class="art-emoji">🎲</span>
+          <span class="art-label">หิวไรดี?</span>
+          <span class="art-sub">สุ่มร้านเด็ดกรุงเทพฯ</span>
+          <span class="art-chip">กดสุ่มเลย</span>
+        </div>
+        <span class="sparkle s1">✦</span>
+        <span class="sparkle s2">✦</span>
+        <span class="sparkle s3">✦</span>
       </div>
-      <span class="go">เริ่มซูม →</span>
-    </a>
+    </section>
 
-    <a class="card card-life" href="life/">
-      <div>
-        <span class="emoji">⏳</span>
-        <h2>นาฬิกาชีวิต</h2>
-        <p>กรอกวันเกิด เห็นชีวิตทั้งหมดเป็นตารางสัปดาห์ แถมดูดวงกวนๆ ให้ด้วย</p>
-        <div class="stat-tile"><span class="stat-num">52</span><span class="stat-label">สัปดาห์ต่อปี</span></div>
+    <section class="strip">
+      <div class="wrap strip-inner">
+        <span class="strip-item">HTML</span>
+        <span class="strip-item">CSS</span>
+        <span class="strip-item">Vanilla JS</span>
+        <span class="strip-item">GitHub Pages</span>
+        <span class="strip-item">Open Source</span>
       </div>
-      <span class="go">ดูนาฬิกาชีวิต →</span>
-    </a>
+    </section>
 
-    <a class="card card-eat" href="eat/">
-      <div>
-        <span class="emoji">🎲</span>
-        <h2>หิวไรดี?</h2>
-        <p>สุ่มร้านเด็ดกรุงเทพฯ เลือกหมวดอาหาร เครื่องดื่ม ของหวาน แล้วดูร้านใน Google Maps หรือเปิด LINE MAN, Grab, ShopeeFood ได้เลย</p>
-        <div class="stat-tile"><span class="stat-num">30+</span><span class="stat-label">ร้านให้สุ่ม</span></div>
+    <section class="wrap section" id="projects">
+      <div class="section-head">
+        <h2>โปรเจกต์<br />ทั้งหมด</h2>
+        <p>
+          ทุกอันเปิดในเบราว์เซอร์ได้เลย ไม่ต้องสมัครสมาชิกและไม่ต้องติดตั้งอะไร
+          กดเข้าไปเล่นได้ทันทีทั้งบนมือถือและคอมพิวเตอร์
+        </p>
       </div>
-      <span class="go">สุ่มร้านเลย →</span>
-    </a>
 
-    <a class="card card-blackjack" href="blackjack/">
-      <div>
-        <span class="emoji">🃏</span>
-        <h2>เจ้ามือใจร้าย</h2>
-        <p>แบล็คแจ็คครบเครื่อง วางชิป ดับเบิล แยกไพ่ ซื้อประกัน ยอมแพ้ได้ครบ พร้อมโค้ชบอกทางเล่นและระบบนับไพ่ Hi-Lo</p>
-        <div class="stat-tile"><span class="stat-num">3:2</span><span class="stat-label">อัตราจ่ายแบล็คแจ็ค</span></div>
+      <div class="grid">
+        <a class="p-card" href="pood/" style="--tile: rgba(237, 155, 76, 0.14);">
+          <div class="p-thumb">🗣️</div>
+          <div class="p-body">
+            <h3>พูดทำไม?</h3>
+            <p>สุ่มหัวข้อฝึกพูดฉับพลัน เลือกระดับความยาก จับเวลา แล้วลองพูดให้ฟังได้เลย</p>
+            <span class="p-stat">60 วินาทีต่อรอบ</span>
+            <span class="p-btn">เข้าไปพูด</span>
+          </div>
+        </a>
+
+        <a class="p-card" href="scale/" style="--tile: rgba(168, 85, 247, 0.14);">
+          <div class="p-thumb">🔭</div>
+          <div class="p-body">
+            <h3>ไล่ล่าสเกลจักรวาล</h3>
+            <p>เลื่อนสกรอลล์ซูมออกจากควาร์กเล็กจิ๋ว ไปจนถึงเอกภพที่สังเกตได้ทั้งหมด</p>
+            <span class="p-stat">ซูมไกลสุด 10²⁷ เมตร</span>
+            <span class="p-btn">เริ่มซูม</span>
+          </div>
+        </a>
+
+        <a class="p-card" href="life/" style="--tile: rgba(244, 114, 182, 0.14);">
+          <div class="p-thumb">⏳</div>
+          <div class="p-body">
+            <h3>นาฬิกาชีวิต</h3>
+            <p>กรอกวันเกิด แล้วเห็นชีวิตทั้งหมดเป็นตารางสัปดาห์ แถมดูดวงกวนๆ ให้ด้วย</p>
+            <span class="p-stat">52 สัปดาห์ต่อปี</span>
+            <span class="p-btn">ดูนาฬิกาชีวิต</span>
+          </div>
+        </a>
+
+        <a class="p-card" href="eat/" style="--tile: rgba(244, 63, 94, 0.14);">
+          <div class="p-thumb">🎲</div>
+          <div class="p-body">
+            <h3>หิวไรดี?</h3>
+            <p>สุ่มร้านหรือสุ่มเมนูเด็ดกรุงเทพฯ เลือกโซนใกล้ตัว แล้วเปิดดูใน Google Maps หรือแอปสั่งอาหารต่อได้เลย</p>
+            <span class="p-stat">30+ ร้านให้สุ่ม</span>
+            <span class="p-btn">สุ่มร้านเลย</span>
+          </div>
+        </a>
+
+        <a class="p-card" href="blackjack/" style="--tile: rgba(16, 185, 129, 0.14);">
+          <div class="p-thumb">🃏</div>
+          <div class="p-body">
+            <h3>เจ้ามือใจร้าย</h3>
+            <p>แบล็คแจ็คครบเครื่อง วางชิป ดับเบิล แยกไพ่ ซื้อประกัน พร้อมโค้ชบอกทางเล่นและระบบนับไพ่</p>
+            <span class="p-stat">จ่ายแบล็คแจ็ค 3:2</span>
+            <span class="p-btn">ลงโต๊ะเลย</span>
+          </div>
+        </a>
+
+        <a class="p-card" href="packing/" style="--tile: rgba(56, 189, 248, 0.14);">
+          <div class="p-thumb">🧳</div>
+          <div class="p-body">
+            <h3>Smart Packing List</h3>
+            <p>กรอกเมืองปลายทางกับวันเดินทาง แล้วให้มันเช็กอากาศจริงและจัดของให้ พร้อมชั่งน้ำหนักและคำนวณงบทริป</p>
+            <span class="p-stat">โควตาถือขึ้นเครื่อง 7 kg</span>
+            <span class="p-btn">จัดกระเป๋าเลย</span>
+          </div>
+        </a>
       </div>
-      <span class="go">ลงโต๊ะเลย →</span>
-    </a>
+    </section>
 
-    <a class="card card-packing" href="packing/">
-      <div>
-        <span class="emoji">🧳</span>
-        <h2>Smart Packing List</h2>
-        <p>กรอกเมืองปลายทางกับวันเดินทาง แล้วให้มันเช็กอากาศจริงแล้วจัดของให้ พร้อมชั่งน้ำหนักเทียบโควตาสายการบินและคำนวณงบทริป</p>
-        <div class="stat-tile"><span class="stat-num">7 kg</span><span class="stat-label">โควตาถือขึ้นเครื่อง</span></div>
+    <section class="section why" id="why">
+      <div class="wrap">
+        <div class="section-head">
+          <h2>ทำไมถึง<br />น่าลอง?</h2>
+          <p>ทุกโปรเจกต์ทำด้วย HTML/CSS/JavaScript ล้วนๆ ไม่มีระบบสมาชิก ไม่มีเซิร์ฟเวอร์เก็บข้อมูล และเปิดซอร์สให้ดูโค้ดได้ทั้งหมด</p>
+        </div>
+        <div class="why-grid">
+          <div class="why-item">
+            <div class="ico">🎈</div>
+            <h3>ใช้ฟรี ไม่ต้องสมัคร</h3>
+            <p>กดเข้าไปเล่นได้เลย ไม่มีหน้าล็อกอิน ไม่ต้องกรอกอีเมล</p>
+          </div>
+          <div class="why-item">
+            <div class="ico">⚡</div>
+            <h3>เปิดในเบราว์เซอร์ได้ทันที</h3>
+            <p>ไม่ต้องติดตั้งแอป ใช้ได้ทั้งมือถือและคอมพิวเตอร์</p>
+          </div>
+          <div class="why-item">
+            <div class="ico">🔒</div>
+            <h3>ข้อมูลอยู่ในเครื่องคุณ</h3>
+            <p>สิ่งที่บันทึกไว้ เช่น เงินในเกมหรือทริป เก็บไว้ในเบราว์เซอร์ของคุณเอง</p>
+          </div>
+          <div class="why-item">
+            <div class="ico">📖</div>
+            <h3>เปิดซอร์สทั้งหมด</h3>
+            <p>อยากรู้ว่าข้างในทำงานยังไง เข้าไปอ่านโค้ดบน GitHub ได้เลย</p>
+          </div>
+        </div>
       </div>
-      <span class="go">จัดกระเป๋าเลย →</span>
-    </a>
-  </div>
+    </section>
 
-  <footer>
-    ทำโดย Panusbodee Pisutsuwimon
+    <section class="wrap section" id="updates">
+      <div class="section-head">
+        <h2>อัปเดต<br />ล่าสุด</h2>
+        <p>ของใหม่ที่เพิ่งเพิ่มเข้ามาใน Lab</p>
+      </div>
+      <div class="updates">
+        <a class="u-card" href="packing/" style="--tile: rgba(56, 189, 248, 0.14);">
+          <div class="u-thumb">🧳</div>
+          <div class="u-body">
+            <span class="u-tag">โปรเจกต์ใหม่</span>
+            <h3>Smart Packing List ย้ายเข้ามาอยู่ใน Lab</h3>
+            <p>เว็บจัดกระเป๋าตามสภาพอากาศจริง พร้อมชั่งน้ำหนักเทียบโควตาสายการบินและคำนวณงบทริป</p>
+          </div>
+        </a>
+        <a class="u-card" href="blackjack/" style="--tile: rgba(16, 185, 129, 0.14);">
+          <div class="u-thumb">🃏</div>
+          <div class="u-body">
+            <span class="u-tag">ลูกเล่นใหม่</span>
+            <h3>เจ้ามือใจร้ายได้อนิเมชันพลิกไพ่ 3 มิติ</h3>
+            <p>ไพ่คว่ำพลิกหงายจริง พร้อมคอนเฟตตีตอนชนะ ตราประทับผล และเจ้ามือที่เปลี่ยนสีหน้าตามสถานการณ์</p>
+          </div>
+        </a>
+        <a class="u-card" href="eat/" style="--tile: rgba(244, 63, 94, 0.14);">
+          <div class="u-thumb">🍽️</div>
+          <div class="u-body">
+            <span class="u-tag">โหมดใหม่</span>
+            <h3>หิวไรดี? เพิ่มโหมดสุ่มเมนู</h3>
+            <p>สุ่มเมนูก่อนแล้วค่อยบอกว่าร้านไหนมีขาย พร้อมโหมดแบล็คแจ็คชิงสิทธิ์เลือกร้าน</p>
+          </div>
+        </a>
+      </div>
+    </section>
+  </main>
+
+  <footer class="footer">
+    <div class="wrap">
+      <div class="footer-top">
+        <div>
+          <a class="brand" href="./">Panusbodee</a>
+          <p class="footer-about">
+            ที่รวมโปรเจกต์เล็กๆ ที่ทำไว้เล่นเอง ทำด้วย HTML/CSS/JavaScript ล้วนๆ
+            และเปิดซอร์สให้ดูได้ทั้งหมด
+          </p>
+        </div>
+        <div class="footer-col">
+          <h4>โปรเจกต์</h4>
+          <a href="pood/">พูดทำไม?</a>
+          <a href="scale/">ไล่ล่าสเกลจักรวาล</a>
+          <a href="life/">นาฬิกาชีวิต</a>
+        </div>
+        <div class="footer-col">
+          <h4>เล่นต่อ</h4>
+          <a href="eat/">หิวไรดี?</a>
+          <a href="blackjack/">เจ้ามือใจร้าย</a>
+          <a href="packing/">Smart Packing List</a>
+        </div>
+        <div class="footer-col">
+          <h4>ลิงก์</h4>
+          <a href="https://github.com/panusbodee-owen/vpk" target="_blank" rel="noopener noreferrer">ซอร์สโค้ดบน GitHub</a>
+          <a href="https://github.com/panusbodee-owen" target="_blank" rel="noopener noreferrer">โปรไฟล์ GitHub</a>
+        </div>
+      </div>
+      <div class="footer-bottom">
+        <span>ทำโดย Panusbodee Pisutsuwimon</span>
+        <span>สร้างด้วย HTML, CSS และ JavaScript ล้วนๆ</span>
+      </div>
+    </div>
   </footer>
 </body>
 </html>
