@@ -33,7 +33,7 @@
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link
-    href="https://fonts.googleapis.com/css2?family=Trirong:wght@400;500;600;700&family=Sarabun:wght@300;400;500;600;700&display=swap"
+    href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap"
     rel="stylesheet"
   />
   <link rel="stylesheet" href="theme.css" />
@@ -45,6 +45,11 @@
        ของเว็บยังเปลี่ยนหน้านี้ได้เหมือนเดิม
        ============================================================ */
     :root {
+      /* Google Sans เป็นฟอนต์ลิขสิทธิ์ที่โหลดจาก Google Fonts ไม่ได้ และไม่มีตัวอักษรไทย
+         จึงใส่ไว้ตัวแรกให้เครื่องที่มีฟอนต์นี้อยู่แล้วใช้ได้เลย ที่เหลือใช้ Prompt
+         ซึ่งเป็นฟอนต์เรขาคณิตหน้าตาใกล้กันและรองรับภาษาไทยครบ */
+      --font-sans: "Google Sans", "Google Sans Text", "Product Sans", "Prompt", system-ui, -apple-system, sans-serif;
+
       --paper: #f7f4ef;
       --paper-2: #efe9e0;
       --surface: #ffffff;
@@ -86,7 +91,7 @@
       margin: 0;
       background: var(--paper);
       color: var(--ink);
-      font-family: "Sarabun", system-ui, sans-serif;
+      font-family: var(--font-sans);
       overflow-x: hidden;
       -webkit-font-smoothing: antialiased;
     }
@@ -103,10 +108,96 @@
     }
 
     .serif {
-      font-family: "Trirong", "Sarabun", Georgia, serif;
+      font-family: var(--font-sans);
       font-weight: 600;
       letter-spacing: -0.01em;
     }
+
+    h1, h2, h3, .brand { font-weight: 600; }
+
+    /* ---------- พื้นหลังเคลื่อนไหว ----------
+       ชั้นนี้อยู่หลังเนื้อหาทั้งหมด (z-index 0) ส่วนเนื้อหาถูกยกขึ้น z-index 1
+       ใช้สีจาก --accent-* จึงเปลี่ยนตามโทนสีที่ผู้ใช้เลือก และปิดเองเมื่อผู้ใช้
+       ตั้งค่าระบบให้ลดการเคลื่อนไหว */
+    .bg-fx {
+      position: fixed;
+      inset: 0;
+      z-index: 0;
+      overflow: hidden;
+      pointer-events: none;
+    }
+
+    .orb {
+      position: absolute;
+      border-radius: 50%;
+      filter: blur(72px);
+      will-change: transform;
+    }
+    .orb-1 {
+      width: 46vw; height: 46vw; min-width: 320px; min-height: 320px;
+      top: -12%; left: -8%;
+      background: radial-gradient(circle, var(--accent-1), transparent 68%);
+      opacity: 0.34;
+      animation: orb-a 26s ease-in-out infinite alternate;
+    }
+    .orb-2 {
+      width: 40vw; height: 40vw; min-width: 280px; min-height: 280px;
+      top: 4%; right: -10%;
+      background: radial-gradient(circle, var(--accent-2), transparent 68%);
+      opacity: 0.26;
+      animation: orb-b 32s ease-in-out infinite alternate;
+    }
+    .orb-3 {
+      width: 52vw; height: 52vw; min-width: 340px; min-height: 340px;
+      bottom: -18%; left: 24%;
+      background: radial-gradient(circle, var(--accent-3), transparent 70%);
+      opacity: 0.22;
+      animation: orb-c 38s ease-in-out infinite alternate;
+    }
+    :root[data-theme="dark"] .orb-1 { opacity: 0.5; }
+    :root[data-theme="dark"] .orb-2 { opacity: 0.36; }
+    :root[data-theme="dark"] .orb-3 { opacity: 0.3; }
+
+    @keyframes orb-a {
+      0%   { transform: translate3d(0, 0, 0) scale(1); }
+      50%  { transform: translate3d(6vw, 7vh, 0) scale(1.14); }
+      100% { transform: translate3d(-3vw, 12vh, 0) scale(0.94); }
+    }
+    @keyframes orb-b {
+      0%   { transform: translate3d(0, 0, 0) scale(1.05); }
+      50%  { transform: translate3d(-7vw, 9vh, 0) scale(0.9); }
+      100% { transform: translate3d(-2vw, -5vh, 0) scale(1.16); }
+    }
+    @keyframes orb-c {
+      0%   { transform: translate3d(0, 0, 0) scale(0.95); }
+      50%  { transform: translate3d(8vw, -8vh, 0) scale(1.12); }
+      100% { transform: translate3d(-6vw, -3vh, 0) scale(1); }
+    }
+
+    /* วงแหวนบางๆ ลอยขึ้นช้าๆ ให้พื้นหลังมีอะไรขยับตลอดเวลา */
+    .ring {
+      position: absolute;
+      bottom: -160px;
+      left: var(--rx, 50%);
+      width: var(--rs, 120px);
+      height: var(--rs, 120px);
+      border: 1.5px solid var(--accent-2);
+      border-radius: 50%;
+      opacity: 0;
+      will-change: transform, opacity;
+      animation: ring-rise var(--rd, 30s) linear infinite;
+      animation-delay: var(--rdelay, 0s);
+    }
+    @keyframes ring-rise {
+      0%   { transform: translateY(0) rotate(0deg) scale(0.85); opacity: 0; }
+      12%  { opacity: 0.18; }
+      85%  { opacity: 0.1; }
+      100% { transform: translateY(-118vh) rotate(180deg) scale(1.2); opacity: 0; }
+    }
+    :root[data-theme="dark"] .ring { border-color: var(--accent-1); }
+
+    /* ยกเนื้อหาทั้งหมดให้อยู่เหนือชั้นพื้นหลัง */
+    .nav, main, .footer { position: relative; z-index: 1; }
 
     /* ---------- แถบเมนูบนสุด ---------- */
     .nav {
@@ -125,7 +216,7 @@
       gap: 20px;
     }
     .brand {
-      font-family: "Trirong", serif;
+      font-family: var(--font-sans);
       font-weight: 700;
       font-size: 17px;
       letter-spacing: 0.16em;
@@ -170,7 +261,7 @@
     }
 
     h1 {
-      font-family: "Trirong", serif;
+      font-family: var(--font-sans);
       font-weight: 600;
       font-size: clamp(40px, 6.4vw, 68px);
       line-height: 1.12;
@@ -234,7 +325,7 @@
       margin-top: 46px;
     }
     .hero-stat .num {
-      font-family: "Trirong", serif;
+      font-family: var(--font-sans);
       font-size: 40px;
       font-weight: 600;
       line-height: 1;
@@ -337,7 +428,7 @@
       margin-bottom: 46px;
     }
     .section-head h2 {
-      font-family: "Trirong", serif;
+      font-family: var(--font-sans);
       font-weight: 600;
       font-size: clamp(28px, 4vw, 40px);
       line-height: 1.22;
@@ -403,7 +494,7 @@
       padding: 22px 22px 20px;
     }
     .p-body h3 {
-      font-family: "Trirong", serif;
+      font-family: var(--font-sans);
       font-weight: 600;
       font-size: 19px;
       margin: 0 0 9px;
@@ -454,7 +545,7 @@
     }
     .why-item .ico { font-size: 24px; }
     .why-item h3 {
-      font-family: "Trirong", serif;
+      font-family: var(--font-sans);
       font-size: 16px;
       font-weight: 600;
       margin: 14px 0 8px;
@@ -495,7 +586,7 @@
       color: var(--ink-faint);
     }
     .u-body h3 {
-      font-family: "Trirong", serif;
+      font-family: var(--font-sans);
       font-size: 16.5px;
       font-weight: 600;
       margin: 10px 0 8px;
@@ -589,6 +680,8 @@
 
     @media (prefers-reduced-motion: reduce) {
       html { scroll-behavior: auto; }
+      .orb { animation: none; }
+      .ring { display: none; }
       .p-card, .u-card, .art-card, .btn-primary { transition: none; }
       .hero-art:hover .art-back,
       .hero-art:hover .art-mid,
@@ -597,6 +690,17 @@
   </style>
 </head>
 <body>
+  <div class="bg-fx" aria-hidden="true">
+    <span class="orb orb-1"></span>
+    <span class="orb orb-2"></span>
+    <span class="orb orb-3"></span>
+    <span class="ring" style="--rx: 12%; --rs: 96px;  --rd: 34s; --rdelay: -4s;"></span>
+    <span class="ring" style="--rx: 34%; --rs: 156px; --rd: 46s; --rdelay: -20s;"></span>
+    <span class="ring" style="--rx: 58%; --rs: 72px;  --rd: 28s; --rdelay: -12s;"></span>
+    <span class="ring" style="--rx: 78%; --rs: 130px; --rd: 40s; --rdelay: -30s;"></span>
+    <span class="ring" style="--rx: 92%; --rs: 88px;  --rd: 36s; --rdelay: -8s;"></span>
+  </div>
+
   <header class="nav">
     <div class="wrap nav-inner">
       <a class="brand" href="./">Panusbodee</a>
