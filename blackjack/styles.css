@@ -140,6 +140,23 @@ h1 span {
   margin-bottom: 18px;
 }
 
+.table.is-shaking { animation: table-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
+@keyframes table-shake {
+  10%, 90% { transform: translateX(-2px); }
+  20%, 80% { transform: translateX(4px); }
+  30%, 50%, 70% { transform: translateX(-7px); }
+  40%, 60% { transform: translateX(7px); }
+}
+
+.dealer-mood { display: inline-block; transition: transform 0.2s ease; }
+.dealer-mood.is-reacting { animation: mood-pop 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.3); }
+@keyframes mood-pop {
+  0% { transform: scale(1) rotate(0deg); }
+  40% { transform: scale(1.5) rotate(-10deg); }
+  70% { transform: scale(0.9) rotate(6deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+
 .seat { display: flex; flex-direction: column; gap: 8px; }
 
 .seat-label {
@@ -187,21 +204,53 @@ h1 span {
   width: 58px;
   height: 82px;
   flex-shrink: 0;
+  perspective: 700px;
+}
+/* อนิเมชันเล่นเฉพาะไพ่ใบที่เพิ่งแจกลงโต๊ะ — สไลด์ออกมาจากกองไพ่มุมขวาบน */
+.card.is-new {
+  animation: card-deal 0.36s cubic-bezier(0.2, 0.9, 0.3, 1.2);
+}
+
+.card-inner {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  transform-style: preserve-3d;
+  transition: transform 0.42s cubic-bezier(0.25, 0.8, 0.3, 1.05);
+}
+/* คว่ำอยู่ = หมุนไปโชว์ด้านหลัง · เอาคลาสนี้ออกเมื่อไหร่ ไพ่จะพลิกหงายให้เห็นหน้า */
+.card.is-down .card-inner { transform: rotateY(180deg); }
+.cards-row .card:not(.is-down):hover .card-inner { transform: translateY(-7px) rotate(-3deg); }
+
+.card-face {
+  position: absolute;
+  inset: 0;
   display: flex;
   flex-direction: column;
   align-items: center;
   justify-content: center;
   gap: 1px;
   border-radius: 9px;
-  background: linear-gradient(160deg, #fffdf8, #f1ebfb);
   border: 1px solid rgba(20, 10, 40, 0.14);
   box-shadow: 0 6px 14px rgba(0, 0, 0, 0.22);
+  backface-visibility: hidden;
+  -webkit-backface-visibility: hidden;
+}
+.card-front {
+  background: linear-gradient(160deg, #fffdf8, #f1ebfb);
   color: #1c1730;
+  transform: rotateY(0deg);
 }
-/* อนิเมชันเล่นเฉพาะไพ่ใบที่เพิ่งแจกลงโต๊ะ ไม่ใช่ทุกใบทุกครั้งที่วาดใหม่ */
-.card.is-new {
-  animation: card-deal 0.3s cubic-bezier(0.2, 0.9, 0.3, 1.25);
+.card-front.is-red { color: #dc2626; }
+/* หลังไพ่: ลายทแยงบนกราเดียนต์ธีม — ไม่พึ่งฟอนต์อีโมจิ จึงหน้าตาเหมือนกันทุกเครื่อง */
+.card-back {
+  transform: rotateY(180deg);
+  border-color: transparent;
+  background:
+    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.22) 0 5px, transparent 5px 10px),
+    var(--accent-grad-3);
 }
+
 .card-rank {
   font-family: "Nunito", sans-serif;
   font-size: 21px;
@@ -209,18 +258,10 @@ h1 span {
   line-height: 1;
 }
 .card-suit { font-size: 16px; line-height: 1; }
-.card.is-red { color: #dc2626; }
-/* หลังไพ่: ลายทแยงบนกราเดียนต์ธีม — ไม่พึ่งฟอนต์อีโมจิ จึงหน้าตาเหมือนกันทุกเครื่อง */
-.card.is-back {
-  background:
-    repeating-linear-gradient(45deg, rgba(255, 255, 255, 0.22) 0 5px, transparent 5px 10px),
-    var(--accent-grad-3);
-  border-color: transparent;
-}
 
 @keyframes card-deal {
-  from { transform: translateY(-18px) rotate(-7deg); opacity: 0; }
-  to { transform: translateY(0) rotate(0deg); opacity: 1; }
+  from { transform: translate(52px, -70px) rotate(22deg) scale(0.82); opacity: 0; }
+  to { transform: translate(0, 0) rotate(0deg) scale(1); opacity: 1; }
 }
 
 /* ---------- มือผู้เล่น (หลายมือได้เมื่อแยกไพ่) ---------- */
@@ -239,6 +280,32 @@ h1 span {
 .hand.is-won { background: rgba(74, 222, 128, 0.09); }
 .hand.is-lost { background: rgba(251, 113, 133, 0.08); }
 .hand.is-push { background: rgba(251, 191, 36, 0.08); }
+.hand { position: relative; overflow: hidden; }
+
+/* ตราประทับผลลัพธ์ — ตบลงมาบนมือไพ่ตอนจบตา */
+.hand-stamp {
+  position: absolute;
+  right: 10px;
+  top: 50%;
+  padding: 5px 14px;
+  border-radius: 10px;
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  letter-spacing: 0.04em;
+  pointer-events: none;
+  animation: stamp-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
+}
+.hand-stamp.is-win, .hand-stamp.is-bj { color: #22c55e; border: 2.5px solid #22c55e; background: rgba(34, 197, 94, 0.12); }
+.hand-stamp.is-bj { color: #f59e0b; border-color: #f59e0b; background: rgba(245, 158, 11, 0.14); font-size: 13px; }
+.hand-stamp.is-lose, .hand-stamp.is-bust, .hand-stamp.is-surrender { color: #f43f5e; border: 2.5px solid #f43f5e; background: rgba(244, 63, 94, 0.1); }
+.hand-stamp.is-push { color: #f59e0b; border: 2.5px solid #f59e0b; background: rgba(245, 158, 11, 0.1); }
+
+@keyframes stamp-in {
+  0% { transform: translateY(-50%) rotate(-14deg) scale(2.6); opacity: 0; }
+  55% { transform: translateY(-50%) rotate(-14deg) scale(0.88); opacity: 1; }
+  100% { transform: translateY(-50%) rotate(-14deg) scale(1); opacity: 1; }
+}
 
 .hand-head {
   display: flex;
@@ -592,6 +659,125 @@ h1 span {
   background: rgba(var(--ink-rgb), 0.1);
 }
 
+/* ---------- เลเยอร์เอฟเฟกต์: คอนเฟตตี · ชิปลอย · ป๊อปอัพเหรียญ ---------- */
+.fx-layer,
+.toast-layer {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  overflow: hidden;
+}
+.fx-layer { z-index: 200; }
+.toast-layer {
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 8px;
+  padding-top: 16px;
+  inset: 0 0 auto 0;
+  bottom: auto;
+}
+
+.confetti {
+  position: absolute;
+  top: -6vh;
+  left: var(--cx, 50vw);
+  width: 9px;
+  height: 14px;
+  border-radius: 2px;
+  opacity: 0;
+  animation: confetti-fall var(--dur, 1.4s) linear var(--delay, 0s) forwards;
+}
+@keyframes confetti-fall {
+  0% { transform: translate(0, 0) rotate(0deg); opacity: 1; }
+  100% { transform: translate(var(--dx, 0), 112vh) rotate(var(--rot, 360deg)); opacity: 0.9; }
+}
+
+/* ชิปลอยจากปุ่มชิปไปยังช่องเดิมพัน */
+.chip-ghost {
+  position: fixed;
+  z-index: 210;
+  pointer-events: none;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: transform 0.5s cubic-bezier(0.3, 0.8, 0.4, 1), opacity 0.5s ease;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 11px 18px;
+  border-radius: 14px;
+  border: 1px solid var(--accent-2);
+  background: var(--card-bg);
+  box-shadow: 0 14px 34px rgba(0, 0, 0, 0.28);
+  backdrop-filter: blur(10px);
+  font-family: "Nunito", sans-serif;
+  animation: toast-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.35);
+}
+.toast.is-out { animation: toast-out 0.35s ease forwards; }
+.toast-emoji { font-size: 22px; }
+.toast-title { font-size: 13px; font-weight: 800; color: rgb(var(--ink-rgb)); }
+.toast-sub { font-size: 11px; color: rgba(var(--ink-rgb), 0.55); }
+
+@keyframes toast-in {
+  0% { transform: translateY(-28px) scale(0.8); opacity: 0; }
+  100% { transform: translateY(0) scale(1); opacity: 1; }
+}
+@keyframes toast-out {
+  to { transform: translateY(-18px) scale(0.94); opacity: 0; }
+}
+
+/* ---------- กองชิปที่วางเดิมพันไว้ ---------- */
+.bet-stack {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  min-height: 30px;
+  margin-bottom: 10px;
+}
+.bet-stack:empty { min-height: 0; margin-bottom: 0; }
+
+.bet-chip {
+  width: 30px;
+  height: 30px;
+  margin-left: -11px;
+  border-radius: 50%;
+  border: 2px dashed rgba(255, 255, 255, 0.75);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Nunito", sans-serif;
+  font-size: 9px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
+  animation: chip-drop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.bet-chip:first-child { margin-left: 0; }
+@keyframes chip-drop {
+  from { transform: translateY(-22px) scale(0.6); opacity: 0; }
+  to { transform: translateY(0) scale(1); opacity: 1; }
+}
+
+/* ---------- ไฟสตรีคชนะติดกัน ---------- */
+.streak-flame {
+  text-align: center;
+  font-family: "Nunito", sans-serif;
+  font-size: 12.5px;
+  font-weight: 800;
+  color: #f59e0b;
+  margin: -6px 0 14px;
+  animation: flame-pulse 1.3s ease-in-out infinite;
+}
+@keyframes flame-pulse {
+  0%, 100% { transform: scale(1); opacity: 0.9; }
+  50% { transform: scale(1.07); opacity: 1; }
+}
+
 /* ---------- จอเล็ก ---------- */
 @media (max-width: 520px) {
   main { padding: 80px 14px 60px; }
@@ -601,6 +787,8 @@ h1 span {
   .hud-label { font-size: 9.5px; }
   .card { width: 48px; height: 68px; }
   .card-rank { font-size: 17px; }
+  .hand-stamp { font-size: 13px; padding: 4px 10px; }
+  .hand-stamp.is-bj { font-size: 11px; }
   .card-suit { font-size: 14px; }
   .cards-row { min-height: 72px; gap: 5px; }
   .chip { width: 50px; height: 50px; font-size: 13px; }
@@ -610,6 +798,13 @@ h1 span {
 
 @media (prefers-reduced-motion: reduce) {
   .card.is-new { animation: none; }
+  .card-inner { transition: none; }
+  .cards-row .card:not(.is-down):hover .card-inner { transform: none; }
   .btn:hover, .chip:hover:not(:disabled) { transform: none; }
   .hud-value.is-flash, .badge.is-new { animation: none; }
+  .table.is-shaking, .dealer-mood.is-reacting, .streak-flame { animation: none; }
+  .hand-stamp { animation: none; transform: translateY(-50%) rotate(-14deg); }
+  .bet-chip { animation: none; }
+  .confetti { display: none; }
+  .toast { animation: none; }
 }

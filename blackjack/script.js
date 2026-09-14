@@ -30,6 +30,8 @@
     fast: { label: "เร็ว", deal: 90, dealer: 240 },
   };
   var SPEED_ORDER = ["slow", "normal", "fast"];
+  var FLIP_MS = 430; // เวลาพลิกไพ่คว่ำ — ต้องรอให้พลิกจบก่อนค่อยวาดหน้าใหม่ทับ
+  var CHIP_DENOMS = [1000, 500, 100, 25];
 
   var BADGES = [
     { id: "first_bj", emoji: "🃏", label: "แบล็คแจ็คแรก" },
@@ -107,7 +109,7 @@
       stats: defaultStats(),
       badges: {},
       history: [],
-      settings: { sound: true, coach: false, count: false, speed: "normal" },
+      settings: { sound: true, coach: false, count: false, speed: "normal", fx: true },
     };
     try {
       var raw = localStorage.getItem(STORE_KEY);
@@ -127,6 +129,7 @@
           coach: saved.settings.coach === true,
           count: saved.settings.count === true,
           speed: SPEEDS[saved.settings.speed] ? saved.settings.speed : "normal",
+          fx: saved.settings.fx !== false,
         };
       }
       return {
@@ -177,6 +180,7 @@
     holeRevealShown: false,
     holeHidden: true,
     busy: false, // กำลังแจกไพ่ค้างอยู่ — ล็อกปุ่มไว้ก่อน
+    settled: false, // ตานี้สรุปผลไปแล้วหรือยัง (กันจ่ายเงินซ้ำ)
     insurance: 0,
     roundWagered: 0,
     stats: saved.stats,
@@ -185,6 +189,10 @@
     settings: saved.settings,
     timers: [],
     newBadges: {},
+    betChips: [], // ชิปที่วางไว้ตานี้ (ไว้วาดเป็นกองชิป)
+    dealerMood: "😈",
+    shownBankroll: saved.bankroll, // ยอดที่กำลังแสดงอยู่ ใช้ไล่ตัวเลขวิ่งไปหายอดจริง
+    bankrollRaf: 0,
   };
 
   var els = {};
@@ -196,6 +204,7 @@
     "surrenderBtn", "coachTip", "countInfo", "soundToggle", "coachToggle", "countToggle",
     "speedToggle", "history", "statHands", "statWinRate", "statStreak", "statPeak",
     "statBj", "statBiggest", "badges", "badgeCount", "resetBtn",
+    "fxLayer", "toastLayer", "betStack", "dealerMood", "streakFlame", "gameTable", "fxToggle",
   ].forEach(function (id) { els[id] = document.getElementById(id); });
 
   // ---------- จังหวะเวลา ----------
@@ -247,7 +256,118 @@
     push: function () { beep(420, 0.14, "sine", 0.04); },
     blackjack: function () { chord([523, 659, 784, 1047], 90, 0.18, 0.06); },
     badge: function () { chord([659, 880, 1175], 80, 0.16, 0.05); },
+    flip: function () { beep(520, 0.09, "triangle", 0.05); },
   };
+
+  // ---------- เอฟเฟกต์ภาพ ----------
+  function reducedMotion() {
+    try {
+      return window.matchMedia && window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    } catch (e) {
+      return false;
+    }
+  }
+
+  /** เอฟเฟกต์หนักๆ เล่นก็ต่อเมื่อผู้ใช้เปิดไว้ และไม่ได้ตั้งค่าให้ลดการเคลื่อนไหว */
+  function fxOn() { return state.settings.fx && !reducedMotion(); }
+
+  function burstConfetti(gold) {
+    if (!fxOn()) return;
+    var colors = gold
+      ? ["#fbbf24", "#f59e0b", "#fde68a", "#ffffff", "#fcd34d"]
+      : ["#4ade80", "#38bdf8", "#f472b6", "#fbbf24", "#a78bfa"];
+    var pieces = gold ? 54 : 32;
+    for (var i = 0; i < pieces; i++) {
+      var piece = document.createElement("span");
+      piece.className = "confetti";
+      piece.style.setProperty("--cx", (Math.random() * 100).toFixed(1) + "vw");
+      piece.style.setProperty("--dx", Math.round(Math.random() * 180 - 90) + "px");
+      piece.style.setProperty("--rot", Math.round(Math.random() * 900 - 450) + "deg");
+      piece.style.setProperty("--dur", (1.1 + Math.random() * 0.9).toFixed(2) + "s");
+      piece.style.setProperty("--delay", (Math.random() * 0.3).toFixed(2) + "s");
+      piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+      if (Math.random() < 0.35) piece.style.borderRadius = "50%";
+      els.fxLayer.appendChild(piece);
+      removeLater(piece, 2600);
+    }
+  }
+
+  function removeLater(node, ms) {
+    setTimeout(function () { if (node.parentNode) node.parentNode.removeChild(node); }, ms);
+  }
+
+  function shakeTable() {
+    if (!fxOn()) return;
+    els.gameTable.classList.remove("is-shaking");
+    void els.gameTable.offsetWidth;
+    els.gameTable.classList.add("is-shaking");
+    later(function () { els.gameTable.classList.remove("is-shaking"); }, 520);
+  }
+
+  function setMood(emoji) {
+    state.dealerMood = emoji;
+    if (!els.dealerMood) return;
+    els.dealerMood.textContent = emoji;
+    if (!fxOn()) return;
+    els.dealerMood.classList.remove("is-reacting");
+    void els.dealerMood.offsetWidth;
+    els.dealerMood.classList.add("is-reacting");
+  }
+
+  /** ชิปลอยจากปุ่มที่กดไปลงช่องเดิมพัน */
+  function tossChip(btn) {
+    if (!fxOn() || !btn) return;
+    var from = btn.getBoundingClientRect();
+    var to = els.betDisplay.getBoundingClientRect();
+    var ghost = document.createElement("span");
+    ghost.className = btn.className.replace("chip", "chip chip-ghost");
+    ghost.textContent = btn.textContent;
+    ghost.style.left = from.left + "px";
+    ghost.style.top = from.top + "px";
+    ghost.style.width = from.width + "px";
+    ghost.style.height = from.height + "px";
+    els.fxLayer.appendChild(ghost);
+    var dx = to.left + to.width / 2 - (from.left + from.width / 2);
+    var dy = to.top + to.height / 2 - (from.top + from.height / 2);
+    requestAnimationFrame(function () {
+      ghost.style.transform = "translate(" + dx + "px," + dy + "px) scale(0.4) rotate(220deg)";
+      ghost.style.opacity = "0";
+    });
+    removeLater(ghost, 700);
+  }
+
+  function showToast(emoji, title, sub) {
+    var toast = document.createElement("div");
+    toast.className = "toast";
+    var e = document.createElement("span");
+    e.className = "toast-emoji";
+    e.textContent = emoji;
+    var box = document.createElement("div");
+    var t = document.createElement("div");
+    t.className = "toast-title";
+    t.textContent = title;
+    box.appendChild(t);
+    if (sub) {
+      var sb = document.createElement("div");
+      sb.className = "toast-sub";
+      sb.textContent = sub;
+      box.appendChild(sb);
+    }
+    toast.appendChild(e);
+    toast.appendChild(box);
+    els.toastLayer.appendChild(toast);
+    setTimeout(function () { toast.classList.add("is-out"); }, 2600);
+    removeLater(toast, 3100);
+  }
+
+  /** แตกยอดเงินออกเป็นชิปให้เห็นภาพ (ใช้กับปุ่มเดิมพันซ้ำ/หมดหน้าตัก) */
+  function chipsFor(amount) {
+    var out = [];
+    CHIP_DENOMS.forEach(function (denom) {
+      while (amount >= denom && out.length < 12) { out.push(denom); amount -= denom; }
+    });
+    return out;
+  }
 
   // ---------- ตำราเล่น (Basic Strategy: 6 สำรับ, S17, ดับเบิลหลังแยกได้) ----------
   function dealerUpValue() {
@@ -334,22 +454,35 @@
     };
   }
 
+  /**
+   * ไพ่ 1 ใบ — มีทั้งด้านหน้าและด้านหลังซ้อนกันใน 3 มิติเสมอ
+   * ใส่คลาส is-down ไว้ = คว่ำอยู่ · เอาออกเมื่อไหร่ไพ่จะ "พลิกหงาย" ให้เห็น
+   */
   function cardEl(card, faceDown, isNew) {
     var el = document.createElement("div");
-    el.className = "card" + (faceDown ? " is-back" : card.suit.red ? " is-red" : "") + (isNew ? " is-new" : "");
-    if (faceDown) {
-      el.setAttribute("aria-label", "ไพ่คว่ำ");
-      return el;
-    }
+    el.className = "card" + (isNew ? " is-new" : "") + (faceDown ? " is-down" : "");
+
+    var inner = document.createElement("div");
+    inner.className = "card-inner";
+
+    var front = document.createElement("div");
+    front.className = "card-face card-front" + (card.suit.red ? " is-red" : "");
     var rank = document.createElement("span");
     rank.className = "card-rank";
     rank.textContent = card.rank;
     var suit = document.createElement("span");
     suit.className = "card-suit";
     suit.textContent = card.suit.symbol;
-    el.appendChild(rank);
-    el.appendChild(suit);
-    el.setAttribute("aria-label", card.rank + " " + card.suit.symbol);
+    front.appendChild(rank);
+    front.appendChild(suit);
+
+    var back = document.createElement("div");
+    back.className = "card-face card-back";
+
+    inner.appendChild(front);
+    inner.appendChild(back);
+    el.appendChild(inner);
+    el.setAttribute("aria-label", faceDown ? "ไพ่คว่ำ" : card.rank + " " + card.suit.symbol);
     return el;
   }
 
@@ -359,8 +492,38 @@
     return hv.total + (hv.soft && hv.total !== 21 ? " (อ่อน)" : "");
   }
 
+  /** ไล่ตัวเลขเงินวิ่งจากยอดเดิมไปยอดใหม่ แทนการกระโดดทีเดียว */
+  function animateBankroll() {
+    var target = state.bankroll;
+    if (!fxOn() || state.shownBankroll === target) {
+      state.shownBankroll = target;
+      els.bankroll.textContent = money(target);
+      return;
+    }
+    if (state.bankrollRaf) cancelAnimationFrame(state.bankrollRaf);
+    var from = state.shownBankroll;
+    var startedAt = 0;
+    var dur = 620;
+    function step(now) {
+      if (!startedAt) startedAt = now;
+      var t = Math.min((now - startedAt) / dur, 1);
+      var eased = 1 - Math.pow(1 - t, 3);
+      state.shownBankroll = from + (target - from) * eased;
+      els.bankroll.textContent = money(state.shownBankroll);
+      if (t < 1) state.bankrollRaf = requestAnimationFrame(step);
+      else { state.bankrollRaf = 0; state.shownBankroll = target; els.bankroll.textContent = money(target); }
+    }
+    state.bankrollRaf = requestAnimationFrame(step);
+  }
+
+  function renderStreak() {
+    var streak = state.stats.streak;
+    els.streakFlame.hidden = streak < 2;
+    if (streak >= 2) els.streakFlame.textContent = "🔥 กำลังชนะติดกัน " + streak + " ตา" + (streak >= 5 ? " — ร้อนแรงมาก!" : "");
+  }
+
   function renderHud() {
-    els.bankroll.textContent = money(state.bankroll);
+    animateBankroll();
     els.betDisplay.textContent = money(state.phase === "betting" ? state.bet : state.roundWagered);
     els.betDisplay.classList.toggle("is-bet", (state.phase === "betting" ? state.bet : state.roundWagered) > 0);
 
@@ -378,14 +541,25 @@
 
   function renderDealer() {
     els.dealerCards.innerHTML = "";
+    var flipping = null;
     state.dealer.forEach(function (card, i) {
       var faceDown = state.holeHidden && i === 1;
-      // เล่นอนิเมชันเฉพาะไพ่ใบที่เพิ่งแจก กับตอนพลิกไพ่คว่ำขึ้นมา
-      var isNew = i >= state.dealerShown || (i === 1 && !faceDown && !state.holeRevealShown);
-      els.dealerCards.appendChild(cardEl(card, faceDown, isNew));
+      // เพิ่งสั่งเปิดไพ่คว่ำ: วาดเป็นหลังไพ่ไว้ก่อน แล้วค่อยสั่งพลิกในเฟรมถัดไป อนิเมชันจะได้เล่นจริง
+      var justRevealed = i === 1 && !faceDown && !state.holeRevealShown;
+      var isNew = i >= state.dealerShown && !justRevealed;
+      var el = cardEl(card, faceDown || justRevealed, isNew);
+      if (justRevealed) flipping = el;
+      els.dealerCards.appendChild(el);
     });
     state.dealerShown = state.dealer.length;
-    if (!state.holeHidden) state.holeRevealShown = true;
+
+    if (flipping) {
+      state.holeRevealShown = true;
+      SFX.flip();
+      requestAnimationFrame(function () {
+        requestAnimationFrame(function () { flipping.classList.remove("is-down"); });
+      });
+    }
 
     if (!state.dealer.length) els.dealerScore.textContent = "";
     else if (state.holeHidden) els.dealerScore.textContent = handValue([state.dealer[0]]).total + " + ?";
@@ -450,6 +624,18 @@
 
       wrap.appendChild(head);
       wrap.appendChild(row);
+
+      if (hand.result) {
+        var stampText = {
+          win: "ชนะ", blackjack: "BLACKJACK", push: "เสมอ",
+          lose: "แพ้", bust: "แตก!", surrender: "ยอมแพ้",
+        }[hand.result];
+        var stamp = document.createElement("div");
+        stamp.className = "hand-stamp is-" + (hand.result === "blackjack" ? "bj" : hand.result);
+        stamp.textContent = stampText;
+        wrap.appendChild(stamp);
+      }
+
       els.playerSeats.appendChild(wrap);
     });
   }
@@ -477,6 +663,8 @@
     els.insurancePanel.hidden = state.phase !== "insurance";
     els.actionPanel.hidden = state.phase !== "player";
 
+    renderBetStack();
+
     if (betting) {
       els.chipRow.querySelectorAll("button[data-chip]").forEach(function (btn) {
         btn.disabled = state.bankroll < state.bet + Number(btn.dataset.chip);
@@ -501,6 +689,17 @@
       els.insuranceCost.textContent = "(" + money(insuranceCost(state.hands[0].bet)) + ")";
       els.insuranceYesBtn.disabled = state.bankroll < insuranceCost(state.hands[0].bet);
     }
+  }
+
+  function renderBetStack() {
+    els.betStack.innerHTML = "";
+    if (state.phase !== "betting" || !state.betChips.length) return;
+    state.betChips.forEach(function (value) {
+      var chip = document.createElement("span");
+      chip.className = "bet-chip chip-" + value;
+      chip.textContent = value >= 1000 ? (value / 1000) + "K" : value;
+      els.betStack.appendChild(chip);
+    });
   }
 
   function renderCoach() {
@@ -599,6 +798,8 @@
     els.countToggle.textContent = "🧮 นับไพ่: " + (state.settings.count ? "เปิด" : "ปิด");
     els.countToggle.classList.toggle("is-on", state.settings.count);
     els.speedToggle.textContent = "⏱️ ความเร็ว: " + speed().label;
+    els.fxToggle.textContent = "✨ เอฟเฟกต์: " + (state.settings.fx ? "เปิด" : "ปิด");
+    els.fxToggle.classList.toggle("is-on", state.settings.fx);
   }
 
   function render() {
@@ -609,6 +810,7 @@
     renderControls();
     renderCoach();
     renderCount();
+    renderStreak();
   }
 
   // ---------- กองไพ่ ----------
@@ -658,6 +860,8 @@
     state.badges[id] = true;
     state.newBadges[id] = true;
     SFX.badge();
+    var badge = BADGES.filter(function (b) { return b.id === id; })[0];
+    if (badge) showToast(badge.emoji, "ปลดล็อกเหรียญ!", badge.label);
     renderBadges();
     save();
   }
@@ -668,10 +872,12 @@
   }
 
   // ---------- วางเดิมพัน ----------
-  function addChip(amount) {
+  function addChip(amount, btn) {
     if (state.phase !== "betting" || state.bankroll < state.bet + amount) return;
     state.bet += amount;
+    state.betChips.push(amount);
     SFX.chip();
+    tossChip(btn);
     flashHud(els.betDisplay);
     render();
   }
@@ -679,12 +885,14 @@
   function clearBet() {
     if (state.phase !== "betting") return;
     state.bet = 0;
+    state.betChips = [];
     render();
   }
 
   function rebet() {
     if (state.phase !== "betting" || !state.lastBet || state.bankroll < state.lastBet) return;
     state.bet = state.lastBet;
+    state.betChips = chipsFor(state.lastBet);
     SFX.chip();
     flashHud(els.betDisplay);
     render();
@@ -693,6 +901,7 @@
   function allIn() {
     if (state.phase !== "betting" || state.bankroll <= 0) return;
     state.bet = state.bankroll;
+    state.betChips = chipsFor(state.bankroll);
     SFX.chip();
     flashHud(els.betDisplay);
     render();
@@ -727,8 +936,11 @@
     state.holeRevealShown = false;
     state.holeHidden = true;
     state.busy = false;
+    state.settled = false;
     state.newBadges = {};
+    state.betChips = [];
     state.phase = "dealing";
+    setMood("😈");
     if (bet >= 1000) unlock("high_roller");
 
     setMessage(shuffled ? "🎴 ไพ่ใกล้หมดกอง สับใหม่แล้วเริ่มกองใหม่..." : "กำลังแจกไพ่...", "");
@@ -771,9 +983,13 @@
     var playerBJ = isBlackjack(state.hands[0]);
     var dealerBJ = state.dealer.length === 2 && handValue(state.dealer).total === 21;
     if (playerBJ || dealerBJ) {
+      // ต้องออกจากเฟสประกัน/ตาผู้เล่นทันที ไม่งั้นแผงยังค้างให้กดซ้ำได้ระหว่างรอไพ่พลิก
+      // แล้วจะสั่งสรุปผลซ้ำซ้อน (เคยทำให้ได้เงินประกันหลายรอบ)
+      state.phase = "dealer";
+      state.busy = true;
       revealHole();
       render();
-      later(settle, speed().deal);
+      later(settle, FLIP_MS); // รอไพ่พลิกจบก่อนค่อยสรุปผล
       return;
     }
     startPlayerTurn();
@@ -902,7 +1118,7 @@
     state.busy = true;
     state.phase = "dealer";
     render();
-    later(function () { revealHole(); render(); later(settle, speed().deal); }, speed().deal);
+    later(function () { revealHole(); render(); later(settle, FLIP_MS); }, speed().deal);
   }
 
   function dealerTurn() {
@@ -913,8 +1129,9 @@
     var anyLive = state.hands.some(function (h) {
       return !h.surrendered && handValue(h.cards).total <= 21;
     });
-    if (!anyLive) { later(settle, speed().deal); return; }
+    if (!anyLive) { later(settle, FLIP_MS); return; }
 
+    setMood("🤔");
     setMessage("เจ้ามือเปิดไพ่...", "");
 
     function step() {
@@ -927,11 +1144,13 @@
       }
       settle();
     }
-    later(step, speed().dealer);
+    later(step, FLIP_MS + speed().dealer); // ให้ไพ่พลิกจบก่อนเจ้ามือจั่วต่อ
   }
 
   // ---------- สรุปผลและจ่ายเงิน ----------
   function settle() {
+    if (state.settled) return; // ตานี้สรุปผลไปแล้ว
+    state.settled = true;
     revealHole();
 
     var dealerTotal = handValue(state.dealer).total;
@@ -1011,11 +1230,22 @@
 
     setMessage(dealerText + " — " + resultText + extras, outcome);
 
+    var gotBlackjack = state.hands.some(function (h) { return h.result === "blackjack"; });
+    var anyBust = state.hands.some(function (h) { return h.result === "bust"; });
+
     if (outcome === "win") {
-      if (state.hands.some(function (h) { return h.result === "blackjack"; })) SFX.blackjack();
+      if (gotBlackjack) SFX.blackjack();
       else SFX.win();
-    } else if (outcome === "lose") SFX.lose();
-    else SFX.push();
+      burstConfetti(gotBlackjack);
+      setMood(gotBlackjack ? "😱" : dealerTotal > 21 ? "🤯" : "😩");
+    } else if (outcome === "lose") {
+      SFX.lose();
+      if (anyBust) shakeTable();
+      setMood("😏");
+    } else {
+      SFX.push();
+      setMood("😐");
+    }
 
     // กลับไปรับเดิมพันตาใหม่ โดยยังโชว์ไพ่ตาที่เพิ่งจบไว้บนโต๊ะ
     state.phase = "betting";
@@ -1047,13 +1277,17 @@
     state.active = 0;
     state.holeHidden = true;
     state.busy = false;
+    state.settled = false;
     state.insurance = 0;
     state.roundWagered = 0;
     state.stats = defaultStats();
     state.badges = {};
     state.newBadges = {};
     state.history = [];
+    state.betChips = [];
+    state.shownBankroll = STARTING_BANKROLL;
     state.phase = "betting";
+    setMood("😈");
     setMessage("เริ่มใหม่หมดจด — วางชิปแล้วลุยต่อเลย 🃏", "");
     save();
     render();
@@ -1065,7 +1299,7 @@
   // ---------- ปุ่มและแป้นลัด ----------
   els.chipRow.addEventListener("click", function (e) {
     var btn = e.target.closest("button[data-chip]");
-    if (btn && !btn.disabled) addChip(Number(btn.dataset.chip));
+    if (btn && !btn.disabled) addChip(Number(btn.dataset.chip), btn);
   });
   els.clearBetBtn.addEventListener("click", clearBet);
   els.rebetBtn.addEventListener("click", rebet);
@@ -1099,6 +1333,13 @@
     renderCount();
     save();
   });
+  els.fxToggle.addEventListener("click", function () {
+    state.settings.fx = !state.settings.fx;
+    renderSettings();
+    save();
+    if (state.settings.fx) showToast("✨", "เปิดเอฟเฟกต์แล้ว", "พลิกไพ่ · คอนเฟตตี · ชิปลอย");
+  });
+
   els.speedToggle.addEventListener("click", function () {
     var i = SPEED_ORDER.indexOf(state.settings.speed);
     state.settings.speed = SPEED_ORDER[(i + 1) % SPEED_ORDER.length];
@@ -1131,6 +1372,7 @@
 
   // ---------- เริ่มต้น ----------
   setMessage("วางชิปแล้วกดแจกไพ่ได้เลย — เจ้ามือรออยู่ 😈", "");
+  els.dealerMood.textContent = state.dealerMood;
   render();
   renderSettings();
   renderStats();
