@@ -1,0 +1,970 @@
+<!DOCTYPE html>
+<html lang="th" class="light" data-accent="ocean">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  
+  <!-- Primary Meta Tags -->
+  <title>Smart Packing List - จัดกระเป๋าตามสภาพอากาศ คำนวณงบเที่ยว & ชั่งน้ำหนักกระเป๋า | By Panusbodee</title>
+  <meta name="title" content="Smart Packing List - จัดกระเป๋าตามสภาพอากาศ คำนวณงบเที่ยว & ชั่งน้ำหนักกระเป๋า | By Panusbodee">
+  <meta name="description" content="Smart Packing List เว็บจัดกระเป๋าเดินทางอัจฉริยะตามสภาพอากาศจริงจาก Weather API แนะนำของที่ต้องเตรียม คำนวณงบทริป แปลงค่าเงินสด และชั่งน้ำหนักกระเป๋าสัมภาระขึ้นเครื่องบิน ใช้งานฟรี 100% พัฒนาโดย Panusbodee">
+  <meta name="keywords" content="Smart Packing List, จัดกระเป๋า, จัดกระเป๋าเดินทาง, เช็คสภาพอากาศ, พยากรณ์อากาศ, ชั่งน้ำหนักกระเป๋า, คำนวณงบเที่ยว, แปลงค่าเงิน, packing checklist, travel packing list, weather forecast packing, Panusbodee">
+  <meta name="author" content="Panusbodee Sontitrakul">
+  <meta name="creator" content="Panusbodee">
+  <meta name="publisher" content="Panusbodee">
+  <meta name="robots" content="index, follow, max-snippet:-1, max-image-preview:large, max-video-preview:-1">
+  <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/packing/">
+
+  <!-- Theme & Mobile App Meta -->
+  <meta name="theme-color" content="#2563eb" media="(prefers-color-scheme: light)">
+  <meta name="theme-color" content="#0f172a" media="(prefers-color-scheme: dark)">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="Smart Packing">
+
+  <!-- Web App Manifest (PWA & Mobile SEO) -->
+  <link rel="manifest" href="manifest.json">
+
+  <!-- Favicon & Touch Icons -->
+  <link rel="icon" type="image/svg+xml" href="favicon.svg">
+  <link rel="icon" type="image/png" sizes="64x64" href="favicon.png">
+  <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon.png">
+
+  <!-- Open Graph / Facebook / LINE -->
+  <meta property="og:type" content="website">
+  <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/packing/">
+  <meta property="og:title" content="Smart Packing List - จัดกระเป๋าตามสภาพอากาศ คำนวณงบเที่ยว & ชั่งน้ำหนักกระเป๋า">
+  <meta property="og:description" content="เว็บจัดกระเป๋าอัจฉริยะตามพยากรณ์อากาศจริง แนะนำเสื้อผ้าและของใช้จำเป็น คำนวณงบประมาณและจำลองชั่งน้ำหนักสัมภาระขึ้นเครื่องบิน ใช้งานฟรี 100% โดย Panusbodee">
+  <meta property="og:image" content="https://panusbodee-owen.github.io/vpk/packing/og-image.png">
+  <meta property="og:image:secure_url" content="https://panusbodee-owen.github.io/vpk/packing/og-image.png">
+  <meta property="og:image:type" content="image/png">
+  <meta property="og:image:width" content="1200">
+  <meta property="og:image:height" content="630">
+  <meta property="og:image:alt" content="Smart Packing List Web App Preview">
+  <meta property="og:site_name" content="Smart Packing List — Panusbodee's Lab">
+  <meta property="og:locale" content="th_TH">
+  <meta property="og:locale:alternate" content="en_US">
+
+  <!-- Twitter Card -->
+  <meta name="twitter:card" content="summary_large_image">
+  <meta name="twitter:url" content="https://panusbodee-owen.github.io/vpk/packing/">
+  <meta name="twitter:title" content="Smart Packing List - จัดกระเป๋าตามสภาพอากาศ | By Panusbodee">
+  <meta name="twitter:description" content="เว็บจัดกระเป๋าอัจฉริยะตามสภาพอากาศจริง คำนวณงบประมาณ และชั่งน้ำหนักสัมภาระขึ้นเครื่องบิน พัฒนาโดย Panusbodee">
+  <meta name="twitter:image" content="https://panusbodee-owen.github.io/vpk/packing/og-image.png">
+  <meta name="twitter:creator" content="@panusbodee">
+
+  <!-- Structured Data / JSON-LD for Google Rich Results -->
+  <script type="application/ld+json">
+  {
+    "@context": "https://schema.org",
+    "@type": "WebApplication",
+    "name": "Smart Packing List",
+    "alternateName": "เว็บจัดกระเป๋าตามสภาพอากาศ",
+    "url": "https://panusbodee-owen.github.io/",
+    "applicationCategory": "TravelApplication",
+    "operatingSystem": "All",
+    "browserRequirements": "Requires JavaScript. Requires HTML5.",
+    "description": "เว็บจัดกระเป๋าเดินทางอัจฉริยะตามสภาพอากาศจริงจาก Weather API คำนวณงบประมาณ แปลงค่าเงินสด และชั่งน้ำหนักกระเป๋าสัมภาระขึ้นเครื่องบิน",
+    "inLanguage": ["th", "en"],
+    "isAccessibleForFree": true,
+    "offers": {
+      "@type": "Offer",
+      "price": "0",
+      "priceCurrency": "THB"
+    },
+    "author": {
+      "@type": "Person",
+      "name": "Panusbodee",
+      "url": "https://github.com/panusbodee-owen"
+    },
+    "featureList": [
+      "พยากรณ์อากาศแบบเรียลไทม์ผ่าน Open-Meteo API",
+      "ระบบแนะนำของใช้และเสื้อผ้าอัตโนมัติตามสภาพอากาศและจำนวนวันเดินทาง",
+      "เครื่องจำลองชั่งน้ำหนักสัมภาระขึ้นเครื่องบิน (Carry-on & Checked Baggage)",
+      "เครื่องคำนวณงบประมาณทริปและแปลงอัตราแลกเปลี่ยนเงินสดเรียลไทม์",
+      "ระบบบันทึกรายการจัดกระเป๋าและประวัติทริปใน LocalStorage",
+      "รองรับ Dark Mode และการปรับแต่งชุดสีธีม"
+    ]
+  }
+  </script>
+
+  <!-- เชื่อมธีมกับ Panusbodee's Lab: ใช้ค่าธีมร่วมกันทั้งเว็บ (ต้องรันก่อน stylesheet เสมอ กันหน้าวูบ) -->
+  <script>
+    (function () {
+      var ACCENT_FROM_LAB = { aurora: "purple", ocean: "ocean", forest: "forest", sunset: "sunset" };
+      var ACCENT_TO_LAB = { purple: "aurora", ocean: "ocean", forest: "forest", sunset: "sunset" };
+      try {
+        var root = document.documentElement;
+
+        // โหมดมืด/สว่าง: ถ้าหน้านี้ยังไม่เคยถูกตั้งค่าไว้ ให้ตามค่าที่เลือกไว้ใน Lab
+        var own = localStorage.getItem("smart_packing_theme_mode");
+        if (!own) {
+          var labMode = localStorage.getItem("vpk-theme") === "light" ? "light" : "dark";
+          localStorage.setItem("smart_packing_theme_mode", labMode);
+          own = labMode;
+        }
+        if (own === "dark") root.classList.add("dark");
+
+        // สีเน้น: แผนที่ชื่อระหว่างสองระบบ (Lab ใช้ aurora ส่วนหน้านี้ใช้ purple)
+        var ownAccent = localStorage.getItem("smart_packing_theme_accent");
+        if (!ownAccent) {
+          var labAccent = localStorage.getItem("vpk-accent") || "aurora";
+          ownAccent = ACCENT_FROM_LAB[labAccent] || "ocean";
+          localStorage.setItem("smart_packing_theme_accent", ownAccent);
+        }
+        root.setAttribute("data-accent", ownAccent);
+
+        // เปลี่ยนธีมในหน้านี้เมื่อไหร่ ให้ส่งค่ากลับไปที่ Lab ด้วย หน้าอื่นจะได้ตามกัน
+        var setItem = localStorage.setItem.bind(localStorage);
+        localStorage.setItem = function (key, value) {
+          setItem(key, value);
+          try {
+            if (key === "smart_packing_theme_mode") setItem("vpk-theme", value === "dark" ? "dark" : "light");
+            else if (key === "smart_packing_theme_accent") setItem("vpk-accent", ACCENT_TO_LAB[value] || "aurora");
+          } catch (e) {}
+        };
+      } catch (e) {}
+    })();
+  </script>
+
+  <!-- Tailwind CSS with Dark Mode -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script>
+    tailwind.config = {
+      darkMode: 'class'
+    }
+  </script>
+  <!-- Font Awesome 6 Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.1/css/all.min.css">
+  <!-- Custom CSS -->
+  <link rel="stylesheet" href="css/style.css">
+
+  <!-- Google AdSense (Auto Ads & Verification) -->
+  <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-4511482626256141"
+     crossorigin="anonymous"></script>
+</head>
+<body class="bg-slate-50 dark:bg-slate-950 text-slate-800 dark:text-slate-100 antialiased min-h-screen flex flex-col transition-colors duration-200">
+
+  <!-- แถบกลับไปหน้ารวมโปรเจกต์ของ Panusbodee's Lab -->
+  <a href="../" class="no-print block w-full text-center py-1.5 text-xs font-medium text-slate-500 hover:text-slate-800 dark:text-slate-400 dark:hover:text-slate-100 bg-slate-100 dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 transition-colors">
+    ← กลับไป Panusbodee's Lab
+  </a>
+
+  <!-- Navigation Bar (Mobile Responsive) -->
+  <header class="bg-white dark:bg-slate-900 border-b border-slate-200 dark:border-slate-800 sticky top-0 z-30 shadow-sm no-print">
+    <div class="max-w-6xl mx-auto px-3 sm:px-6 h-16 flex items-center justify-between">
+      <!-- Brand & Creator Badge -->
+      <div class="flex items-center space-x-2.5 sm:space-x-3 min-w-0">
+        <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl theme-btn-gradient flex items-center justify-center text-white shadow-md shadow-blue-500/20 shrink-0">
+          <i class="fa-solid fa-suitcase-rolling text-lg sm:text-xl"></i>
+        </div>
+        <div class="min-w-0">
+          <div class="flex items-center gap-1.5 flex-wrap">
+            <h1 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white leading-tight truncate">Smart Packing</h1>
+            <!-- Creator Badge -->
+            <a href="https://github.com/panusbodee-owen" target="_blank" rel="noopener noreferrer" class="inline-flex items-center space-x-1 px-1.5 sm:px-2 py-0.5 rounded-full text-[9px] sm:text-[10px] font-bold bg-blue-50 dark:bg-blue-950 text-blue-600 dark:text-blue-400 border border-blue-200 dark:border-blue-800 hover:scale-105 transition truncate">
+              <i class="fa-solid fa-code text-[8px]"></i>
+              <span>By Panusbodee</span>
+            </a>
+          </div>
+          <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 truncate hidden xs:block">จัดกระเป๋า • งบทริป • ชั่งน้ำหนัก</p>
+        </div>
+      </div>
+
+      <!-- Action Buttons & Theme Controls -->
+      <div class="flex items-center space-x-1 sm:space-x-2 shrink-0" id="header-actions">
+        <!-- Theme Controls -->
+        <div class="relative">
+          <button id="btn-theme-palette" title="ปรับแต่งธีมสี" class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
+            <i class="fa-solid fa-palette text-xs sm:text-sm"></i>
+          </button>
+
+          <!-- Accent Palette Dropdown -->
+          <div id="palette-dropdown" class="hidden absolute right-0 mt-1.5 w-44 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl p-2 z-50 space-y-1 text-xs font-semibold">
+            <div class="text-[10px] text-slate-400 dark:text-slate-400 px-2 py-1 uppercase">เลือกโทนสี (Theme)</div>
+            <button class="theme-accent-opt w-full px-2.5 py-2 rounded-lg flex items-center space-x-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-left transition" data-accent="ocean">
+              <span class="w-3.5 h-3.5 rounded-full bg-blue-600"></span>
+              <span>Ocean Blue (เริ่มต้น)</span>
+            </button>
+            <button class="theme-accent-opt w-full px-2.5 py-2 rounded-lg flex items-center space-x-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-left transition" data-accent="sunset">
+              <span class="w-3.5 h-3.5 rounded-full bg-orange-600"></span>
+              <span>Sunset Orange</span>
+            </button>
+            <button class="theme-accent-opt w-full px-2.5 py-2 rounded-lg flex items-center space-x-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-left transition" data-accent="forest">
+              <span class="w-3.5 h-3.5 rounded-full bg-emerald-600"></span>
+              <span>Forest Green</span>
+            </button>
+            <button class="theme-accent-opt w-full px-2.5 py-2 rounded-lg flex items-center space-x-2 hover:bg-slate-100 dark:hover:bg-slate-700 text-left transition" data-accent="purple">
+              <span class="w-3.5 h-3.5 rounded-full bg-purple-600"></span>
+              <span>Royal Purple</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Dark / Light Toggle -->
+        <button id="btn-theme-dark-toggle" title="สลับโหมดมืด/สว่าง" class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-slate-600 dark:text-amber-400 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">
+          <i id="theme-dark-icon" class="fa-solid fa-moon text-xs sm:text-sm"></i>
+        </button>
+
+        <!-- Saved Trips -->
+        <button id="btn-open-history" title="ทริปที่บันทึก" class="px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-bookmark text-blue-600 dark:text-blue-400 text-xs sm:text-sm"></i>
+          <span class="hidden md:inline">ทริปที่บันทึก</span>
+          <span id="saved-trips-count" class="bg-blue-600 text-white text-[10px] font-bold px-1.5 py-0.2 rounded-full">0</span>
+        </button>
+
+        <!-- Export / Print -->
+        <button id="btn-export-options" title="แชร์ / พิมพ์" class="px-2.5 sm:px-3 py-1.5 text-xs sm:text-sm font-medium text-slate-700 dark:text-slate-200 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition flex items-center space-x-1.5">
+          <i class="fa-solid fa-share-nodes text-indigo-600 dark:text-indigo-400 text-xs sm:text-sm"></i>
+          <span class="hidden md:inline">แชร์</span>
+        </button>
+
+        <!-- Reset -->
+        <button id="btn-reset-trip" title="ล้างและเริ่มใหม่" class="w-8 h-8 sm:w-9 sm:h-9 flex items-center justify-center text-slate-400 hover:text-red-500 hover:bg-red-50 dark:hover:bg-red-950/40 rounded-lg transition">
+          <i class="fa-solid fa-rotate-left text-xs sm:text-sm"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="flex-grow max-w-6xl w-full mx-auto px-3 sm:px-6 py-4 sm:py-6 space-y-5 sm:space-y-6">
+
+    <!-- Print Header Only -->
+    <div class="hidden print-only mb-6 border-b pb-4">
+      <h1 class="text-2xl font-bold" id="print-title">Smart Packing List</h1>
+      <p class="text-sm text-slate-600" id="print-subtitle"></p>
+      <p class="text-xs text-slate-400 mt-1">Create By Panusbodee (panusbodee-owen)</p>
+    </div>
+
+    <!-- Search & Travel Planning Section (Card) -->
+    <section id="search-section" class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-7 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      
+      <!-- Top Row: City & Date Range -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-3 sm:gap-4">
+        
+        <!-- City Input & Autocomplete (5 cols) -->
+        <div class="lg:col-span-5 relative">
+          <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">
+            <i class="fa-solid fa-location-dot text-rose-500 mr-1.5"></i> เมืองปลายทาง
+          </label>
+          <div class="relative">
+            <input 
+              type="text" 
+              id="input-city" 
+              placeholder="พิมพ์ชื่อเมือง เช่น โตเกียว, Tokyo, Chiang Mai..." 
+              autocomplete="off"
+              class="w-full pl-9 sm:pl-10 pr-9 sm:pr-10 py-2.5 text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 text-slate-800 dark:text-white transition placeholder:text-slate-400 font-normal"
+            >
+            <div class="absolute inset-y-0 left-0 pl-3 sm:pl-3.5 flex items-center pointer-events-none text-slate-400">
+              <i class="fa-solid fa-magnifying-glass text-xs sm:text-sm"></i>
+            </div>
+            <button id="btn-clear-city" aria-label="ล้างชื่อเมือง" class="hidden absolute inset-y-0 right-0 pr-3 flex items-center text-slate-400 hover:text-slate-600 dark:hover:text-slate-200">
+              <i class="fa-solid fa-circle-xmark text-sm"></i>
+            </button>
+          </div>
+
+          <!-- Autocomplete Dropdown -->
+          <div id="autocomplete-list" class="hidden absolute left-0 right-0 top-full mt-1.5 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-xl shadow-xl z-50 autocomplete-dropdown divide-y divide-slate-100 dark:divide-slate-700">
+            <!-- Dynamically populated -->
+          </div>
+        </div>
+
+        <!-- Travel Dates (Start + End + Days Badge) -->
+        <div class="lg:col-span-7 grid grid-cols-2 sm:grid-cols-7 gap-2 sm:gap-3 items-end">
+          <!-- Travel Start Date (3 cols on desktop) -->
+          <div class="col-span-1 sm:col-span-3">
+            <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1 truncate">
+              <i class="fa-regular fa-calendar-plus text-blue-500 mr-1"></i> วันเริ่มเดินทาง
+            </label>
+            <input 
+              type="date" 
+              id="input-start-date" 
+              class="w-full px-2.5 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-800 dark:text-white transition"
+            >
+          </div>
+
+          <!-- Travel End Date (3 cols on desktop) -->
+          <div class="col-span-1 sm:col-span-3">
+            <label class="block text-xs sm:text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1 truncate">
+              <i class="fa-regular fa-calendar-check text-indigo-500 mr-1"></i> วันเดินทางกลับ
+            </label>
+            <input 
+              type="date" 
+              id="input-end-date" 
+              class="w-full px-2.5 sm:px-3.5 py-2 sm:py-2.5 text-xs sm:text-sm bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-xl focus:bg-white dark:focus:bg-slate-800 focus:outline-none focus:ring-2 focus:ring-blue-500 font-medium text-slate-800 dark:text-white transition"
+            >
+          </div>
+
+          <!-- Days Badge indicator (1 col on desktop, full row on mobile if needed) -->
+          <div class="col-span-2 sm:col-span-1 flex items-center justify-center">
+            <div class="w-full h-[38px] sm:h-[42px] px-2 bg-blue-50 dark:bg-blue-950/60 border border-blue-200 dark:border-blue-800 text-blue-700 dark:text-blue-300 rounded-xl flex sm:flex-col items-center justify-center text-center space-x-1 sm:space-x-0">
+              <span id="display-days" class="text-sm font-black leading-none">4</span>
+              <span class="text-[10px] sm:text-[9px] font-medium leading-tight">วัน</span>
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Second Row: Quick Duration Presets & Submit Button -->
+      <div class="flex flex-col md:flex-row items-stretch md:items-center justify-between gap-3 pt-1">
+        <!-- Duration helper chips (Horizontally scrollable on mobile) -->
+        <div class="chip-scroll-container text-xs">
+          <span class="text-slate-400 font-medium mr-1 self-center shrink-0">ระยะเวลา:</span>
+          <button class="duration-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 hover:text-blue-700 dark:hover:text-blue-300 rounded-lg text-slate-600 dark:text-slate-300 font-medium transition shrink-0" data-days="3">3 วัน (สุดสัปดาห์)</button>
+          <button class="duration-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 hover:text-blue-700 dark:hover:text-blue-300 rounded-lg text-slate-600 dark:text-slate-300 font-medium transition active-chip shrink-0" data-days="4">4 วัน</button>
+          <button class="duration-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 hover:text-blue-700 dark:hover:text-blue-300 rounded-lg text-slate-600 dark:text-slate-300 font-medium transition shrink-0" data-days="5">5 วัน</button>
+          <button class="duration-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 hover:text-blue-700 dark:hover:text-blue-300 rounded-lg text-slate-600 dark:text-slate-300 font-medium transition shrink-0" data-days="7">7 วัน (1 สัปดาห์)</button>
+          <button class="duration-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 hover:text-blue-700 dark:hover:text-blue-300 rounded-lg text-slate-600 dark:text-slate-300 font-medium transition shrink-0" data-days="10">10 วัน</button>
+          <button class="duration-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-100 dark:hover:bg-blue-900/60 hover:text-blue-700 dark:hover:text-blue-300 rounded-lg text-slate-600 dark:text-slate-300 font-medium transition shrink-0" data-days="14">14 วัน (2 สัปดาห์)</button>
+        </div>
+
+        <!-- Submit Button (Full width on mobile) -->
+        <div class="shrink-0 pt-1 md:pt-0">
+          <button 
+            id="btn-generate-plan" 
+            class="w-full md:w-auto py-3 md:py-2.5 px-6 theme-btn-gradient text-white font-semibold rounded-xl shadow-md shadow-blue-500/25 transition-all transform active:scale-[0.98] flex items-center justify-center space-x-2 text-sm sm:text-base"
+          >
+            <span id="btn-generate-text">สร้างรายการจัดกระเป๋า</span>
+            <i id="btn-generate-icon" class="fa-solid fa-wand-magic-sparkles text-sm"></i>
+            <!-- Spinner -->
+            <svg id="btn-generate-spinner" class="hidden animate-spin h-4 w-4 text-white" fill="none" viewBox="0 0 24 24">
+              <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+              <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8v4a4 4 0 00-4 4H4z"></path>
+            </svg>
+          </button>
+        </div>
+      </div>
+
+      <!-- Quick City Chips (Horizontally scrollable on mobile) -->
+      <div class="pt-2 sm:pt-3 border-t border-slate-100 dark:border-slate-800">
+        <div class="chip-scroll-container text-xs">
+          <span class="text-slate-400 font-medium mr-1 self-center shrink-0">เมืองยอดนิยม:</span>
+          <button class="city-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg text-slate-600 dark:text-slate-300 transition shrink-0" data-city="Tokyo">🇯🇵 โตเกียว</button>
+          <button class="city-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg text-slate-600 dark:text-slate-300 transition shrink-0" data-city="Seoul">🇰🇷 โซล</button>
+          <button class="city-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg text-slate-600 dark:text-slate-300 transition shrink-0" data-city="London">🇬🇧 ลอนดอน</button>
+          <button class="city-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg text-slate-600 dark:text-slate-300 transition shrink-0" data-city="Paris">🇫🇷 ปารีส</button>
+          <button class="city-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg text-slate-600 dark:text-slate-300 transition shrink-0" data-city="Chiang Mai">🇹🇭 เชียงใหม่</button>
+          <button class="city-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg text-slate-600 dark:text-slate-300 transition shrink-0" data-city="Singapore">🇸🇬 สิงคโปร์</button>
+          <button class="city-chip px-2.5 py-1 bg-slate-100 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 hover:text-blue-600 dark:hover:text-blue-400 rounded-lg text-slate-600 dark:text-slate-300 transition shrink-0" data-city="Reykjavik">🇮🇸 เรคยาวิก (หนาว)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- Weather Dashboard Card (Shown when weather loaded) -->
+    <section id="weather-section" class="hidden bg-gradient-to-br from-slate-900 via-indigo-950 to-slate-900 text-white rounded-2xl p-4 sm:p-6 shadow-xl relative overflow-hidden">
+      <div class="absolute -top-24 -right-24 w-72 h-72 bg-blue-500/20 rounded-full blur-3xl pointer-events-none"></div>
+      <div class="absolute -bottom-24 -left-24 w-72 h-72 bg-indigo-500/20 rounded-full blur-3xl pointer-events-none"></div>
+
+      <div class="relative z-10 space-y-4 sm:space-y-5">
+        <!-- Weather Header -->
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-700/60 pb-4">
+          <div>
+            <div class="flex items-center space-x-2">
+              <span class="text-[10px] sm:text-xs font-semibold uppercase tracking-wider text-blue-400 bg-blue-950/60 border border-blue-800/60 px-2 py-0.5 rounded-full">พยากรณ์อากาศ Real-time</span>
+              <span id="weather-last-updated" class="text-[10px] sm:text-xs text-slate-400"></span>
+            </div>
+            <h2 id="weather-city-title" class="text-xl sm:text-2xl font-bold mt-1 text-white flex items-center gap-2">
+              <i class="fa-solid fa-plane-arrival text-blue-400 text-lg sm:text-xl"></i>
+              <span>โตเกียว, ประเทศญี่ปุ่น</span>
+            </h2>
+            <div id="weather-date-range-badge" class="mt-1 text-xs text-indigo-200 font-medium flex items-center gap-1.5 flex-wrap">
+              <i class="fa-regular fa-calendar-days text-indigo-400"></i>
+              <span id="weather-date-range-text">ช่วงวันเดินทาง</span>
+            </div>
+          </div>
+
+          <!-- Overall Temp & Badges -->
+          <div class="flex flex-wrap items-center gap-1.5 sm:gap-2" id="weather-summary-badges">
+            <!-- Dynamically populated tags -->
+          </div>
+        </div>
+
+        <!-- Weather Daily Forecast Horizontal Scroller (Touch Optimized) -->
+        <div>
+          <div class="flex items-center justify-between mb-2">
+            <span class="text-xs font-medium text-slate-300">
+              <i class="fa-regular fa-calendar-check mr-1 text-blue-400"></i> สภาพอากาศรายวันช่วงเดินทาง (<span id="weather-forecast-days-label">4 วัน</span>):
+            </span>
+            <span class="text-[10px] text-slate-400">เลื่อนซ้าย-ขวาดูวันถัดไป &rarr;</span>
+          </div>
+
+          <!-- Horizontal Smooth Touch Carousel -->
+          <div id="weather-daily-grid" class="weather-carousel-scroll">
+            <!-- Dynamically populated daily weather cards -->
+          </div>
+        </div>
+
+        <!-- Packing Weather Insights Banner -->
+        <div id="weather-insight-banner" class="bg-white/10 backdrop-blur-md border border-white/10 rounded-xl p-3 sm:p-3.5 text-xs sm:text-sm flex items-start space-x-2.5 sm:space-x-3">
+          <i class="fa-solid fa-lightbulb text-amber-300 text-base sm:text-lg mt-0.5 shrink-0"></i>
+          <div class="text-slate-200" id="weather-insight-text">
+            กำลังวิเคราะห์สภาพอากาศเพื่อเลือกสิ่งของที่เหมาะสม...
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trip Budget & Booking Hub -->
+    <section id="budget-section" class="hidden bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4 sm:space-y-5">
+      <!-- Section Header -->
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3 border-b border-slate-100 dark:border-slate-800 pb-3 sm:pb-4">
+        <div class="flex items-center space-x-2.5 sm:space-x-3">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-emerald-50 dark:bg-emerald-950/60 text-emerald-600 dark:text-emerald-400 flex items-center justify-center text-lg sm:text-xl shadow-sm shrink-0">
+            <i class="fa-solid fa-coins"></i>
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">คำนวณงบประมาณ & อัตราแลกเปลี่ยน</h2>
+            <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">วางแผนงบประมาณทริปแบบ Real-time พร้อมเรทแลกเงินและจองตั๋ว</p>
+          </div>
+        </div>
+
+        <!-- Live Currency Rate Badge -->
+        <div class="bg-emerald-50/80 dark:bg-emerald-950/60 border border-emerald-200/80 dark:border-emerald-800 rounded-xl px-3 py-1.5 flex items-center space-x-2 text-xs self-start sm:self-auto">
+          <i class="fa-solid fa-arrow-right-arrow-left text-emerald-600 dark:text-emerald-400"></i>
+          <span class="text-slate-600 dark:text-slate-300 font-medium">เรทวันนี้:</span>
+          <span id="budget-exchange-rate-text" class="font-bold text-emerald-700 dark:text-emerald-300">1 THB ≈ 4.73 JPY</span>
+        </div>
+      </div>
+
+      <!-- Quick Booking Shortcuts (UX Booster) -->
+      <div class="bg-gradient-to-r from-blue-50 to-indigo-50 dark:from-slate-800 dark:to-slate-800/80 border border-blue-100/80 dark:border-slate-700 rounded-xl p-3 sm:p-3.5 flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5">
+        <div class="flex items-center space-x-2">
+          <i class="fa-solid fa-ticket text-blue-600 dark:text-blue-400 text-xs"></i>
+          <span class="text-xs font-bold text-slate-800 dark:text-white">จองตั๋วช่วงเดินทาง:</span>
+          <span id="booking-city-date-label" class="text-[11px] text-slate-500 dark:text-slate-400 truncate"></span>
+        </div>
+        <div class="grid grid-cols-3 gap-1.5 sm:flex sm:flex-wrap sm:gap-2">
+          <a id="link-search-flights" target="_blank" rel="noopener noreferrer" class="px-2 sm:px-3 py-2 sm:py-1.5 bg-blue-600 hover:bg-blue-700 text-white rounded-lg text-[11px] sm:text-xs font-semibold shadow-sm transition flex items-center justify-center space-x-1">
+            <i class="fa-solid fa-plane-departure text-[10px]"></i>
+            <span class="truncate">ตั๋วบิน</span>
+          </a>
+          <a id="link-search-hotels" target="_blank" rel="noopener noreferrer" class="px-2 sm:px-3 py-2 sm:py-1.5 bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 rounded-lg text-[11px] sm:text-xs font-semibold shadow-sm transition flex items-center justify-center space-x-1">
+            <i class="fa-solid fa-hotel text-amber-500 text-[10px]"></i>
+            <span class="truncate">ที่พัก</span>
+          </a>
+          <a id="link-search-activities" target="_blank" rel="noopener noreferrer" class="px-2 sm:px-3 py-2 sm:py-1.5 bg-white dark:bg-slate-700 hover:bg-slate-100 dark:hover:bg-slate-600 text-slate-700 dark:text-slate-200 border border-slate-200 dark:border-slate-600 rounded-lg text-[11px] sm:text-xs font-semibold shadow-sm transition flex items-center justify-center space-x-1">
+            <i class="fa-solid fa-ticket-simple text-rose-500 text-[10px]"></i>
+            <span class="truncate">กิจกรรม</span>
+          </a>
+        </div>
+      </div>
+
+      <!-- Budget Calculator Grid -->
+      <div class="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-5 items-start">
+        
+        <!-- Interactive Budget Form (7 cols) -->
+        <div class="lg:col-span-7 space-y-2.5 sm:space-y-3">
+          <div class="text-xs font-bold text-slate-700 dark:text-slate-300 flex items-center justify-between">
+            <span>หมวดหมู่ค่าใช้จ่ายโดยประมาณ (บาท):</span>
+            <button id="btn-suggest-budget" class="text-[11px] text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1 font-medium">
+              <i class="fa-solid fa-wand-magic-sparkles"></i> แนะนำอัตโนมัติ
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 gap-2 sm:gap-2.5 text-xs">
+            <!-- Flights -->
+            <div class="bg-slate-50 dark:bg-slate-800/80 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <label class="block text-slate-500 dark:text-slate-400 mb-0.5 text-[11px] truncate font-medium">✈️ ตั๋วเครื่องบิน/เดินทาง</label>
+              <div class="relative">
+                <input type="number" id="budget-flights" min="0" step="100" class="budget-input w-full pl-2.5 pr-7 py-1.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="12000">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 font-medium">฿</span>
+              </div>
+            </div>
+
+            <!-- Hotel -->
+            <div class="bg-slate-50 dark:bg-slate-800/80 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <label class="block text-slate-500 dark:text-slate-400 mb-0.5 text-[11px] truncate font-medium">🏨 ที่พักตลอดทริป</label>
+              <div class="relative">
+                <input type="number" id="budget-hotel" min="0" step="100" class="budget-input w-full pl-2.5 pr-7 py-1.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="8000">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 font-medium">฿</span>
+              </div>
+            </div>
+
+            <!-- Food & Transport -->
+            <div class="bg-slate-50 dark:bg-slate-800/80 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <label class="block text-slate-500 dark:text-slate-400 mb-0.5 text-[11px] truncate font-medium">🍜 ค่าอาหาร & เดินทาง</label>
+              <div class="relative">
+                <input type="number" id="budget-food" min="0" step="100" class="budget-input w-full pl-2.5 pr-7 py-1.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="6000">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 font-medium">฿</span>
+              </div>
+            </div>
+
+            <!-- Activities -->
+            <div class="bg-slate-50 dark:bg-slate-800/80 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <label class="block text-slate-500 dark:text-slate-400 mb-0.5 text-[11px] truncate font-medium">🎟️ บัตรผ่าน & เข้าชม</label>
+              <div class="relative">
+                <input type="number" id="budget-activities" min="0" step="100" class="budget-input w-full pl-2.5 pr-7 py-1.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="3000">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 font-medium">฿</span>
+              </div>
+            </div>
+
+            <!-- Shopping -->
+            <div class="bg-slate-50 dark:bg-slate-800/80 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <label class="block text-slate-500 dark:text-slate-400 mb-0.5 text-[11px] truncate font-medium">🛍️ ช้อปปิ้งของฝาก</label>
+              <div class="relative">
+                <input type="number" id="budget-shopping" min="0" step="100" class="budget-input w-full pl-2.5 pr-7 py-1.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="5000">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 font-medium">฿</span>
+              </div>
+            </div>
+
+            <!-- Emergency -->
+            <div class="bg-slate-50 dark:bg-slate-800/80 p-2 sm:p-2.5 rounded-xl border border-slate-200 dark:border-slate-700">
+              <label class="block text-slate-500 dark:text-slate-400 mb-0.5 text-[11px] truncate font-medium">🚨 งบสำรองฉุกเฉิน</label>
+              <div class="relative">
+                <input type="number" id="budget-emergency" min="0" step="100" class="budget-input w-full pl-2.5 pr-7 py-1.5 bg-white dark:bg-slate-700 border border-slate-300 dark:border-slate-600 rounded-lg text-xs sm:text-sm font-bold text-slate-800 dark:text-white focus:ring-2 focus:ring-blue-500 focus:outline-none" value="2000">
+                <span class="absolute inset-y-0 right-0 pr-2 flex items-center text-slate-400 font-medium">฿</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Budget Summary & Currency Card (5 cols) -->
+        <div class="lg:col-span-5 bg-gradient-to-br from-slate-900 to-slate-800 dark:from-slate-950 dark:to-slate-900 text-white rounded-xl p-4 sm:p-5 space-y-3 sm:space-y-4 shadow-md border border-slate-800">
+          <div>
+            <span class="text-[10px] sm:text-xs uppercase tracking-wider text-emerald-400 font-bold">งบประมาณรวมทั้งทริป</span>
+            <div class="flex items-baseline space-x-1.5 mt-0.5 sm:mt-1">
+              <span id="budget-total-thb" class="text-2xl sm:text-3xl font-black text-white">36,000</span>
+              <span class="text-xs sm:text-sm font-bold text-slate-300">บาท (THB)</span>
+            </div>
+            <!-- Converted currency -->
+            <div class="mt-1 text-xs sm:text-sm text-emerald-300 font-semibold flex items-center gap-1.5">
+              <span>≈</span>
+              <span id="budget-total-foreign" class="text-base sm:text-lg font-bold">170,280</span>
+              <span id="budget-foreign-currency-code">JPY</span>
+            </div>
+          </div>
+
+          <!-- Per-day Average -->
+          <div class="border-t border-slate-700/80 pt-2.5 sm:pt-3 flex items-center justify-between text-xs">
+            <span class="text-slate-400">เฉลี่ยต่อวัน:</span>
+            <span id="budget-daily-average" class="font-bold text-slate-200">9,000 ฿/วัน</span>
+          </div>
+
+          <!-- Quick Converter Tool in Card -->
+          <div class="border-t border-slate-700/80 pt-2.5 sm:pt-3 space-y-1.5">
+            <span class="text-[10px] sm:text-[11px] font-semibold text-slate-400">แปลงค่าเงินด่วน:</span>
+            <div class="grid grid-cols-2 gap-2 text-xs">
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-0.5">บาท (THB)</label>
+                <input type="number" id="quick-convert-thb" placeholder="1000" class="w-full px-2.5 py-1.5 bg-slate-800/90 border border-slate-600 rounded-lg text-white font-bold text-xs focus:ring-1 focus:ring-emerald-400 focus:outline-none">
+              </div>
+              <div>
+                <label class="block text-[10px] text-slate-400 mb-0.5 truncate" id="quick-convert-foreign-label">สกุลเงินท้องถิ่น</label>
+                <input type="number" id="quick-convert-foreign" placeholder="4730" class="w-full px-2.5 py-1.5 bg-slate-800/90 border border-slate-600 rounded-lg text-white font-bold text-xs focus:ring-1 focus:ring-emerald-400 focus:outline-none">
+              </div>
+            </div>
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <!-- Luggage Weight Calculator Card -->
+    <section id="weight-section" class="hidden bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800 space-y-4">
+      <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5 border-b border-slate-100 dark:border-slate-800 pb-3 sm:pb-4">
+        <div class="flex items-center space-x-2.5 sm:space-x-3">
+          <div class="w-9 h-9 sm:w-10 sm:h-10 rounded-xl bg-amber-50 dark:bg-amber-950/60 text-amber-600 dark:text-amber-400 flex items-center justify-center text-lg sm:text-xl shadow-sm shrink-0">
+            <i class="fa-solid fa-scale-balanced"></i>
+          </div>
+          <div>
+            <h2 class="text-base sm:text-lg font-bold text-slate-900 dark:text-white">จำลองชั่งน้ำหนักกระเป๋าเดินทาง</h2>
+            <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400">คำนวณน้ำหนักสัมภาระเทียบกับโควตาสายการบิน</p>
+          </div>
+        </div>
+
+        <!-- Luggage Allowance Preset Selector (Full width on mobile) -->
+        <div class="flex items-center gap-1.5 w-full sm:w-auto">
+          <label class="text-xs font-semibold text-slate-600 dark:text-slate-300 shrink-0">โควตา:</label>
+          <select id="select-baggage-preset" class="text-xs font-semibold bg-slate-50 dark:bg-slate-800 border border-slate-300 dark:border-slate-700 rounded-lg px-2.5 py-2 sm:py-1.5 text-slate-800 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500 flex-grow sm:flex-grow-0">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+      </div>
+
+      <!-- Weight Gauge & Metrics Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-12 gap-3 sm:gap-4 items-center">
+        <!-- Current Weight Display (4 cols) -->
+        <div class="md:col-span-4 bg-slate-50 dark:bg-slate-800/70 rounded-xl p-3.5 sm:p-4 border border-slate-200 dark:border-slate-700 flex flex-col justify-center text-center">
+          <span class="text-xs text-slate-500 dark:text-slate-400 font-medium">น้ำหนักรวมกระเป๋าปัจจุบัน</span>
+          <div class="flex items-baseline justify-center space-x-1.5 my-0.5 sm:my-1">
+            <span id="weight-current-kg" class="text-2xl sm:text-3xl font-black text-slate-900 dark:text-white">0.0</span>
+            <span class="text-sm sm:text-base font-bold text-slate-500 dark:text-slate-400">/ <span id="weight-limit-kg">20.0</span> kg</span>
+          </div>
+          <div id="weight-remaining-badge" class="inline-flex items-center justify-center text-[11px] sm:text-xs font-bold text-emerald-700 dark:text-emerald-300 bg-emerald-50 dark:bg-emerald-950/70 px-2.5 py-1 rounded-full mt-1">
+            <i class="fa-solid fa-bag-shopping mr-1"></i>
+            <span id="weight-remaining-text">เหลือพื้นที่ช้อปปิ้ง 20.0 kg</span>
+          </div>
+        </div>
+
+        <!-- Weight Progress Bar & Details (8 cols) -->
+        <div class="md:col-span-8 space-y-2.5 sm:space-y-3">
+          <div class="flex justify-between items-center text-xs font-semibold">
+            <span class="text-slate-600 dark:text-slate-300 flex items-center gap-1">
+              <i class="fa-solid fa-chart-pie text-blue-500"></i> สัดส่วนที่ใช้ไป:
+            </span>
+            <span id="weight-percentage-text" class="text-blue-600 dark:text-blue-400 font-bold">0%</span>
+          </div>
+
+          <!-- Weight Bar -->
+          <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3.5 sm:h-4 overflow-hidden border border-slate-200 dark:border-slate-700 p-0.5">
+            <div id="weight-bar-fill" class="h-full rounded-full transition-all duration-500 bg-gradient-to-r from-blue-500 to-indigo-600 w-0"></div>
+          </div>
+
+          <!-- Sub-breakdown & Options -->
+          <div class="flex flex-wrap items-center justify-between text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 gap-2 pt-0.5">
+            <div class="flex items-center space-x-2">
+              <span>กระเป๋าเปล่า: <strong id="weight-empty-bag-text" class="text-slate-700 dark:text-slate-200">3.8 kg</strong></span>
+              <span>•</span>
+              <span>ของ: <strong id="weight-items-text" class="text-slate-700 dark:text-slate-200">0.0 kg</strong></span>
+            </div>
+
+            <div class="flex items-center space-x-1.5">
+              <label class="text-[11px] text-slate-500 dark:text-slate-400 flex items-center cursor-pointer">
+                <input type="checkbox" id="check-weight-packed-only" class="mr-1 accent-blue-600 rounded">
+                <span>เฉพาะของที่เก็บแล้ว</span>
+              </label>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Overweight Warning Alert Banner -->
+      <div id="weight-overweight-alert" class="hidden bg-rose-50 dark:bg-rose-950/60 border border-rose-200 dark:border-rose-800 rounded-xl p-3 text-xs sm:text-sm text-rose-800 dark:text-rose-200 flex items-start space-x-2.5">
+        <i class="fa-solid fa-triangle-exclamation text-rose-600 dark:text-rose-400 text-base sm:text-lg mt-0.5 shrink-0"></i>
+        <div>
+          <strong class="font-bold">คำเตือน: น้ำหนักกระเป๋าเกินโควตาสายการบิน!</strong>
+          <p class="text-xs text-rose-700 dark:text-rose-300 mt-0.5" id="weight-overweight-desc">
+            น้ำหนักเกินไป 0.0 kg แนะนำให้นำของชิ้นหนักออก หรือซื้อน้ำหนักกระเป๋าเพิ่มล่วงหน้า
+          </p>
+        </div>
+      </div>
+
+      <!-- Quick Gear Shortcuts for Luggage (Affiliate) -->
+      <div class="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between flex-wrap gap-2 text-xs no-print">
+        <span class="text-slate-500 dark:text-slate-400 flex items-center gap-1.5 text-[11px]">
+          <i class="fa-solid fa-wand-magic-sparkles text-amber-500"></i> อุปกรณ์ช่วยจัดสัมภาระ:
+        </span>
+        <div class="flex items-center gap-2 flex-wrap">
+          <a href="https://s.shopee.co.th/4fvws9ePKr" target="_blank" rel="noopener noreferrer sponsored" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-orange-50 dark:bg-orange-950/60 hover:bg-orange-100 dark:hover:bg-orange-900/80 text-orange-600 dark:text-orange-400 border border-orange-200 dark:border-orange-800/80 text-[11px] font-semibold transition">
+            <i class="fa-solid fa-suitcase-rolling text-[10px]"></i>
+            <span>กระเป๋าเดินทางน้ำหนักเบา</span>
+          </a>
+          <a href="https://s.shopee.co.th/1LfUtpaDm8" target="_blank" rel="noopener noreferrer sponsored" class="inline-flex items-center gap-1 px-2.5 py-1 rounded-lg bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/80 text-emerald-600 dark:text-emerald-400 border border-emerald-200 dark:border-emerald-800/80 text-[11px] font-semibold transition">
+            <i class="fa-solid fa-weight-scale text-[10px]"></i>
+            <span>เครื่องชั่งน้ำหนักพกพา</span>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Checklist & Progress Section -->
+    <section id="checklist-section" class="hidden space-y-4 sm:space-y-5">
+
+      <!-- Progress Tracking Card -->
+      <div class="bg-white dark:bg-slate-900 rounded-2xl p-4 sm:p-6 shadow-sm border border-slate-200 dark:border-slate-800">
+        <div class="flex items-center justify-between gap-3 mb-3">
+          <div>
+            <div class="flex items-center space-x-2">
+              <h2 class="text-base sm:text-xl font-bold text-slate-900 dark:text-white">รายการสิ่งของที่ต้องเตรียม</h2>
+              <span id="badge-total-items" class="bg-slate-100 dark:bg-slate-800 text-slate-700 dark:text-slate-300 text-[10px] sm:text-xs font-semibold px-2 py-0.5 rounded-full">0 ชิ้น</span>
+            </div>
+            <p class="text-[11px] sm:text-xs text-slate-500 dark:text-slate-400 mt-0.5" id="progress-status-text">ติ๊กเลือกเมื่อเก็บของลงกระเป๋าแล้ว</p>
+          </div>
+
+          <!-- Progress Percentage Display -->
+          <div class="text-right shrink-0">
+            <div class="text-xl sm:text-2xl font-black text-blue-600 dark:text-blue-400" id="progress-percent">0%</div>
+            <div class="text-[10px] sm:text-[11px] text-slate-500 dark:text-slate-400" id="progress-count">0 / 0 ชิ้น</div>
+          </div>
+        </div>
+
+        <!-- Progress Bar Line -->
+        <div class="w-full bg-slate-100 dark:bg-slate-800 rounded-full h-3 sm:h-3.5 overflow-hidden border border-slate-200/80 dark:border-slate-700 p-0.5">
+          <div id="progress-bar-fill" class="progress-bar-fill theme-btn-gradient h-full rounded-full w-0"></div>
+        </div>
+
+        <!-- Toolbar: Filters & Quick Actions (Mobile Optimized) -->
+        <div class="flex flex-col sm:flex-row items-stretch sm:items-center justify-between gap-2.5 mt-4 pt-3.5 border-t border-slate-100 dark:border-slate-800 no-print">
+          <!-- Filter Tabs (3 equal columns on mobile) -->
+          <div class="grid grid-cols-3 p-1 bg-slate-100 dark:bg-slate-800 rounded-xl text-center text-xs font-medium">
+            <button class="filter-tab py-1.5 rounded-lg transition bg-white dark:bg-slate-700 text-slate-900 dark:text-white shadow-sm" data-filter="all">ทั้งหมด (<span id="count-all">0</span>)</button>
+            <button class="filter-tab py-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" data-filter="unpacked">ยังไม่เก็บ (<span id="count-unpacked">0</span>)</button>
+            <button class="filter-tab py-1.5 rounded-lg transition text-slate-600 dark:text-slate-400 hover:text-slate-900 dark:hover:text-white" data-filter="packed">เก็บแล้ว (<span id="count-packed">0</span>)</button>
+          </div>
+
+          <!-- Action Buttons (Touch Friendly Grid on Mobile) -->
+          <div class="grid grid-cols-2 sm:flex sm:flex-wrap items-center gap-1.5 sm:gap-2">
+            <button id="btn-add-item-modal" class="px-3 py-2 sm:py-1.5 text-xs font-semibold text-white theme-btn-gradient rounded-lg shadow-sm transition flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-plus text-xs"></i>
+              <span>เพิ่มของเอง</span>
+            </button>
+            <button id="btn-check-all" class="px-3 py-2 sm:py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition flex items-center justify-center">
+              <i class="fa-solid fa-check-double mr-1 text-xs"></i> ติ๊กหมด
+            </button>
+            <button id="btn-uncheck-all" class="px-3 py-2 sm:py-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg transition flex items-center justify-center">
+              <i class="fa-solid fa-xmark mr-1 text-xs"></i> ยกเลิกหมด
+            </button>
+            <button id="btn-save-trip-bookmark" class="px-3 py-2 sm:py-1.5 text-xs font-medium text-emerald-700 dark:text-emerald-400 bg-emerald-50 dark:bg-emerald-950/60 hover:bg-emerald-100 dark:hover:bg-emerald-900/60 rounded-lg transition flex items-center justify-center space-x-1">
+              <i class="fa-solid fa-floppy-disk text-xs"></i>
+              <span>บันทึกทริป</span>
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- Smart Travel Gear Recommendations (Affiliate Shopping: Shopee / Lazada / Klook) -->
+      <div id="affiliate-gear-card" class="bg-gradient-to-br from-amber-500/5 via-orange-500/5 to-rose-500/5 dark:from-amber-950/20 dark:via-orange-950/20 dark:to-rose-950/20 rounded-2xl p-4 sm:p-5 border border-amber-200/60 dark:border-amber-800/40 space-y-3.5 no-print">
+        <div class="flex items-center justify-between flex-wrap gap-2">
+          <div class="flex items-center space-x-2.5">
+            <div class="w-8 h-8 rounded-lg bg-orange-100 dark:bg-orange-950/80 text-orange-600 dark:text-orange-400 flex items-center justify-center text-sm shadow-sm shrink-0">
+              <i class="fa-solid fa-bag-shopping"></i>
+            </div>
+            <div>
+              <h3 class="font-bold text-slate-800 dark:text-white text-sm sm:text-base flex items-center gap-1.5 flex-wrap">
+                <span>ไอเทมแนะนำสำหรับทริปนี้</span>
+                <span class="text-[10px] font-bold text-orange-600 dark:text-orange-400 bg-orange-100 dark:bg-orange-950 px-2 py-0.5 rounded-full">จัดตามสภาพอากาศ</span>
+              </h3>
+              <p class="text-xs text-slate-500 dark:text-slate-400">คัดสรรอุปกรณ์จำเป็นที่ช่วยให้เดินทางราบรื่น ไม่ติดขัดที่สนามบินและหน้างาน</p>
+            </div>
+          </div>
+          <div class="flex items-center gap-2 flex-wrap">
+            <a href="https://mycollection.shop/panusbodeepisutsuwimol" target="_blank" rel="noopener noreferrer sponsored" class="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-xl bg-orange-500 hover:bg-orange-600 text-white text-xs font-semibold shadow-sm transition">
+              <i class="fa-solid fa-store text-xs"></i>
+              <span>หน้าร้าน Shopee ของ PAbodee</span>
+            </a>
+          </div>
+        </div>
+
+        <!-- Dynamic Gear Grid Container -->
+        <div id="affiliate-gear-grid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-2.5 sm:gap-3">
+          <!-- Dynamically populated via renderAffiliateGear() -->
+        </div>
+      </div>
+
+      <!-- Checklist Categories Container -->
+      <div id="categories-container" class="space-y-3 sm:space-y-4">
+        <!-- Dynamically rendered category cards & items -->
+      </div>
+    </section>
+
+    <!-- Empty State / Welcome Screen -->
+    <section id="empty-state" class="bg-white dark:bg-slate-900 rounded-2xl p-6 sm:p-14 text-center border border-slate-200 dark:border-slate-800 shadow-sm space-y-3 sm:space-y-4">
+      <div class="w-16 h-16 sm:w-20 sm:h-20 mx-auto rounded-2xl bg-blue-50 dark:bg-blue-950/60 text-blue-600 dark:text-blue-400 flex items-center justify-center text-2xl sm:text-3xl shadow-inner">
+        <i class="fa-solid fa-map-location-dot"></i>
+      </div>
+      <div class="max-w-md mx-auto">
+        <h3 class="text-lg sm:text-xl font-bold text-slate-800 dark:text-white">พร้อมจัดกระเป๋าแล้วหรือยัง?</h3>
+        <p class="text-xs sm:text-sm text-slate-500 dark:text-slate-400 mt-1">
+          เลือกเมืองปลายทางและช่วงวันเดินทางด้านบน เพื่อให้ระบบดึงข้อมูลพยากรณ์อากาศแบบตรงวัน พร้อมคำนวณงบประมาณและจำลองน้ำหนักกระเป๋าให้อัตโนมัติ!
+        </p>
+      </div>
+      <div class="pt-2 flex justify-center gap-2">
+        <button class="px-5 py-2.5 text-xs sm:text-sm font-semibold text-blue-600 dark:text-blue-400 bg-blue-50 dark:bg-blue-950/60 hover:bg-blue-100 dark:hover:bg-blue-900/60 rounded-xl transition" onclick="document.getElementById('input-city').focus()">
+          เริ่มค้นหาเมืองเลย <i class="fa-solid fa-arrow-up ml-1"></i>
+        </button>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- Footer with Author Credit -->
+  <footer class="bg-white dark:bg-slate-900 border-t border-slate-200 dark:border-slate-800 py-5 sm:py-6 text-center text-xs text-slate-500 dark:text-slate-400 no-print mt-auto">
+    <div class="max-w-6xl mx-auto px-4 flex flex-col sm:flex-row items-center justify-between gap-3">
+      <div class="flex items-center space-x-2">
+        <span>Smart Packing List &copy; 2026</span>
+        <span>•</span>
+        <a href="https://github.com/panusbodee-owen" target="_blank" rel="noopener noreferrer" class="font-bold text-blue-600 dark:text-blue-400 hover:underline flex items-center gap-1">
+          <i class="fa-brands fa-github"></i> Create By Panusbodee
+        </a>
+      </div>
+      <div class="flex items-center space-x-2.5 sm:space-x-3 text-slate-500 dark:text-slate-400 text-[11px] sm:text-xs">
+        <button id="btn-open-privacy" class="hover:text-blue-600 dark:hover:text-blue-400 underline transition">นโยบายความเป็นส่วนตัว (Privacy Policy)</button>
+        <span>•</span>
+        <a href="https://github.com/panusbodee-owen" target="_blank" rel="noopener noreferrer" class="hover:text-blue-600 dark:hover:text-blue-400 underline transition">ติดต่อผู้พัฒนา</a>
+      </div>
+    </div>
+  </footer>
+
+  <!-- MODAL: Add Custom Item (Mobile Friendly) -->
+  <div id="modal-add-item" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 modal-backdrop bg-slate-900/60">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-5 sm:p-6 shadow-2xl space-y-3.5 border border-slate-100 dark:border-slate-800 max-h-[92vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-circle-plus text-blue-600 dark:text-blue-400"></i> เพิ่มสิ่งของในรายการ
+        </h3>
+        <button id="btn-close-add-modal" aria-label="ปิดหน้าต่างเพิ่มรายการ" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <form id="form-add-item" class="space-y-3">
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">ชื่อสิ่งของ *</label>
+          <input type="text" id="add-item-name" required placeholder="เช่น กล้องถ่ายรูป, ขาตั้งกล้อง" class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <div class="grid grid-cols-3 gap-2">
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">จำนวน</label>
+            <input type="number" id="add-item-qty" min="1" max="99" value="1" class="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">หน่วย</label>
+            <input type="text" id="add-item-unit" value="ชิ้น" placeholder="ชิ้น, ตัว" class="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          </div>
+          <div>
+            <label class="block text-[11px] font-semibold text-slate-700 dark:text-slate-300 mb-1">น้ำหนัก (g)</label>
+            <input type="number" id="add-item-weight" min="1" max="10000" value="150" placeholder="150" class="w-full px-2.5 py-1.5 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+          </div>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">หมวดหมู่</label>
+          <select id="add-item-category" class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+            <!-- Populated via JS -->
+          </select>
+        </div>
+
+        <div>
+          <label class="block text-xs font-semibold text-slate-700 dark:text-slate-300 mb-1">หมายเหตุ (ไม่บังคับ)</label>
+          <input type="text" id="add-item-reason" placeholder="เช่น ใช้ถ่ายภาพกลางคืน" class="w-full px-3 py-2 text-sm bg-white dark:bg-slate-800 border border-slate-300 dark:border-slate-700 text-slate-800 dark:text-white rounded-lg focus:ring-2 focus:ring-blue-500 focus:outline-none">
+        </div>
+
+        <div class="flex items-center justify-end space-x-2 pt-2 border-t border-slate-100 dark:border-slate-800">
+          <button type="button" id="btn-cancel-add" class="px-4 py-2 text-xs font-medium text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-800 rounded-lg transition">ยกเลิก</button>
+          <button type="submit" class="px-5 py-2 text-xs font-semibold text-white theme-btn-gradient rounded-lg shadow-sm transition">เพิ่มรายการ</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <!-- MODAL: Saved Trips History (Mobile Friendly) -->
+  <div id="modal-history" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 modal-backdrop bg-slate-900/60">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-4 sm:p-6 shadow-2xl space-y-3 sm:space-y-4 border border-slate-100 dark:border-slate-800 max-h-[88vh] flex flex-col">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-clock-rotate-left text-blue-600 dark:text-blue-400"></i> ทริปที่บันทึกไว้
+        </h3>
+        <button id="btn-close-history-modal" aria-label="ปิดหน้าต่างประวัติทริป" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div id="history-trips-list" class="flex-grow overflow-y-auto space-y-2.5 pr-1">
+        <!-- Populated via JS -->
+      </div>
+
+      <div class="flex items-center justify-between pt-2.5 border-t border-slate-100 dark:border-slate-800 text-xs text-slate-500 dark:text-slate-400">
+        <span>ประวัติสูงสุด 20 ทริป</span>
+        <button id="btn-close-history-footer" class="px-3.5 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg font-medium text-slate-700 dark:text-slate-200 transition">ปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Export / Share Options (Mobile Friendly) -->
+  <div id="modal-export" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 modal-backdrop bg-slate-900/60">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-md w-full p-4 sm:p-6 shadow-2xl space-y-3 sm:space-y-4 border border-slate-100 dark:border-slate-800 max-h-[88vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-share-from-square text-indigo-600 dark:text-indigo-400"></i> แชร์หรือส่งออกรายการ
+        </h3>
+        <button id="btn-close-export-modal" aria-label="ปิดหน้าต่างส่งออก" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="space-y-2">
+        <button id="btn-action-copy-text" class="w-full p-3 bg-slate-50 dark:bg-slate-800 hover:bg-blue-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center space-x-3 text-left transition group">
+          <div class="w-9 h-9 rounded-lg bg-blue-100 dark:bg-blue-900 text-blue-600 dark:text-blue-300 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
+            <i class="fa-solid fa-copy"></i>
+          </div>
+          <div>
+            <div class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">คัดลอกข้อความ (Copy Text)</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">คัดลอกนำไปส่งใน LINE หรือ Note</div>
+          </div>
+        </button>
+
+        <button id="btn-action-print" class="w-full p-3 bg-slate-50 dark:bg-slate-800 hover:bg-indigo-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center space-x-3 text-left transition group">
+          <div class="w-9 h-9 rounded-lg bg-indigo-100 dark:bg-indigo-900 text-indigo-600 dark:text-indigo-300 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
+            <i class="fa-solid fa-print"></i>
+          </div>
+          <div>
+            <div class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">พิมพ์หรือบันทึก PDF (Print)</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">พิมพ์ใบเช็กลิสต์หรือเซฟไฟล์ PDF</div>
+          </div>
+        </button>
+
+        <button id="btn-action-download-json" class="w-full p-3 bg-slate-50 dark:bg-slate-800 hover:bg-emerald-50 dark:hover:bg-slate-700 border border-slate-200 dark:border-slate-700 rounded-xl flex items-center space-x-3 text-left transition group">
+          <div class="w-9 h-9 rounded-lg bg-emerald-100 dark:bg-emerald-900 text-emerald-600 dark:text-emerald-300 flex items-center justify-center text-base shrink-0 group-hover:scale-105 transition">
+            <i class="fa-solid fa-file-code"></i>
+          </div>
+          <div>
+            <div class="text-xs sm:text-sm font-semibold text-slate-800 dark:text-white">ดาวน์โหลดเป็น JSON</div>
+            <div class="text-[11px] text-slate-500 dark:text-slate-400">สำรองข้อมูลโครงสร้างครบถ้วน</div>
+          </div>
+        </button>
+      </div>
+
+      <div class="pt-2 text-center">
+        <button id="btn-close-export-footer" class="px-4 py-1.5 text-xs font-medium text-slate-500 dark:text-slate-400 hover:text-slate-800 dark:hover:text-white transition">ปิดหน้าต่าง</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- MODAL: Privacy Policy (Required for Google AdSense Approval) -->
+  <div id="modal-privacy" class="hidden fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 modal-backdrop bg-slate-900/60">
+    <div class="bg-white dark:bg-slate-900 rounded-2xl max-w-lg w-full p-5 sm:p-6 shadow-2xl space-y-3.5 border border-slate-100 dark:border-slate-800 max-h-[85vh] overflow-y-auto">
+      <div class="flex items-center justify-between border-b border-slate-100 dark:border-slate-800 pb-2.5">
+        <h3 class="text-sm sm:text-base font-bold text-slate-900 dark:text-white flex items-center gap-2">
+          <i class="fa-solid fa-shield-halved text-blue-600 dark:text-blue-400"></i> นโยบายความเป็นส่วนตัว (Privacy Policy)
+        </h3>
+        <button id="btn-close-privacy-modal" aria-label="ปิดหน้าต่างนโยบาย" class="text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 p-1">
+          <i class="fa-solid fa-xmark text-lg"></i>
+        </button>
+      </div>
+
+      <div class="text-xs text-slate-600 dark:text-slate-300 space-y-3 leading-relaxed">
+        <p>
+          เว็บแอปพลิเคชัน <strong>Smart Packing List</strong> ให้ความสำคัญอย่างยิ่งต่อความเป็นส่วนตัวของผู้ใช้งาน หน้านี้อธิบายถึงนโยบายในการจัดเก็บและใช้งานข้อมูล:
+        </p>
+        <div>
+          <h4 class="font-bold text-slate-800 dark:text-white mb-0.5">1. การจัดเก็บข้อมูลของผู้ใช้ (Local Storage)</h4>
+          <p>ข้อมูลรายการจัดกระเป๋า, จำนวนวัน, การตั้งค่าธีม และประวัติทริปจะถูกจัดเก็บอยู่บนเบราว์เซอร์ของท่านผ่านเทคโนโลยี LocalStorage โดยตรง ไม่มีการส่งข้อมูลรายการของท่านไปยังเซิร์ฟเวอร์ภายนอก</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800 dark:text-white mb-0.5">2. คุกกี้และโฆษณา (Google AdSense &amp; Third-Party Cookies)</h4>
+          <p>
+            เว็บไซต์นี้ใช้บริการโฆษณาจาก <strong>Google AdSense</strong> ซึ่งผู้ให้บริการภายนอกรวมถึง Google จะใช้คุกกี้ (Cookies) เพื่อแสดงโฆษณาตามการเข้าชมเว็บไซต์ของผู้ใช้ ทั้งในเว็บไซต์นี้และเว็บไซต์อื่น ๆ บนอินเทอร์เน็ต
+          </p>
+          <p class="mt-1">
+            ผู้ใช้สามารถเลือกปิดใช้งานคุกกี้สำหรับการโฆษณาตามความสนใจ (Personalized Advertising) ได้โดยไปที่ <a href="https://www.google.com/settings/ads" target="_blank" rel="noopener noreferrer" class="text-blue-600 dark:text-blue-400 underline">Google Ads Settings</a>
+          </p>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800 dark:text-white mb-0.5">3. ลิงก์พันธมิตร (Affiliate Disclosure)</h4>
+          <p>บางลิงก์บนเว็บไซต์นี้เป็นลิงก์พันธมิตร (เช่น Shopee, Lazada, Klook) ซึ่งเมื่อท่านคลิกและสั่งซื้อสินค้า ผู้พัฒนาอาจได้รับค่าคอมมิชชันส่วนแบ่งเล็กน้อยโดยไม่มีค่าใช้จ่ายเพิ่มเติมใด ๆ แก่ท่าน</p>
+        </div>
+        <div>
+          <h4 class="font-bold text-slate-800 dark:text-white mb-0.5">4. ข้อมูลสภาพอากาศและอัตราแลกเปลี่ยน</h4>
+          <p>ข้อมูลสภาพอากาศดึงมาจาก Open-Meteo API และอัตราแลกเปลี่ยนดึงมาจาก Interbank Open Exchange Rates ซึ่งเป็นบริการสาธารณะที่ไม่มีการเก็บข้อมูลส่วนบุคคล</p>
+        </div>
+      </div>
+
+      <div class="pt-3 border-t border-slate-100 dark:border-slate-800 text-center">
+        <button id="btn-close-privacy-footer" class="px-4 py-1.5 bg-slate-100 dark:bg-slate-800 hover:bg-slate-200 dark:hover:bg-slate-700 rounded-lg font-medium text-slate-700 dark:text-slate-200 text-xs transition">รับทราบและปิด</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Notification Container (Mobile position: bottom-center on mobile) -->
+  <div id="toast-container" class="fixed bottom-4 left-4 right-4 sm:left-auto sm:right-5 z-50 flex flex-col space-y-2 pointer-events-none items-center sm:items-end">
+    <!-- Populated via showToast() -->
+  </div>
+
+  <!-- Main JavaScript Application (ES Modules) -->
+  <script type="module" src="js/app.js"></script>
+</body>
+</html>
