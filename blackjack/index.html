@@ -1,0 +1,197 @@
+<!doctype html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8" />
+  <script>
+    // ป้องกันหน้าวูบ (FOUC): อ่านธีมที่บันทึกไว้แล้วตั้งค่าก่อนวาดหน้า ต้องรันก่อน stylesheet เสมอ
+    (function () {
+      try {
+        if (localStorage.getItem("vpk-theme") === "light") document.documentElement.dataset.theme = "light";
+        var a = localStorage.getItem("vpk-accent");
+        if (a && a !== "aurora") document.documentElement.dataset.accent = a;
+      } catch (e) {}
+    })();
+  </script>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="เจ้ามือใจร้าย — แบล็คแจ็คครบเครื่องเล่นในเบราว์เซอร์ มีเดิมพันชิป ดับเบิลดาวน์ แยกไพ่ ประกัน ยอมแพ้ โค้ชบอกทางเล่นตามตำราเป๊ะ ระบบนับไพ่ Hi-Lo สถิติ เหรียญรางวัล และแป้นลัด เล่นฟรีไม่ต้องสมัคร" />
+  <meta name="author" content="Panusbodee Pisutsuwimon" />
+  <meta name="theme-color" content="#0b1022" />
+  <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/blackjack/" />
+  <meta property="og:type" content="website" />
+  <meta property="og:site_name" content="เจ้ามือใจร้าย" />
+  <meta property="og:title" content="เจ้ามือใจร้าย — แบล็คแจ็คครบเครื่อง" />
+  <meta property="og:description" content="เดิมพันชิป ดับเบิล แยกไพ่ ประกัน ยอมแพ้ พร้อมโค้ชบอกทางเล่นและระบบนับไพ่ Hi-Lo" />
+  <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/blackjack/" />
+  <link rel="icon" type="image/svg+xml" href="../pood/favicon.svg" />
+  <title>เจ้ามือใจร้าย — แบล็คแจ็คครบเครื่อง</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link
+    href="https://fonts.googleapis.com/css2?family=Kanit:wght@300;400;500;600;700&family=Nunito:wght@400;600;700;800&display=swap"
+    rel="stylesheet"
+  />
+  <link rel="stylesheet" href="../theme.css" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="../theme.js" defer></script>
+</head>
+<body>
+  <div class="particles" aria-hidden="true">
+    <span class="particle" style="--x:5%; --size:22px; --dur:26s; --delay:-6s; --drift:20px; --opacity:0.2;">🃏</span>
+    <span class="particle" style="--x:14%; --size:16px; --dur:21s; --delay:-13s; --drift:-14px; --opacity:0.18;">♠️</span>
+    <span class="particle" style="--x:23%; --size:24px; --dur:31s; --delay:-3s; --drift:24px; --opacity:0.15;">💰</span>
+    <span class="particle" style="--x:32%; --size:18px; --dur:23s; --delay:-17s; --drift:-18px; --opacity:0.2;">♦️</span>
+    <span class="particle" style="--x:41%; --size:20px; --dur:28s; --delay:-9s; --drift:16px; --opacity:0.16;">🎰</span>
+    <span class="particle" style="--x:50%; --size:15px; --dur:19s; --delay:-22s; --drift:-22px; --opacity:0.24;">♣️</span>
+    <span class="particle" style="--x:59%; --size:25px; --dur:33s; --delay:-4s; --drift:14px; --opacity:0.14;">🃏</span>
+    <span class="particle" style="--x:68%; --size:17px; --dur:22s; --delay:-15s; --drift:-16px; --opacity:0.2;">♥️</span>
+    <span class="particle" style="--x:77%; --size:21px; --dur:29s; --delay:-8s; --drift:22px; --opacity:0.17;">🪙</span>
+    <span class="particle" style="--x:86%; --size:16px; --dur:24s; --delay:-19s; --drift:-12px; --opacity:0.22;">♠️</span>
+    <span class="particle" style="--x:94%; --size:19px; --dur:27s; --delay:-5s; --drift:18px; --opacity:0.16;">💵</span>
+    <span class="particle" style="--x:9%; --size:14px; --dur:20s; --delay:-11s; --drift:-20px; --opacity:0.2;">♦️</span>
+    <span class="particle" style="--x:64%; --size:13px; --dur:18s; --delay:-7s; --drift:-8px; --opacity:0.25;">♣️</span>
+  </div>
+
+  <div class="big-objects">
+    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
+      style="--bx:5%; --by:16%; --bsize:76px;" data-depth="0.025" data-emojis="🃏,🎴,♠️,♥️">🃏</button>
+    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
+      style="--bx:95%; --by:22%; --bsize:64px;" data-depth="0.018" data-emojis="💰,🪙,💵,💸">💰</button>
+    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
+      style="--bx:6%; --by:84%; --bsize:70px;" data-depth="0.03" data-emojis="🎰,🎲,🀄,🎯">🎰</button>
+    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
+      style="--bx:93%; --by:82%; --bsize:80px;" data-depth="0.02" data-emojis="😈,🤑,😎,🥶">😈</button>
+  </div>
+
+  <a class="back-link" href="../" title="กลับหน้ารวมโปรเจกต์">← Panusbodee's Lab</a>
+
+  <main>
+    <header class="intro">
+      <p class="kicker">BLACKJACK TABLE</p>
+      <h1>เจ้ามือ<span>ใจร้าย</span></h1>
+      <p class="sub">
+        แบล็คแจ็คครบเครื่องแบบโต๊ะจริง — วางชิป ดับเบิลดาวน์ แยกไพ่ ซื้อประกัน ยอมแพ้ได้ครบ
+        พร้อมโค้ชบอกทางเล่นตามตำรา ระบบนับไพ่ Hi-Lo สถิติ และเหรียญรางวัลให้เก็บ
+      </p>
+    </header>
+
+    <div class="hud">
+      <div class="hud-item">
+        <span class="hud-label">เงินคงเหลือ</span>
+        <span id="bankroll" class="hud-value">฿0</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">เดิมพันตานี้</span>
+        <span id="betDisplay" class="hud-value">฿0</span>
+      </div>
+      <div class="hud-item">
+        <span class="hud-label">กำไร/ขาดทุนสุทธิ</span>
+        <span id="netDisplay" class="hud-value">฿0</span>
+      </div>
+    </div>
+
+    <section class="table" aria-label="โต๊ะไพ่">
+      <div class="seat">
+        <div class="seat-label">
+          <span>😈 เจ้ามือ</span>
+          <span id="dealerScore" class="seat-score"></span>
+        </div>
+        <div id="dealerCards" class="cards-row"></div>
+      </div>
+
+      <div class="table-divider"><span id="shoeInfo" class="shoe-info"></span></div>
+
+      <div id="playerSeats" class="player-seats"></div>
+
+      <p id="message" class="table-message" role="status" aria-live="polite"></p>
+    </section>
+
+    <div id="bettingPanel" class="panel">
+      <div class="panel-label">วางเดิมพัน</div>
+      <div id="chipRow" class="chip-row" role="group" aria-label="เลือกชิป">
+        <button type="button" class="chip chip-25" data-chip="25">25</button>
+        <button type="button" class="chip chip-100" data-chip="100">100</button>
+        <button type="button" class="chip chip-500" data-chip="500">500</button>
+        <button type="button" class="chip chip-1000" data-chip="1000">1K</button>
+      </div>
+      <div class="panel-actions">
+        <button type="button" id="clearBetBtn" class="btn btn-ghost">ล้างชิป</button>
+        <button type="button" id="rebetBtn" class="btn btn-ghost">เดิมพันซ้ำ</button>
+        <button type="button" id="allInBtn" class="btn btn-ghost">หมดหน้าตัก</button>
+        <button type="button" id="dealBtn" class="btn btn-primary">🃏 แจกไพ่</button>
+      </div>
+      <button type="button" id="brokeBtn" class="btn btn-ghost broke-btn" hidden>😭 เงินไม่พอวางชิปแล้ว — ขอเจ้ามืออีก ฿500</button>
+    </div>
+
+    <div id="insurancePanel" class="panel" hidden>
+      <div class="panel-label">🛡️ เจ้ามือเปิดเอซ — ซื้อประกันไหม? (จ่ายครึ่งเดิมพัน ได้คืน 2:1 ถ้าเจ้ามือแบล็คแจ็ค)</div>
+      <div class="panel-actions">
+        <button type="button" id="insuranceYesBtn" class="btn btn-primary">ซื้อประกัน <span id="insuranceCost"></span></button>
+        <button type="button" id="insuranceNoBtn" class="btn btn-ghost">ไม่เอา</button>
+      </div>
+    </div>
+
+    <div id="actionPanel" class="panel" hidden>
+      <div class="panel-label">ตาของคุณ</div>
+      <div class="panel-actions">
+        <button type="button" id="hitBtn" class="btn" data-key="H">🖐️ ขอเพิ่ม <kbd>H</kbd></button>
+        <button type="button" id="standBtn" class="btn" data-key="S">✋ พอแล้ว <kbd>S</kbd></button>
+        <button type="button" id="doubleBtn" class="btn" data-key="D">💥 ดับเบิล <kbd>D</kbd></button>
+        <button type="button" id="splitBtn" class="btn" data-key="P">✌️ แยกไพ่ <kbd>P</kbd></button>
+        <button type="button" id="surrenderBtn" class="btn" data-key="R">🏳️ ยอมแพ้ <kbd>R</kbd></button>
+      </div>
+    </div>
+
+    <div class="assist">
+      <p id="coachTip" class="coach-tip" hidden></p>
+      <p id="countInfo" class="count-info" hidden></p>
+    </div>
+
+    <div class="settings" role="group" aria-label="ตั้งค่า">
+      <button type="button" id="soundToggle" class="toggle">🔊 เสียง: เปิด</button>
+      <button type="button" id="coachToggle" class="toggle">🎓 โค้ช: ปิด</button>
+      <button type="button" id="countToggle" class="toggle">🧮 นับไพ่: ปิด</button>
+      <button type="button" id="speedToggle" class="toggle">⏱️ ความเร็ว: ปกติ</button>
+    </div>
+
+    <div class="history-wrap">
+      <span class="history-label">10 ตาล่าสุด:</span>
+      <div id="history" class="history"></div>
+    </div>
+
+    <section class="stats-card" aria-label="สถิติการเล่น">
+      <div class="stats-title">📊 สถิติของคุณ</div>
+      <div class="stats-grid">
+        <div class="stat"><div id="statHands" class="stat-value">0</div><div class="stat-label">ตาที่เล่น</div></div>
+        <div class="stat"><div id="statWinRate" class="stat-value">0%</div><div class="stat-label">อัตราชนะ</div></div>
+        <div class="stat"><div id="statStreak" class="stat-value">0</div><div class="stat-label">ชนะติดกันสูงสุด</div></div>
+        <div class="stat"><div id="statPeak" class="stat-value">฿0</div><div class="stat-label">เงินสูงสุดที่เคยมี</div></div>
+        <div class="stat"><div id="statBj" class="stat-value">0</div><div class="stat-label">แบล็คแจ็คที่ได้</div></div>
+        <div class="stat"><div id="statBiggest" class="stat-value">฿0</div><div class="stat-label">ชนะรวดเดียวสูงสุด</div></div>
+      </div>
+      <button type="button" id="resetBtn" class="btn btn-ghost reset-btn">♻️ เริ่มใหม่ทั้งหมด (ล้างเงินและสถิติ)</button>
+    </section>
+
+    <section class="stats-card" aria-label="เหรียญรางวัล">
+      <div class="stats-title">🏅 เหรียญรางวัล <span id="badgeCount" class="badge-count"></span></div>
+      <div id="badges" class="badges"></div>
+    </section>
+
+    <details class="rules">
+      <summary>📜 กติกาโต๊ะนี้ &amp; แป้นลัด</summary>
+      <ul>
+        <li>ใช้ไพ่ 6 สำรับ สับใหม่เมื่อจ่ายไปแล้วประมาณ 75% ของกอง</li>
+        <li>แบล็คแจ็ค (21 จากสองใบแรก) จ่าย <b>3:2</b> · ชนะปกติจ่าย <b>1:1</b> · เสมอได้เดิมพันคืน</li>
+        <li>เจ้ามือจั่วจนถึง 17 แล้วหยุดทุกกรณี รวมทั้ง 17 อ่อน (S17)</li>
+        <li><b>ดับเบิลดาวน์</b>: ได้เฉพาะตอนมีไพ่ 2 ใบ วางเพิ่มเท่าเดิมพันแล้วรับไพ่อีกใบเดียว</li>
+        <li><b>แยกไพ่</b>: ไพ่แต้มเท่ากันแยกได้สูงสุด 4 มือ · แยกเอซได้ไพ่มือละใบเดียว · 21 จากไพ่ที่แยกนับเป็น 21 ธรรมดา ไม่ใช่แบล็คแจ็ค</li>
+        <li><b>ประกัน</b>: เลือกได้เมื่อเจ้ามือเปิดเอซ จ่ายครึ่งเดิมพัน ได้คืน 2:1 ถ้าเจ้ามือแบล็คแจ็คจริง</li>
+        <li><b>ยอมแพ้</b>: ได้เฉพาะไพ่ 2 ใบแรกและยังไม่แยกไพ่ คืนเดิมพันครึ่งหนึ่ง</li>
+        <li>แป้นลัด: <kbd>H</kbd> ขอเพิ่ม · <kbd>S</kbd> พอแล้ว · <kbd>D</kbd> ดับเบิล · <kbd>P</kbd> แยกไพ่ · <kbd>R</kbd> ยอมแพ้ · <kbd>Space</kbd> แจกไพ่/เล่นตาใหม่</li>
+        <li>เงิน สถิติ และเหรียญทั้งหมดเก็บไว้ในเครื่องคุณเอง (localStorage) ไม่ได้ส่งไปที่ไหน — และเป็นเงินปลอมล้วนๆ ไว้เล่นสนุกเท่านั้น</li>
+      </ul>
+    </details>
+  </main>
+
+  <script src="script.js"></script>
+</body>
+</html>
