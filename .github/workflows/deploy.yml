@@ -51,6 +51,7 @@ jobs:
           cp -r vpk/life site/life
           cp -r vpk/eat site/eat
           cp -r vpk/blackjack site/blackjack
+          cp -r vpk/packing site/packing
           mkdir -p site/scale
           cp -r scale-src/dist/. site/scale/
 

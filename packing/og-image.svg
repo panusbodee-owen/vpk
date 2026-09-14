@@ -1,0 +1,68 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <defs>
+    <linearGradient id="bgGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#0f172a" />
+      <stop offset="100%" stop-color="#1e293b" />
+    </linearGradient>
+    <linearGradient id="primaryGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#3b82f6" />
+      <stop offset="100%" stop-color="#2563eb" />
+    </linearGradient>
+    <linearGradient id="accentGrad" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#60a5fa" />
+      <stop offset="100%" stop-color="#3b82f6" />
+    </linearGradient>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1200" height="630" fill="url(#bgGrad)" />
+
+  <!-- Subtle grid pattern/glow -->
+  <circle cx="1050" cy="150" r="300" fill="#3b82f6" opacity="0.12" />
+  <circle cx="150" cy="500" r="250" fill="#6366f1" opacity="0.1" />
+
+  <!-- Logo Icon Container -->
+  <rect x="90" y="80" width="90" height="90" rx="24" fill="url(#primaryGrad)" />
+  <path d="M123 118 V105 C123 100 127 96 132 96 H138 C143 96 147 100 147 105 V118" fill="none" stroke="#ffffff" stroke-width="5" stroke-linecap="round" />
+  <rect x="108" y="116" width="54" height="40" rx="9" fill="#ffffff" />
+  <line x1="122" y1="116" x2="122" y2="156" stroke="#2563eb" stroke-width="4" />
+  <line x1="148" y1="116" x2="148" y2="156" stroke="#2563eb" stroke-width="4" />
+
+  <!-- Creator Badge -->
+  <g transform="translate(200, 105)">
+    <rect width="210" height="40" rx="20" fill="#1e3a8a" stroke="#3b82f6" stroke-width="1.5" />
+    <text x="105" y="25" fill="#93c5fd" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="16" font-weight="700" text-anchor="middle">CREATE BY PANUSBODEE</text>
+  </g>
+
+  <!-- Main Headline -->
+  <text x="90" y="260" fill="#ffffff" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="64" font-weight="800" letter-spacing="-1">Smart Packing List</text>
+  <text x="90" y="325" fill="#38bdf8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="34" font-weight="600">เว็บจัดกระเป๋าอัจฉริยะตามสภาพอากาศจริง</text>
+
+  <!-- Feature Pills -->
+  <g transform="translate(90, 390)">
+    <!-- Pill 1: Weather -->
+    <rect x="0" y="0" width="230" height="60" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+    <text x="30" y="37" fill="#60a5fa" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22">⛅</text>
+    <text x="70" y="37" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="600">พยากรณ์อากาศสด</text>
+
+    <!-- Pill 2: Luggage Scale -->
+    <rect x="250" y="0" width="240" height="60" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+    <text x="280" y="37" fill="#f59e0b" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22">⚖️</text>
+    <text x="320" y="37" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="600">ชั่งน้ำหนักกระเป๋า</text>
+
+    <!-- Pill 3: Budget Calculator -->
+    <rect x="510" y="0" width="240" height="60" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+    <text x="540" y="37" fill="#10b981" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22">💰</text>
+    <text x="580" y="37" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="600">คำนวณงบ &amp; แปลงเงิน</text>
+
+    <!-- Pill 4: Free -->
+    <rect x="770" y="0" width="230" height="60" rx="16" fill="#1e293b" stroke="#334155" stroke-width="1.5" />
+    <text x="800" y="37" fill="#ec4899" font-family="-apple-system, BlinkMacSystemFont, sans-serif" font-size="22">✨</text>
+    <text x="840" y="37" fill="#e2e8f0" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="19" font-weight="600">ใช้งานฟรี 100%</text>
+  </g>
+
+  <!-- Bottom URL / Footer -->
+  <line x1="90" y1="510" x2="1110" y2="510" stroke="#334155" stroke-width="1" />
+  <text x="90" y="560" fill="#94a3b8" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18">https://panusbodee-owen.github.io/</text>
+  <text x="1110" y="560" fill="#64748b" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="18" text-anchor="end">Open-Meteo API • LocalStorage</text>
+</svg>
