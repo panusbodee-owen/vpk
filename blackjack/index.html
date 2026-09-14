@@ -64,6 +64,9 @@
 
   <a class="back-link" href="../" title="กลับหน้ารวมโปรเจกต์">← Panusbodee's Lab</a>
 
+  <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
+  <div id="toastLayer" class="toast-layer" aria-hidden="true"></div>
+
   <main>
     <header class="intro">
       <p class="kicker">BLACKJACK TABLE</p>
@@ -89,10 +92,12 @@
       </div>
     </div>
 
-    <section class="table" aria-label="โต๊ะไพ่">
+    <p id="streakFlame" class="streak-flame" hidden></p>
+
+    <section id="gameTable" class="table" aria-label="โต๊ะไพ่">
       <div class="seat">
         <div class="seat-label">
-          <span>😈 เจ้ามือ</span>
+          <span><span id="dealerMood" class="dealer-mood">😈</span> เจ้ามือ</span>
           <span id="dealerScore" class="seat-score"></span>
         </div>
         <div id="dealerCards" class="cards-row"></div>
@@ -113,6 +118,7 @@
         <button type="button" class="chip chip-500" data-chip="500">500</button>
         <button type="button" class="chip chip-1000" data-chip="1000">1K</button>
       </div>
+      <div id="betStack" class="bet-stack" aria-hidden="true"></div>
       <div class="panel-actions">
         <button type="button" id="clearBetBtn" class="btn btn-ghost">ล้างชิป</button>
         <button type="button" id="rebetBtn" class="btn btn-ghost">เดิมพันซ้ำ</button>
@@ -151,6 +157,7 @@
       <button type="button" id="coachToggle" class="toggle">🎓 โค้ช: ปิด</button>
       <button type="button" id="countToggle" class="toggle">🧮 นับไพ่: ปิด</button>
       <button type="button" id="speedToggle" class="toggle">⏱️ ความเร็ว: ปกติ</button>
+      <button type="button" id="fxToggle" class="toggle">✨ เอฟเฟกต์: เปิด</button>
     </div>
 
     <div class="history-wrap">
