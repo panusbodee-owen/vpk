@@ -13,14 +13,14 @@
     })();
   </script>
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ, นาฬิกาชีวิต และหิวไรดี? สุ่มร้านเด็ดกรุงเทพฯ" />
+  <meta name="description" content="รวมโปรเจกต์เล็กๆ ของ Panusbodee — พูดทำไม? เว็บฝึกพูดฉับพลัน, ไล่ล่าสเกลจักรวาล ของเล่นอินเทอร์แอคทีฟ, นาฬิกาชีวิต, หิวไรดี? สุ่มร้านเด็ดกรุงเทพฯ และเจ้ามือใจร้าย แบล็คแจ็คครบเครื่อง" />
   <meta name="author" content="Panusbodee Pisutsuwimon" />
   <meta name="theme-color" content="#0b1022" />
   <link rel="canonical" href="https://panusbodee-owen.github.io/vpk/" />
   <meta property="og:type" content="website" />
   <meta property="og:site_name" content="Panusbodee's Lab" />
   <meta property="og:title" content="เลือกโปรเจกต์ — Panusbodee's Lab" />
-  <meta property="og:description" content="พูดทำไม? เว็บฝึกพูดฉับพลัน · ไล่ล่าสเกลจักรวาล · นาฬิกาชีวิต · หิวไรดี?" />
+  <meta property="og:description" content="พูดทำไม? เว็บฝึกพูดฉับพลัน · ไล่ล่าสเกลจักรวาล · นาฬิกาชีวิต · หิวไรดี? · เจ้ามือใจร้าย" />
   <meta property="og:url" content="https://panusbodee-owen.github.io/vpk/" />
   <link rel="icon" type="image/svg+xml" href="pood/favicon.svg" />
   <link rel="apple-touch-icon" href="pood/favicon.svg" />
@@ -99,10 +99,13 @@
       position: relative;
       z-index: 1;
       display: grid;
-      grid-template-columns: repeat(4, minmax(200px, 250px));
-      gap: 24px;
+      grid-template-columns: repeat(5, minmax(168px, 208px));
+      gap: 22px;
       width: 100%;
-      max-width: 1060px;
+      max-width: 1110px;
+    }
+    @media (max-width: 1180px) {
+      .cards { grid-template-columns: repeat(3, minmax(200px, 280px)); max-width: 880px; }
     }
     @media (max-width: 1020px) {
       .cards { grid-template-columns: repeat(2, minmax(220px, 320px)); max-width: 680px; }
@@ -150,6 +153,7 @@
     .card-scale { --glow-color: #a855f7; --tile-bg: rgba(168, 85, 247, 0.14); }
     .card-life { --glow-color: #f472b6; --tile-bg: rgba(244, 114, 182, 0.14); }
     .card-eat { --glow-color: #f43f5e; --tile-bg: rgba(244, 63, 94, 0.14); }
+    .card-blackjack { --glow-color: #10b981; --tile-bg: rgba(16, 185, 129, 0.14); }
     .card .emoji { font-size: 44px; position: relative; }
     .stat-tile {
       display: inline-flex;
@@ -199,6 +203,7 @@
     .card-scale .go { color: #c084fc; }
     .card-life .go { color: #f472b6; }
     .card-eat .go { color: #fb7185; }
+    .card-blackjack .go { color: #34d399; }
     footer {
       position: relative;
       z-index: 1;
@@ -259,6 +264,16 @@
         <div class="stat-tile"><span class="stat-num">30+</span><span class="stat-label">ร้านให้สุ่ม</span></div>
       </div>
       <span class="go">สุ่มร้านเลย →</span>
+    </a>
+
+    <a class="card card-blackjack" href="blackjack/">
+      <div>
+        <span class="emoji">🃏</span>
+        <h2>เจ้ามือใจร้าย</h2>
+        <p>แบล็คแจ็คครบเครื่อง วางชิป ดับเบิล แยกไพ่ ซื้อประกัน ยอมแพ้ได้ครบ พร้อมโค้ชบอกทางเล่นและระบบนับไพ่ Hi-Lo</p>
+        <div class="stat-tile"><span class="stat-num">3:2</span><span class="stat-label">อัตราจ่ายแบล็คแจ็ค</span></div>
+      </div>
+      <span class="go">ลงโต๊ะเลย →</span>
     </a>
   </div>
 
