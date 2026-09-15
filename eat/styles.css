@@ -31,8 +31,9 @@ body::before {
 
 .back-link {
   position: fixed;
-  left: 16px;
-  top: 16px;
+  left: 4px;
+  top: 4px;
+  padding: 12px;
   z-index: 50;
   font-size: 12px;
   color: rgba(var(--ink-rgb), 0.4);
@@ -741,4 +742,8 @@ h1 span {
 
 @media (max-width: 480px) {
   .app-links { grid-template-columns: 1fr; }
+}
+
+@media (max-width: 480px) {
+  .zone-btn { min-height: 40px; padding: 8px 14px; }
 }

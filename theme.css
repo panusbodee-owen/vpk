@@ -128,9 +128,10 @@
 .theme-widget__swatch.is-active { border-color: rgb(var(--ink-rgb)); }
 
 @media (max-width: 480px) {
-  .theme-widget { right: 10px; bottom: 10px; padding: 5px; gap: 5px; }
-  .theme-widget__toggle { width: 26px; height: 26px; font-size: 13px; }
-  .theme-widget__swatch { width: 15px; height: 15px; }
+  .theme-widget { right: 10px; bottom: 10px; padding: 4px; gap: 4px; }
+  .theme-widget__toggle { width: 40px; height: 40px; font-size: 17px; }
+  /* 15px dots are too small to tap and widen the floating bar over content; accent stays as last chosen */
+  .theme-widget__swatches { display: none; }
 }
 
 /* ---------- Background glow animation ----------
