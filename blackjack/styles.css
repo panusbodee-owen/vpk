@@ -128,67 +128,118 @@ h1 span {
   100% { transform: scale(1); }
 }
 
-/* ---------- โต๊ะไพ่ (ผ้าสักหลาดเขียว) ----------
-   โต๊ะจริงทุกธีม: ขอบไม้เข้ม + ผ้าเขียว · ไพ่ใช้สีอ่อนคงที่เพราะเป็น "วัตถุ" บนโต๊ะ */
+/* ---------- Casino scene (dark floor + overhead light) ---------- */
+.casino-scene {
+  position: relative;
+  margin: 0 -10px 18px;
+  padding: 36px 10px 24px;
+  border-radius: 32px;
+  background:
+    radial-gradient(ellipse 50% 28% at 50% 0%, rgba(255, 220, 150, 0.06) 0%, transparent 100%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.004) 0, rgba(255,255,255,0.004) 1px, transparent 1px, transparent 18px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.004) 0, rgba(255,255,255,0.004) 1px, transparent 1px, transparent 18px),
+    linear-gradient(180deg, #0c0c09 0%, #0e100b 50%, #080a06 100%);
+  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+}
+
+.casino-scene::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 80px;
+  height: 4px;
+  border-radius: 0 0 6px 6px;
+  background: linear-gradient(90deg, transparent, rgba(160, 140, 100, 0.25), transparent);
+}
+
+/* ---------- โต๊ะไพ่ (immersive casino table) ---------- */
 .table {
   position: relative;
   overflow: hidden;
-  border-radius: 28px;
-  margin-bottom: 18px;
-  /* ขอบโต๊ะเหมือนไม้ mahogany */
-  border: 4px solid #3a1c0a;
+  border-radius: 50% 50% 14px 14px / 28% 28% 14px 14px;
+  border-width: 8px 10px 14px 10px;
+  border-style: solid;
+  border-color: #2a1505 #3a1c0a #4a2812 #3a1c0a;
   box-shadow:
-    inset 0 0 0 3px #5a2d10,
-    0 8px 32px rgba(0, 0, 0, 0.4),
-    0 2px 8px rgba(0, 0, 0, 0.2);
+    inset 0 0 0 2px #1a0a02,
+    inset 0 0 0 5px rgba(139, 94, 60, 0.25),
+    inset 0 5px 12px rgba(0, 0, 0, 0.4),
+    inset 0 -2px 8px rgba(0, 0, 0, 0.2),
+    0 -10px 30px rgba(255, 200, 100, 0.05),
+    0 20px 50px rgba(0, 0, 0, 0.55),
+    0 5px 15px rgba(0, 0, 0, 0.3);
   background: #1a6b3c;
 }
 
-/* พื้นผ้าสักหลาดเขียว — เทกซ์เจอร์เส้นใยบนกราเดียนต์ */
 .felt-texture {
   position: absolute;
   inset: 0;
   z-index: 0;
   background:
-    /* เส้นใยบางๆ ทำให้ดูเหมือนผ้าจริง */
-    repeating-linear-gradient(
-      90deg,
-      transparent 0,
-      transparent 3px,
-      rgba(255, 255, 255, 0.012) 3px,
-      rgba(255, 255, 255, 0.012) 4px
-    ),
-    repeating-linear-gradient(
-      0deg,
-      transparent 0,
-      transparent 3px,
-      rgba(0, 0, 0, 0.018) 3px,
-      rgba(0, 0, 0, 0.018) 4px
-    ),
-    /* กราเดียนต์สักหลาดเขียว */
-    radial-gradient(ellipse 120% 80% at 50% 30%, #237a48 0%, #1a6b3c 40%, #145a30 100%);
+    repeating-linear-gradient(90deg, transparent 0, transparent 2px, rgba(255,255,255,0.014) 2px, rgba(255,255,255,0.014) 3px),
+    repeating-linear-gradient(0deg, transparent 0, transparent 2px, rgba(0,0,0,0.02) 2px, rgba(0,0,0,0.02) 3px),
+    repeating-linear-gradient(45deg, transparent 0, transparent 8px, rgba(255,255,255,0.005) 8px, rgba(255,255,255,0.005) 9px),
+    radial-gradient(ellipse 120% 100% at 50% 18%, #257e4b 0%, #1a6b3c 30%, #145a30 65%, #0f4a26 100%);
   pointer-events: none;
 }
 
-/* ลายสัญลักษณ์ไพ่ตรงกลางโต๊ะ — จางๆ เหมือนพิมพ์บนผ้า */
-.felt-logo {
+.felt-markings {
   position: absolute;
-  top: 50%;
-  left: 50%;
-  transform: translate(-50%, -50%);
+  inset: 0;
   z-index: 0;
-  font-size: 28px;
-  letter-spacing: 0.3em;
-  color: rgba(255, 255, 255, 0.04);
-  white-space: nowrap;
   pointer-events: none;
   user-select: none;
+}
+
+.felt-text {
+  position: absolute;
+  left: 50%;
+  transform: translateX(-50%);
+  font-family: "Nunito", sans-serif;
+  font-weight: 800;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: rgba(255, 255, 255, 0.045);
+  white-space: nowrap;
+}
+
+.felt-pays {
+  top: 14%;
+  font-size: 11px;
+  letter-spacing: 0.3em;
+}
+
+.felt-suits {
+  top: 50%;
+  transform: translateX(-50%) translateY(-50%);
+  font-size: 30px;
+  letter-spacing: 0.4em;
+  color: rgba(255, 255, 255, 0.025);
+}
+
+.felt-rule {
+  bottom: 12%;
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  color: rgba(255, 255, 255, 0.032);
+}
+
+.table-spotlight {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    radial-gradient(ellipse 70% 45% at 50% 6%, rgba(255, 255, 210, 0.07) 0%, transparent 100%),
+    radial-gradient(ellipse 100% 70% at 50% 25%, rgba(255, 255, 220, 0.025) 0%, transparent 100%);
+  pointer-events: none;
 }
 
 .table-inner {
   position: relative;
   z-index: 1;
-  padding: 22px 20px;
+  padding: 30px 24px 24px;
 }
 
 .table.is-shaking { animation: table-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
@@ -231,8 +282,8 @@ h1 span {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 14px 0;
-  border-top: 1px dashed rgba(255, 255, 255, 0.15);
+  margin: 18px -6px;
+  border-top: 1.5px dashed rgba(253, 230, 138, 0.1);
 }
 
 .shoe-info {
@@ -1023,9 +1074,12 @@ h1 span {
   .hud-item { padding: 10px 5px; border-radius: 13px; }
   .hud-value { font-size: 16px; }
   .hud-label { font-size: 9.5px; }
-  .table { border-radius: 20px; border-width: 3px; }
-  .table-inner { padding: 16px 14px; }
-  .felt-logo { font-size: 20px; }
+  .casino-scene { margin: 0 -6px 14px; padding: 24px 6px 16px; border-radius: 22px; }
+  .table { border-radius: 50% 50% 10px 10px / 22% 22% 10px 10px; border-width: 5px 6px 9px 6px; }
+  .table-inner { padding: 22px 14px 16px; }
+  .felt-pays { font-size: 8px; top: 10%; }
+  .felt-suits { font-size: 22px; }
+  .felt-rule { font-size: 6px; bottom: 8%; }
   .card { width: 48px; height: 68px; }
   .card-rank { font-size: 17px; }
   .hand-stamp { font-size: 13px; padding: 4px 10px; }
