@@ -108,6 +108,10 @@
             <span class="felt-spot felt-spot-c"></span>
             <span class="felt-spot felt-spot-r"></span>
           </div>
+          <div id="feltBet" class="felt-bet" aria-hidden="true">
+            <div id="feltBetStack" class="felt-bet-stack"></div>
+            <span id="feltBetAmount" class="felt-bet-amount"></span>
+          </div>
           <div class="table-spotlight" aria-hidden="true"></div>
           <div class="chip-tray" aria-hidden="true"></div>
           <div class="table-inner">
@@ -138,6 +142,25 @@
         <button type="button" class="chip chip-1000" data-chip="1000">1K</button>
       </div>
       <div id="betStack" class="bet-stack" aria-hidden="true"></div>
+
+      <div class="bet-custom">
+        <label class="bet-custom-label" for="betInput">หรือกำหนดเอง</label>
+        <div class="bet-custom-row">
+          <span class="bet-input-wrap">
+            <span class="bet-input-prefix" aria-hidden="true">฿</span>
+            <input type="number" id="betInput" class="bet-input" min="25" step="25"
+                   inputmode="numeric" placeholder="0" aria-label="จำนวนเงินเดิมพัน">
+          </span>
+          <button type="button" id="setBetBtn" class="btn btn-set">ลง</button>
+        </div>
+        <div class="bet-quick" role="group" aria-label="ปรับเดิมพันแบบเร็ว">
+          <button type="button" class="btn-quick" data-bet-mult="0.5">½</button>
+          <button type="button" class="btn-quick" data-bet-mult="2">×2</button>
+          <button type="button" class="btn-quick" data-bet-pct="0.25">25% ทุน</button>
+          <button type="button" class="btn-quick" data-bet-pct="0.5">50% ทุน</button>
+        </div>
+      </div>
+
       <div class="panel-actions">
         <button type="button" id="clearBetBtn" class="btn btn-ghost">ล้างชิป</button>
         <button type="button" id="rebetBtn" class="btn btn-ghost">เดิมพันซ้ำ</button>

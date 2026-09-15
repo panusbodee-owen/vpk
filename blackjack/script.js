@@ -208,7 +208,10 @@
     "statBj", "statBiggest", "badges", "badgeCount", "resetBtn",
     "fxLayer", "toastLayer", "betStack", "dealerMood", "streakFlame", "gameTable", "fxToggle",
     "leaderboard", "lbCount", "saveLbBtn", "clearLbBtn",
+    "betInput", "setBetBtn", "feltBet", "feltBetStack", "feltBetAmount",
   ].forEach(function (id) { els[id] = document.getElementById(id); });
+  els.feltMarkings = document.querySelector(".felt-markings");
+  els.betQuick = document.querySelector(".bet-quick");
 
   // ---------- จังหวะเวลา ----------
   function speed() { return SPEEDS[state.settings.speed] || SPEEDS.normal; }
@@ -739,7 +742,16 @@
       els.allInBtn.disabled = state.bankroll <= 0;
       els.brokeBtn.hidden = !(state.bankroll < MIN_CHIP && state.bet <= 0);
       els.dealBtn.textContent = state.stats.rounds > 0 ? "🃏 แจกไพ่ตาใหม่" : "🃏 แจกไพ่";
+
+      els.setBetBtn.disabled = state.bankroll < MIN_CHIP;
+      els.betQuick.querySelectorAll("button[data-bet-mult]").forEach(function (btn) {
+        btn.disabled = state.bet <= 0 || snapBet(state.bet * Number(btn.dataset.betMult)) <= 0;
+      });
+      els.betQuick.querySelectorAll("button[data-bet-pct]").forEach(function (btn) {
+        btn.disabled = snapBet(state.bankroll * Number(btn.dataset.betPct)) <= 0;
+      });
     }
+    syncBetInput();
 
     var hand = activeHand();
     var legal = legalMoves(hand);
@@ -763,6 +775,25 @@
       chip.className = "bet-chip chip-" + value;
       chip.textContent = value >= 1000 ? (value / 1000) + "K" : value;
       els.betStack.appendChild(chip);
+    });
+  }
+
+  /** กองชิปบนวงเดิมพันกลางโต๊ะ — ให้เห็นว่าเงินวางอยู่บนโต๊ะจริงๆ ไม่ใช่แค่ตัวเลขใน HUD */
+  function renderFeltBet() {
+    if (!els.feltBetStack) return;
+    var betting = state.phase === "betting";
+    var amount = betting ? state.bet : state.roundWagered;
+    var chips = betting ? state.betChips : chipsFor(amount);
+
+    els.feltBetStack.innerHTML = "";
+    els.feltBetAmount.textContent = amount > 0 ? money(amount) : "";
+    if (els.feltMarkings) els.feltMarkings.classList.toggle("has-bet", amount > 0);
+
+    chips.forEach(function (value) {
+      var chip = document.createElement("span");
+      chip.className = "felt-bet-chip chip-" + value;
+      chip.textContent = value >= 1000 ? (value / 1000) + "K" : value;
+      els.feltBetStack.appendChild(chip);
     });
   }
 
@@ -952,6 +983,7 @@
     renderHands();
     renderShoeInfo();
     renderControls();
+    renderFeltBet();
     renderCoach();
     renderCount();
     renderStreak();
@@ -1026,11 +1058,41 @@
     render();
   }
 
+  /** ปัดยอดลงให้ลงตัวกับชิปเล็กสุดบนโต๊ะ กองชิปที่วาดจะได้ตรงกับยอดจริง */
+  function snapBet(amount) {
+    amount = Math.floor(Number(amount) || 0);
+    if (!isFinite(amount) || amount <= 0) return 0;
+    if (amount > state.bankroll) amount = state.bankroll;
+    return Math.floor(amount / MIN_CHIP) * MIN_CHIP;
+  }
+
+  /** กำหนดยอดเดิมพันตรงๆ — ใช้กับช่องกรอกเองและปุ่มลัด */
+  function setBet(amount) {
+    if (state.phase !== "betting") return;
+    var next = snapBet(amount);
+    if (next === state.bet) { syncBetInput(true); return; }
+    state.bet = next;
+    state.betChips = chipsFor(next);
+    if (next > 0) { SFX.chip(); flashHud(els.betDisplay); }
+    render();
+    syncBetInput(true);
+  }
+
+  /** ให้ช่องกรอกสะท้อนยอดปัจจุบัน แต่ไม่แย่งค่าตอนผู้เล่นกำลังพิมพ์ */
+  function syncBetInput(force) {
+    if (!els.betInput) return;
+    els.betInput.max = String(state.bankroll);
+    els.betInput.disabled = state.phase !== "betting";
+    if (!force && document.activeElement === els.betInput) return;
+    els.betInput.value = state.bet > 0 ? String(state.bet) : "";
+  }
+
   function clearBet() {
     if (state.phase !== "betting") return;
     state.bet = 0;
     state.betChips = [];
     render();
+    syncBetInput(true);
   }
 
   function rebet() {
@@ -1455,6 +1517,19 @@
   els.clearBetBtn.addEventListener("click", clearBet);
   els.rebetBtn.addEventListener("click", rebet);
   els.allInBtn.addEventListener("click", allIn);
+
+  els.setBetBtn.addEventListener("click", function () { setBet(els.betInput.value); });
+  els.betInput.addEventListener("keydown", function (e) {
+    if (e.key !== "Enter") return;
+    e.preventDefault();
+    setBet(els.betInput.value);
+  });
+  els.betQuick.addEventListener("click", function (e) {
+    var btn = e.target.closest("button[data-bet-mult], button[data-bet-pct]");
+    if (!btn || btn.disabled) return;
+    if (btn.dataset.betMult) setBet(state.bet * Number(btn.dataset.betMult));
+    else setBet(state.bankroll * Number(btn.dataset.betPct));
+  });
   els.dealBtn.addEventListener("click", deal);
   els.brokeBtn.addEventListener("click", brokeBonus);
   els.insuranceYesBtn.addEventListener("click", function () { takeInsurance(true); });

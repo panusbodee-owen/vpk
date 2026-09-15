@@ -291,6 +291,47 @@ h1 span {
 .felt-spot-c { left: 50%; transform: translateX(-50%); }
 .felt-spot-r { right: 18%; }
 
+/* กองชิปจริงที่วางบนวงเดิมพันกลางโต๊ะ */
+.felt-bet {
+  position: absolute;
+  bottom: 16%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 56px;
+  height: 56px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 3px;
+  z-index: 1;
+  pointer-events: none;
+}
+
+.felt-bet-stack {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.felt-bet-amount {
+  font-family: "Nunito", sans-serif;
+  font-size: 10px;
+  font-weight: 800;
+  color: #fde68a;
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.85);
+  white-space: nowrap;
+}
+.felt-bet-amount:empty { display: none; }
+
+/* วงเดิมพันกลางเรืองแสงตอนมีชิปวางอยู่ */
+.felt-markings.has-bet .felt-spot-c {
+  border-color: rgba(253, 230, 138, 0.35);
+  box-shadow:
+    inset 0 0 14px rgba(253, 230, 138, 0.12),
+    0 0 18px rgba(253, 230, 138, 0.15);
+}
+
 .chip-tray {
   position: absolute;
   top: 5%;
@@ -1131,6 +1172,124 @@ h1 span {
   to { transform: translateY(0) scale(1); opacity: 1; }
 }
 
+/* ชิปบนหน้าโต๊ะ — เล็กกว่าในแผงและซ้อนกันแน่นกว่า */
+.felt-bet-chip {
+  width: 22px;
+  height: 22px;
+  margin-left: -15px;
+  border-radius: 50%;
+  border: 1.5px dashed rgba(255, 255, 255, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-family: "Nunito", sans-serif;
+  font-size: 7px;
+  font-weight: 800;
+  color: #fff;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
+  animation: chip-drop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4);
+}
+.felt-bet-chip:first-child { margin-left: 0; }
+
+/* ---------- กำหนดเดิมพันเอง ---------- */
+.bet-custom {
+  margin-bottom: 14px;
+}
+
+.bet-custom-label {
+  display: block;
+  font-family: "Nunito", sans-serif;
+  font-size: 11.5px;
+  font-weight: 700;
+  color: rgba(var(--ink-rgb), 0.45);
+  text-align: center;
+  margin-bottom: 8px;
+}
+
+.bet-custom-row {
+  display: flex;
+  justify-content: center;
+  gap: 8px;
+  margin-bottom: 8px;
+}
+
+.bet-input-wrap {
+  position: relative;
+  display: inline-flex;
+  align-items: center;
+}
+
+.bet-input-prefix {
+  position: absolute;
+  left: 12px;
+  font-family: "Nunito", sans-serif;
+  font-size: 14px;
+  font-weight: 800;
+  color: rgba(var(--ink-rgb), 0.4);
+  pointer-events: none;
+}
+
+.bet-input {
+  width: 150px;
+  padding: 10px 12px 10px 26px;
+  border-radius: 12px;
+  border: 1.5px solid rgba(var(--ink-rgb), 0.16);
+  background: rgba(var(--ink-rgb), 0.03);
+  color: rgb(var(--ink-rgb));
+  font-family: "Nunito", sans-serif;
+  font-size: 15px;
+  font-weight: 800;
+  text-align: right;
+  transition: border-color 0.18s ease, box-shadow 0.18s ease;
+}
+.bet-input::placeholder { color: rgba(var(--ink-rgb), 0.28); font-weight: 700; }
+.bet-input:focus {
+  outline: none;
+  border-color: #f59e0b;
+  box-shadow: 0 0 0 3px rgba(245, 158, 11, 0.18);
+}
+.bet-input:disabled { opacity: 0.5; cursor: not-allowed; }
+/* ซ่อนลูกศรขึ้นลงของ number input ให้ดูสะอาด */
+.bet-input::-webkit-outer-spin-button,
+.bet-input::-webkit-inner-spin-button { -webkit-appearance: none; margin: 0; }
+.bet-input { -moz-appearance: textfield; appearance: textfield; }
+
+.btn-set {
+  padding: 10px 20px;
+  background: linear-gradient(180deg, #f59e0b, #d97706);
+  color: #fff;
+  border: none;
+  font-weight: 800;
+}
+.btn-set:hover:not(:disabled) { filter: brightness(1.08); }
+.btn-set:disabled { opacity: 0.45; cursor: not-allowed; }
+
+.bet-quick {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 6px;
+}
+
+.btn-quick {
+  padding: 6px 12px;
+  border-radius: 999px;
+  border: 1.5px solid rgba(var(--ink-rgb), 0.14);
+  background: transparent;
+  color: rgba(var(--ink-rgb), 0.62);
+  font-family: "Nunito", sans-serif;
+  font-size: 12px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: border-color 0.18s ease, color 0.18s ease, background 0.18s ease;
+}
+.btn-quick:hover:not(:disabled) {
+  border-color: rgba(245, 158, 11, 0.55);
+  color: #f59e0b;
+  background: rgba(245, 158, 11, 0.07);
+}
+.btn-quick:disabled { opacity: 0.4; cursor: not-allowed; }
+
 /* ---------- ไฟสตรีคชนะติดกัน ---------- */
 .streak-flame {
   text-align: center;
@@ -1162,7 +1321,12 @@ h1 span {
   .felt-rule { font-size: 6px; bottom: 6%; }
   .felt-arc { left: 8%; right: 8%; }
   .felt-spot { width: 38px; height: 38px; bottom: 12%; }
+  .felt-bet { width: 38px; height: 38px; bottom: 12%; gap: 2px; }
+  .felt-bet-chip { width: 17px; height: 17px; margin-left: -12px; font-size: 6px; }
+  .felt-bet-amount { font-size: 8.5px; }
   .chip-tray { width: 55px; height: 8px; top: 3%; }
+  .bet-input { width: 120px; font-size: 14px; }
+  .btn-quick { font-size: 11px; padding: 6px 10px; }
   .card { width: 48px; height: 68px; }
   .card-rank { font-size: 17px; }
   .hand-stamp { font-size: 13px; padding: 4px 10px; }
