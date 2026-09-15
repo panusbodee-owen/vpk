@@ -95,30 +95,38 @@
     <p id="streakFlame" class="streak-flame" hidden></p>
 
     <div class="casino-scene">
-      <section id="gameTable" class="table" aria-label="โต๊ะไพ่">
-        <div class="felt-texture" aria-hidden="true"></div>
-        <div class="felt-markings" aria-hidden="true">
-          <span class="felt-text felt-pays">BLACKJACK PAYS 3 TO 2</span>
-          <span class="felt-text felt-suits">♠ ♥ ♦ ♣</span>
-          <span class="felt-text felt-rule">DEALER MUST STAND ON ALL 17s &middot; INSURANCE PAYS 2 TO 1</span>
-        </div>
-        <div class="table-spotlight" aria-hidden="true"></div>
-        <div class="table-inner">
-          <div class="seat">
-            <div class="seat-label">
-              <span><span id="dealerMood" class="dealer-mood">😈</span> เจ้ามือ</span>
-              <span id="dealerScore" class="seat-score"></span>
-            </div>
-            <div id="dealerCards" class="cards-row"></div>
+      <div class="table-rail">
+        <section id="gameTable" class="table" aria-label="โต๊ะไพ่">
+          <div class="felt-texture" aria-hidden="true"></div>
+          <div class="felt-markings" aria-hidden="true">
+            <span class="felt-text felt-pays">BLACKJACK PAYS 3 TO 2</span>
+            <span class="felt-text felt-suits">♠ ♥ ♦ ♣</span>
+            <span class="felt-text felt-rule">DEALER MUST STAND ON ALL 17s</span>
+            <span class="felt-arc"></span>
+            <span class="felt-text felt-insurance">INSURANCE PAYS 2 TO 1</span>
+            <span class="felt-spot felt-spot-l"></span>
+            <span class="felt-spot felt-spot-c"></span>
+            <span class="felt-spot felt-spot-r"></span>
           </div>
+          <div class="table-spotlight" aria-hidden="true"></div>
+          <div class="chip-tray" aria-hidden="true"></div>
+          <div class="table-inner">
+            <div class="seat">
+              <div class="seat-label">
+                <span><span id="dealerMood" class="dealer-mood">😈</span> เจ้ามือ</span>
+                <span id="dealerScore" class="seat-score"></span>
+              </div>
+              <div id="dealerCards" class="cards-row"></div>
+            </div>
 
-          <div class="table-divider"><span id="shoeInfo" class="shoe-info"></span></div>
+            <div class="table-divider"><span id="shoeInfo" class="shoe-info"></span></div>
 
-          <div id="playerSeats" class="player-seats"></div>
+            <div id="playerSeats" class="player-seats"></div>
 
-          <p id="message" class="table-message" role="status" aria-live="polite"></p>
-        </div>
-      </section>
+            <p id="message" class="table-message" role="status" aria-live="polite"></p>
+          </div>
+        </section>
+      </div>
     </div>
 
     <div id="bettingPanel" class="panel">

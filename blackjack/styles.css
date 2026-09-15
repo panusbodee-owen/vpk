@@ -131,15 +131,15 @@ h1 span {
 /* ---------- Casino scene (dark floor + overhead light) ---------- */
 .casino-scene {
   position: relative;
-  margin: 0 -10px 18px;
-  padding: 36px 10px 24px;
+  margin: 0 -20px 18px;
+  padding: 44px 12px 28px;
   border-radius: 32px;
   background:
-    radial-gradient(ellipse 50% 28% at 50% 0%, rgba(255, 220, 150, 0.06) 0%, transparent 100%),
-    repeating-linear-gradient(45deg, rgba(255,255,255,0.004) 0, rgba(255,255,255,0.004) 1px, transparent 1px, transparent 18px),
-    repeating-linear-gradient(-45deg, rgba(255,255,255,0.004) 0, rgba(255,255,255,0.004) 1px, transparent 1px, transparent 18px),
-    linear-gradient(180deg, #0c0c09 0%, #0e100b 50%, #080a06 100%);
-  box-shadow: inset 0 0 60px rgba(0, 0, 0, 0.4);
+    radial-gradient(ellipse 45% 25% at 50% 0%, rgba(255, 230, 160, 0.08) 0%, transparent 100%),
+    repeating-linear-gradient(45deg, rgba(255,255,255,0.006) 0, rgba(255,255,255,0.006) 1px, transparent 1px, transparent 16px),
+    repeating-linear-gradient(-45deg, rgba(255,255,255,0.006) 0, rgba(255,255,255,0.006) 1px, transparent 1px, transparent 16px),
+    linear-gradient(180deg, #08080a 0%, #0c0e0a 50%, #060806 100%);
+  box-shadow: inset 0 0 80px rgba(0, 0, 0, 0.5);
 }
 
 .casino-scene::before {
@@ -148,28 +148,62 @@ h1 span {
   top: 0;
   left: 50%;
   transform: translateX(-50%);
-  width: 80px;
-  height: 4px;
-  border-radius: 0 0 6px 6px;
-  background: linear-gradient(90deg, transparent, rgba(160, 140, 100, 0.25), transparent);
+  width: 100px;
+  height: 6px;
+  border-radius: 0 0 8px 8px;
+  background: linear-gradient(90deg, transparent, rgba(140, 120, 80, 0.3), rgba(180, 155, 100, 0.4), rgba(140, 120, 80, 0.3), transparent);
+  box-shadow: 0 4px 20px rgba(255, 200, 100, 0.08);
 }
 
-/* ---------- โต๊ะไพ่ (immersive casino table) ---------- */
+.casino-scene::after {
+  content: "";
+  position: absolute;
+  top: 6px;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 2px;
+  height: 18px;
+  background: linear-gradient(180deg, rgba(120, 100, 70, 0.35), rgba(120, 100, 70, 0.06));
+}
+
+/* ---------- Table rail (padded leather bumper) ---------- */
+.table-rail {
+  position: relative;
+  border-radius: 50% 50% 16px 16px / 38% 38% 16px 16px;
+  padding: 16px 16px 24px;
+  background:
+    repeating-linear-gradient(87deg, rgba(0,0,0,0.04) 0, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 4px),
+    linear-gradient(180deg,
+      #7a4e28 0%,
+      #5a3218 6%,
+      #3a1c0a 20%,
+      #2a1205 40%,
+      #1c0c03 55%,
+      #2a1205 72%,
+      #3d2010 88%,
+      #4a2812 95%,
+      #5a3518 100%
+    );
+  box-shadow:
+    inset 0 1px 0 rgba(200, 160, 100, 0.18),
+    inset 0 -1px 0 rgba(200, 160, 100, 0.06),
+    inset 1px 0 0 rgba(160, 120, 70, 0.08),
+    inset -1px 0 0 rgba(160, 120, 70, 0.08),
+    0 0 30px rgba(0, 0, 0, 0.3),
+    0 20px 60px rgba(0, 0, 0, 0.5),
+    0 5px 20px rgba(0, 0, 0, 0.4);
+}
+
+/* ---------- โต๊ะไพ่ (felt surface inside the rail) ---------- */
 .table {
   position: relative;
   overflow: hidden;
-  border-radius: 50% 50% 14px 14px / 28% 28% 14px 14px;
-  border-width: 8px 10px 14px 10px;
-  border-style: solid;
-  border-color: #2a1505 #3a1c0a #4a2812 #3a1c0a;
+  border-radius: 50% 50% 8px 8px / 32% 32% 8px 8px;
+  border: 2px solid #0f0803;
   box-shadow:
-    inset 0 0 0 2px #1a0a02,
-    inset 0 0 0 5px rgba(139, 94, 60, 0.25),
-    inset 0 5px 12px rgba(0, 0, 0, 0.4),
-    inset 0 -2px 8px rgba(0, 0, 0, 0.2),
-    0 -10px 30px rgba(255, 200, 100, 0.05),
-    0 20px 50px rgba(0, 0, 0, 0.55),
-    0 5px 15px rgba(0, 0, 0, 0.3);
+    inset 0 0 30px rgba(0, 0, 0, 0.35),
+    inset 0 0 60px rgba(0, 0, 0, 0.12),
+    inset 0 2px 4px rgba(0, 0, 0, 0.5);
   background: #1a6b3c;
 }
 
@@ -201,29 +235,74 @@ h1 span {
   font-weight: 800;
   letter-spacing: 0.2em;
   text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.045);
+  color: rgba(255, 255, 255, 0.07);
   white-space: nowrap;
 }
 
 .felt-pays {
-  top: 14%;
-  font-size: 11px;
-  letter-spacing: 0.3em;
+  top: 12%;
+  font-size: 13px;
+  letter-spacing: 0.35em;
 }
 
 .felt-suits {
   top: 50%;
   transform: translateX(-50%) translateY(-50%);
-  font-size: 30px;
-  letter-spacing: 0.4em;
-  color: rgba(255, 255, 255, 0.025);
+  font-size: 34px;
+  letter-spacing: 0.5em;
+  color: rgba(255, 255, 255, 0.03);
 }
 
 .felt-rule {
-  bottom: 12%;
-  font-size: 8px;
-  letter-spacing: 0.12em;
-  color: rgba(255, 255, 255, 0.032);
+  bottom: 10%;
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  color: rgba(255, 255, 255, 0.055);
+}
+
+.felt-arc {
+  position: absolute;
+  top: 40%;
+  left: 12%;
+  right: 12%;
+  height: 30px;
+  border: none;
+  border-bottom: 1.5px dashed rgba(253, 230, 138, 0.09);
+  border-radius: 0 0 50% 50% / 0 0 100% 100%;
+}
+
+.felt-insurance {
+  top: 39%;
+  font-size: 7px;
+  letter-spacing: 0.25em;
+  color: rgba(253, 230, 138, 0.07);
+}
+
+.felt-spot {
+  position: absolute;
+  bottom: 16%;
+  width: 56px;
+  height: 56px;
+  border-radius: 50%;
+  border: 1.5px solid rgba(253, 230, 138, 0.09);
+  box-shadow: inset 0 0 10px rgba(253, 230, 138, 0.03);
+}
+.felt-spot-l { left: 18%; }
+.felt-spot-c { left: 50%; transform: translateX(-50%); }
+.felt-spot-r { right: 18%; }
+
+.chip-tray {
+  position: absolute;
+  top: 5%;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 90px;
+  height: 12px;
+  border-radius: 3px;
+  border: 1px solid rgba(0, 0, 0, 0.4);
+  background: linear-gradient(180deg, #1a0f08, #0d0704);
+  box-shadow: inset 0 1px 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+  z-index: 0;
 }
 
 .table-spotlight {
@@ -231,15 +310,15 @@ h1 span {
   inset: 0;
   z-index: 0;
   background:
-    radial-gradient(ellipse 70% 45% at 50% 6%, rgba(255, 255, 210, 0.07) 0%, transparent 100%),
-    radial-gradient(ellipse 100% 70% at 50% 25%, rgba(255, 255, 220, 0.025) 0%, transparent 100%);
+    radial-gradient(ellipse 65% 40% at 50% 5%, rgba(255, 255, 210, 0.09) 0%, transparent 100%),
+    radial-gradient(ellipse 100% 70% at 50% 25%, rgba(255, 255, 220, 0.03) 0%, transparent 100%);
   pointer-events: none;
 }
 
 .table-inner {
   position: relative;
   z-index: 1;
-  padding: 30px 24px 24px;
+  padding: 32px 28px 28px;
 }
 
 .table.is-shaking { animation: table-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
@@ -282,8 +361,8 @@ h1 span {
   display: flex;
   align-items: center;
   justify-content: center;
-  margin: 18px -6px;
-  border-top: 1.5px dashed rgba(253, 230, 138, 0.1);
+  margin: 20px -10px;
+  border-top: 1.5px dashed rgba(253, 230, 138, 0.12);
 }
 
 .shoe-info {
@@ -1074,12 +1153,16 @@ h1 span {
   .hud-item { padding: 10px 5px; border-radius: 13px; }
   .hud-value { font-size: 16px; }
   .hud-label { font-size: 9.5px; }
-  .casino-scene { margin: 0 -6px 14px; padding: 24px 6px 16px; border-radius: 22px; }
-  .table { border-radius: 50% 50% 10px 10px / 22% 22% 10px 10px; border-width: 5px 6px 9px 6px; }
-  .table-inner { padding: 22px 14px 16px; }
-  .felt-pays { font-size: 8px; top: 10%; }
+  .casino-scene { margin: 0 -8px 14px; padding: 28px 6px 18px; border-radius: 22px; }
+  .table-rail { border-radius: 50% 50% 12px 12px / 30% 30% 12px 12px; padding: 10px 10px 16px; }
+  .table { border-radius: 50% 50% 6px 6px / 25% 25% 6px 6px; }
+  .table-inner { padding: 22px 16px 18px; }
+  .felt-pays { font-size: 8px; top: 8%; letter-spacing: 0.2em; }
   .felt-suits { font-size: 22px; }
-  .felt-rule { font-size: 6px; bottom: 8%; }
+  .felt-rule { font-size: 6px; bottom: 6%; }
+  .felt-arc { left: 8%; right: 8%; }
+  .felt-spot { width: 38px; height: 38px; bottom: 12%; }
+  .chip-tray { width: 55px; height: 8px; top: 3%; }
   .card { width: 48px; height: 68px; }
   .card-rank { font-size: 17px; }
   .hand-stamp { font-size: 13px; padding: 4px 10px; }
