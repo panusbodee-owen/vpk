@@ -404,7 +404,7 @@ feedbackModal.addEventListener('click', event => { if (event.target === feedback
 function showFeedback() {
   const text = finalTranscript.trim();
   const secondsSpoken = Math.max(1, Math.round((Date.now() - speechStartedAt) / 1000));
-  const words = text ? text.split(/\s+/).filter(Boolean).length : 0;
+  const words = [...new Intl.Segmenter(recognition.lang, { granularity: 'word' }).segment(text)].filter(s => s.isWordLike).length;
   const fillers = (text.match(/(เอ่อ|อืม|แบบว่า|คือว่า|um|uh|like|you know)/gi) || []).length;
   const flow = Math.min(100, Math.round(35 + Math.min(secondsSpoken, 60) * .65 + Math.min(words, 100) * .18));
   const clarity = Math.max(20, Math.min(100, Math.round(58 + Math.min(words, 80) * .25 - fillers * 5)));
@@ -419,10 +419,10 @@ function showFeedback() {
   feedbackResult.hidden = false;
 }
 function saveScore(entry) { const history = JSON.parse(localStorage.getItem('poodThammaiScores') || '[]'); history.unshift(entry); localStorage.setItem('poodThammaiScores', JSON.stringify(history.slice(0, 20))); renderScoreHistory(); }
-function renderScoreHistory() { const history = JSON.parse(localStorage.getItem('poodThammaiScores') || '[]'); const target = document.querySelector('#scoreHistory'); if (!history.length) { target.textContent = 'ยังไม่มีประวัติการพูด'; return; } target.innerHTML = history.slice(0, 8).map(item => `<div class="history-row"><span>${item.topic}<small>${new Date(item.date).toLocaleDateString('th-TH')} · ${item.language === 'en' ? 'English' : 'ไทย'}</small></span><strong>${item.score}</strong></div>`).join(''); }
+function renderScoreHistory() { const history = JSON.parse(localStorage.getItem('poodThammaiScores') || '[]'); const target = document.querySelector('#scoreHistory'); if (!history.length) { target.textContent = 'ยังไม่มีประวัติการพูด'; return; } target.innerHTML = history.slice(0, 8).map(item => `<div class="history-row"><span>${item.topic}<small>${new Date(item.date).toLocaleDateString(document.documentElement.lang)} · ${item.language === 'en' ? 'English' : 'ไทย'}</small></span><strong>${item.score}</strong></div>`).join(''); }
 function setupRecognition() {
   if (!SpeechRecognitionAPI) { transcriptEl.textContent = 'เบราว์เซอร์นี้ยังไม่รองรับการฟังเสียง ลองใช้ Google Chrome หรือ Microsoft Edge'; return false; }
-  recognition = new SpeechRecognitionAPI(); recognition.continuous = true; recognition.interimResults = true; recognition.lang = language === 'en' ? 'en-US' : 'th-TH';
+  recognition = new SpeechRecognitionAPI(); recognition.continuous = true; recognition.interimResults = true; recognition.lang = language === 'en' ? 'en-US' : document.documentElement.lang === 'th' ? 'th-TH' : document.documentElement.lang;
   recognition.onstart = () => { isListening = true; speechStartedAt = Date.now(); recordBtn.classList.add('stop'); recordBtn.innerHTML = '<span>■</span> หยุดฟัง'; recordStatus.classList.add('listening'); recordStatus.lastChild.textContent = ' กำลังฟังอยู่...'; };
   recognition.onresult = event => { let interim = ''; finalTranscript = ''; for (let i = 0; i < event.results.length; i++) { const text = event.results[i][0].transcript; if (event.results[i].isFinal) finalTranscript += text + ' '; else interim += text; } transcriptEl.textContent = (finalTranscript + interim) || 'กำลังฟัง...'; };
   recognition.onerror = event => { if (event.error === 'not-allowed') transcriptEl.textContent = 'กรุณาอนุญาตการใช้ไมโครโฟนเพื่อเริ่มประเมิน'; };
