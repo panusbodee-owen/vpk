@@ -489,11 +489,7 @@
   }
 
   function lbDate(iso) {
-    try {
-      var d = new Date(iso);
-      var months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
-      return d.getDate() + " " + months[d.getMonth()] + " " + (d.getFullYear() + 543);
-    } catch (e) { return ""; }
+    return new Date(iso).toLocaleDateString(document.documentElement.lang, { day: "numeric", month: "short", year: "numeric" });
   }
 
   // ---------- ตัวช่วยแสดงผล ----------
