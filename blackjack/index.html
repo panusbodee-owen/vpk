@@ -95,19 +95,23 @@
     <p id="streakFlame" class="streak-flame" hidden></p>
 
     <section id="gameTable" class="table" aria-label="โต๊ะไพ่">
-      <div class="seat">
-        <div class="seat-label">
-          <span><span id="dealerMood" class="dealer-mood">😈</span> เจ้ามือ</span>
-          <span id="dealerScore" class="seat-score"></span>
+      <div class="felt-texture" aria-hidden="true"></div>
+      <div class="felt-logo" aria-hidden="true">♠ ♥ ♦ ♣</div>
+      <div class="table-inner">
+        <div class="seat">
+          <div class="seat-label">
+            <span><span id="dealerMood" class="dealer-mood">😈</span> เจ้ามือ</span>
+            <span id="dealerScore" class="seat-score"></span>
+          </div>
+          <div id="dealerCards" class="cards-row"></div>
         </div>
-        <div id="dealerCards" class="cards-row"></div>
+
+        <div class="table-divider"><span id="shoeInfo" class="shoe-info"></span></div>
+
+        <div id="playerSeats" class="player-seats"></div>
+
+        <p id="message" class="table-message" role="status" aria-live="polite"></p>
       </div>
-
-      <div class="table-divider"><span id="shoeInfo" class="shoe-info"></span></div>
-
-      <div id="playerSeats" class="player-seats"></div>
-
-      <p id="message" class="table-message" role="status" aria-live="polite"></p>
     </section>
 
     <div id="bettingPanel" class="panel">

@@ -128,16 +128,67 @@ h1 span {
   100% { transform: scale(1); }
 }
 
-/* ---------- โต๊ะไพ่ ----------
-   ตัวไพ่ใช้สีอ่อนคงที่ทั้งธีมมืด/สว่าง เพราะไพ่เป็น "วัตถุ" บนโต๊ะ ไม่ใช่พื้นผิวของหน้าเว็บ */
+/* ---------- โต๊ะไพ่ (ผ้าสักหลาดเขียว) ----------
+   โต๊ะจริงทุกธีม: ขอบไม้เข้ม + ผ้าเขียว · ไพ่ใช้สีอ่อนคงที่เพราะเป็น "วัตถุ" บนโต๊ะ */
 .table {
-  border: 1px solid var(--card-border);
-  background: var(--card-bg);
-  box-shadow: var(--card-shadow);
-  backdrop-filter: blur(6px);
-  border-radius: 22px;
-  padding: 20px 18px;
+  position: relative;
+  overflow: hidden;
+  border-radius: 28px;
   margin-bottom: 18px;
+  /* ขอบโต๊ะเหมือนไม้ mahogany */
+  border: 4px solid #3a1c0a;
+  box-shadow:
+    inset 0 0 0 3px #5a2d10,
+    0 8px 32px rgba(0, 0, 0, 0.4),
+    0 2px 8px rgba(0, 0, 0, 0.2);
+  background: #1a6b3c;
+}
+
+/* พื้นผ้าสักหลาดเขียว — เทกซ์เจอร์เส้นใยบนกราเดียนต์ */
+.felt-texture {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  background:
+    /* เส้นใยบางๆ ทำให้ดูเหมือนผ้าจริง */
+    repeating-linear-gradient(
+      90deg,
+      transparent 0,
+      transparent 3px,
+      rgba(255, 255, 255, 0.012) 3px,
+      rgba(255, 255, 255, 0.012) 4px
+    ),
+    repeating-linear-gradient(
+      0deg,
+      transparent 0,
+      transparent 3px,
+      rgba(0, 0, 0, 0.018) 3px,
+      rgba(0, 0, 0, 0.018) 4px
+    ),
+    /* กราเดียนต์สักหลาดเขียว */
+    radial-gradient(ellipse 120% 80% at 50% 30%, #237a48 0%, #1a6b3c 40%, #145a30 100%);
+  pointer-events: none;
+}
+
+/* ลายสัญลักษณ์ไพ่ตรงกลางโต๊ะ — จางๆ เหมือนพิมพ์บนผ้า */
+.felt-logo {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  font-size: 28px;
+  letter-spacing: 0.3em;
+  color: rgba(255, 255, 255, 0.04);
+  white-space: nowrap;
+  pointer-events: none;
+  user-select: none;
+}
+
+.table-inner {
+  position: relative;
+  z-index: 1;
+  padding: 22px 20px;
 }
 
 .table.is-shaking { animation: table-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
@@ -166,12 +217,14 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
   font-weight: 700;
-  color: rgba(var(--ink-rgb), 0.55);
+  color: rgba(255, 255, 255, 0.75);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
 }
 
 .seat-score {
   font-weight: 800;
-  color: var(--accent-2);
+  color: #fde68a;
+  text-shadow: 0 1px 4px rgba(0, 0, 0, 0.4);
 }
 
 .table-divider {
@@ -179,18 +232,19 @@ h1 span {
   align-items: center;
   justify-content: center;
   margin: 14px 0;
-  border-top: 1px dashed var(--card-border);
+  border-top: 1px dashed rgba(255, 255, 255, 0.15);
 }
 
 .shoe-info {
   transform: translateY(-50%);
   padding: 2px 12px;
   border-radius: 999px;
-  background: var(--bg);
+  background: rgba(0, 40, 15, 0.6);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   font-family: "Nunito", sans-serif;
   font-size: 10.5px;
   font-weight: 700;
-  color: rgba(var(--ink-rgb), 0.38);
+  color: rgba(255, 255, 255, 0.5);
 }
 
 .cards-row {
@@ -272,15 +326,16 @@ h1 span {
   border-radius: 14px;
   border: 1.5px solid transparent;
   transition: border-color 0.2s ease, background 0.2s ease;
+  position: relative;
+  overflow: hidden;
 }
 .hand.is-active {
-  border-color: var(--accent-2);
-  background: rgba(var(--accent-2-rgb), 0.07);
+  border-color: rgba(253, 230, 138, 0.5);
+  background: rgba(255, 255, 255, 0.06);
 }
-.hand.is-won { background: rgba(74, 222, 128, 0.09); }
-.hand.is-lost { background: rgba(251, 113, 133, 0.08); }
-.hand.is-push { background: rgba(251, 191, 36, 0.08); }
-.hand { position: relative; overflow: hidden; }
+.hand.is-won { background: rgba(74, 222, 128, 0.12); }
+.hand.is-lost { background: rgba(251, 113, 133, 0.1); }
+.hand.is-push { background: rgba(251, 191, 36, 0.1); }
 
 /* ตราประทับผลลัพธ์ — ตบลงมาบนมือไพ่ตอนจบตา */
 .hand-stamp {
@@ -296,10 +351,10 @@ h1 span {
   pointer-events: none;
   animation: stamp-in 0.45s cubic-bezier(0.2, 0.9, 0.3, 1.4) both;
 }
-.hand-stamp.is-win, .hand-stamp.is-bj { color: #22c55e; border: 2.5px solid #22c55e; background: rgba(34, 197, 94, 0.12); }
-.hand-stamp.is-bj { color: #f59e0b; border-color: #f59e0b; background: rgba(245, 158, 11, 0.14); font-size: 13px; }
-.hand-stamp.is-lose, .hand-stamp.is-bust, .hand-stamp.is-surrender { color: #f43f5e; border: 2.5px solid #f43f5e; background: rgba(244, 63, 94, 0.1); }
-.hand-stamp.is-push { color: #f59e0b; border: 2.5px solid #f59e0b; background: rgba(245, 158, 11, 0.1); }
+.hand-stamp.is-win, .hand-stamp.is-bj { color: #86efac; border: 2.5px solid #86efac; background: rgba(34, 197, 94, 0.18); }
+.hand-stamp.is-bj { color: #fde68a; border-color: #fde68a; background: rgba(253, 230, 138, 0.18); font-size: 13px; }
+.hand-stamp.is-lose, .hand-stamp.is-bust, .hand-stamp.is-surrender { color: #fda4af; border: 2.5px solid #fda4af; background: rgba(253, 164, 175, 0.14); }
+.hand-stamp.is-push { color: #fde68a; border: 2.5px solid #fde68a; background: rgba(253, 230, 138, 0.14); }
 
 @keyframes stamp-in {
   0% { transform: translateY(-50%) rotate(-14deg) scale(2.6); opacity: 0; }
@@ -316,14 +371,15 @@ h1 span {
   font-family: "Nunito", sans-serif;
   font-size: 12.5px;
   font-weight: 700;
-  color: rgba(var(--ink-rgb), 0.55);
+  color: rgba(255, 255, 255, 0.65);
+  text-shadow: 0 1px 2px rgba(0, 0, 0, 0.25);
 }
 
 .hand-bet {
   padding: 2px 9px;
   border-radius: 999px;
-  background: rgba(var(--accent-2-rgb), 0.14);
-  color: var(--accent-2);
+  background: rgba(253, 230, 138, 0.2);
+  color: #fde68a;
   font-size: 11px;
 }
 
@@ -331,25 +387,26 @@ h1 span {
   padding: 2px 9px;
   border-radius: 999px;
   font-size: 11px;
-  background: rgba(var(--ink-rgb), 0.08);
-  color: rgba(var(--ink-rgb), 0.6);
+  background: rgba(255, 255, 255, 0.1);
+  color: rgba(255, 255, 255, 0.7);
 }
-.hand-tag.is-won { background: rgba(74, 222, 128, 0.18); color: #4ade80; }
-.hand-tag.is-lost { background: rgba(251, 113, 133, 0.18); color: #fb7185; }
-.hand-tag.is-push { background: rgba(251, 191, 36, 0.18); color: #fbbf24; }
+.hand-tag.is-won { background: rgba(74, 222, 128, 0.22); color: #86efac; }
+.hand-tag.is-lost { background: rgba(251, 113, 133, 0.22); color: #fda4af; }
+.hand-tag.is-push { background: rgba(251, 191, 36, 0.22); color: #fde68a; }
 
 .table-message {
   font-family: "Kanit", sans-serif;
   font-size: 14.5px;
   text-align: center;
   line-height: 1.6;
-  color: rgba(var(--ink-rgb), 0.75);
+  color: rgba(255, 255, 255, 0.8);
+  text-shadow: 0 1px 3px rgba(0, 0, 0, 0.3);
   margin: 16px 0 0;
   min-height: 24px;
 }
-.table-message.is-win { color: #4ade80; font-weight: 600; }
-.table-message.is-lose { color: #fb7185; font-weight: 600; }
-.table-message.is-push { color: #fbbf24; font-weight: 600; }
+.table-message.is-win { color: #86efac; font-weight: 600; }
+.table-message.is-lose { color: #fda4af; font-weight: 600; }
+.table-message.is-push { color: #fde68a; font-weight: 600; }
 
 /* ---------- แผงควบคุม (วางเดิมพัน / ตัวเลือกในตา) ---------- */
 .panel {
@@ -966,6 +1023,9 @@ h1 span {
   .hud-item { padding: 10px 5px; border-radius: 13px; }
   .hud-value { font-size: 16px; }
   .hud-label { font-size: 9.5px; }
+  .table { border-radius: 20px; border-width: 3px; }
+  .table-inner { padding: 16px 14px; }
+  .felt-logo { font-size: 20px; }
   .card { width: 48px; height: 68px; }
   .card-rank { font-size: 17px; }
   .hand-stamp { font-size: 13px; padding: 4px 10px; }
