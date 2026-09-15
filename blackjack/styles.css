@@ -169,7 +169,7 @@ h1 span {
 /* ---------- Table rail (padded leather bumper) ---------- */
 .table-rail {
   position: relative;
-  border-radius: 50% 50% 16px 16px / 38% 38% 16px 16px;
+  border-radius: 42% 42% 16px 16px / 26% 26% 16px 16px;
   padding: 16px 16px 24px;
   background:
     repeating-linear-gradient(87deg, rgba(0,0,0,0.04) 0, rgba(0,0,0,0.04) 1px, transparent 1px, transparent 4px),
@@ -198,7 +198,7 @@ h1 span {
 .table {
   position: relative;
   overflow: hidden;
-  border-radius: 50% 50% 8px 8px / 32% 32% 8px 8px;
+  border-radius: 42% 42% 8px 8px / 21% 21% 8px 8px;
   border: 2px solid #0f0803;
   box-shadow:
     inset 0 0 30px rgba(0, 0, 0, 0.35),
@@ -359,7 +359,7 @@ h1 span {
 .table-inner {
   position: relative;
   z-index: 1;
-  padding: 32px 28px 28px;
+  padding: 40px 28px 28px;
 }
 
 .table.is-shaking { animation: table-shake 0.45s cubic-bezier(0.36, 0.07, 0.19, 0.97); }
@@ -380,6 +380,10 @@ h1 span {
 }
 
 .seat { display: flex; flex-direction: column; gap: 8px; }
+
+/* เจ้ามือนั่งใต้ส่วนโค้งบนสุดของโต๊ะ — จัดกลางไว้ให้พ้นมุมโค้งที่ overflow:hidden ตัดทิ้ง */
+.seat-dealer { align-items: center; }
+.seat-dealer .cards-row { justify-content: center; }
 
 .seat-label {
   display: flex;
@@ -1313,9 +1317,9 @@ h1 span {
   .hud-value { font-size: 16px; }
   .hud-label { font-size: 9.5px; }
   .casino-scene { margin: 0 -8px 14px; padding: 28px 6px 18px; border-radius: 22px; }
-  .table-rail { border-radius: 50% 50% 12px 12px / 30% 30% 12px 12px; padding: 10px 10px 16px; }
-  .table { border-radius: 50% 50% 6px 6px / 25% 25% 6px 6px; }
-  .table-inner { padding: 22px 16px 18px; }
+  .table-rail { border-radius: 42% 42% 12px 12px / 20% 20% 12px 12px; padding: 10px 10px 16px; }
+  .table { border-radius: 42% 42% 6px 6px / 16% 16% 6px 6px; }
+  .table-inner { padding: 30px 16px 18px; }
   .felt-pays { font-size: 8px; top: 8%; letter-spacing: 0.2em; }
   .felt-suits { font-size: 22px; }
   .felt-rule { font-size: 6px; bottom: 6%; }
