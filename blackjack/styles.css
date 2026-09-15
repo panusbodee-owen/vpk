@@ -634,6 +634,187 @@ h1 span {
   100% { transform: scale(1); }
 }
 
+/* ---------- ลีดเดอร์บอร์ด ---------- */
+.leaderboard-card { overflow: hidden; }
+
+.lb-header {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 12px;
+  margin-bottom: 18px;
+}
+
+.lb-trophy {
+  font-size: 36px;
+  filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.4));
+  animation: trophy-glow 3s ease-in-out infinite;
+}
+@keyframes trophy-glow {
+  0%, 100% { filter: drop-shadow(0 4px 12px rgba(251, 191, 36, 0.3)); transform: scale(1); }
+  50% { filter: drop-shadow(0 6px 20px rgba(251, 191, 36, 0.55)); transform: scale(1.06); }
+}
+
+.lb-header-text { text-align: left; }
+
+.lb-subtitle {
+  font-family: "Nunito", sans-serif;
+  font-size: 11px;
+  color: rgba(var(--ink-rgb), 0.4);
+  margin-top: 2px;
+}
+
+.leaderboard {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  margin-bottom: 16px;
+}
+
+.lb-empty {
+  font-family: "Nunito", sans-serif;
+  font-size: 13px;
+  color: rgba(var(--ink-rgb), 0.35);
+  text-align: center;
+  padding: 28px 16px;
+  border: 1px dashed var(--card-border);
+  border-radius: 14px;
+}
+
+.lb-entry {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  border: 1px solid rgba(var(--ink-rgb), 0.07);
+  background: rgba(var(--ink-rgb), 0.025);
+  transition: all 0.25s ease;
+}
+.lb-entry:hover {
+  background: rgba(var(--ink-rgb), 0.06);
+  border-color: rgba(var(--ink-rgb), 0.12);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(0, 0, 0, 0.08);
+}
+
+.lb-entry.lb-gold {
+  border-color: rgba(251, 191, 36, 0.35);
+  background: linear-gradient(135deg, rgba(251, 191, 36, 0.08), rgba(245, 158, 11, 0.04));
+  box-shadow: 0 0 20px rgba(251, 191, 36, 0.06);
+}
+.lb-entry.lb-silver {
+  border-color: rgba(148, 163, 184, 0.35);
+  background: linear-gradient(135deg, rgba(148, 163, 184, 0.06), rgba(100, 116, 139, 0.03));
+}
+.lb-entry.lb-bronze {
+  border-color: rgba(217, 119, 6, 0.3);
+  background: linear-gradient(135deg, rgba(217, 119, 6, 0.06), rgba(180, 83, 9, 0.03));
+}
+
+.lb-rank {
+  width: 30px;
+  height: 30px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: 9px;
+  font-family: "Nunito", sans-serif;
+  font-size: 13px;
+  font-weight: 800;
+  color: rgba(var(--ink-rgb), 0.45);
+  background: rgba(var(--ink-rgb), 0.06);
+  flex-shrink: 0;
+}
+.lb-gold .lb-rank {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  color: #422006;
+  box-shadow: 0 3px 10px rgba(251, 191, 36, 0.35);
+}
+.lb-silver .lb-rank {
+  background: linear-gradient(135deg, #cbd5e1, #94a3b8);
+  color: #1e293b;
+}
+.lb-bronze .lb-rank {
+  background: linear-gradient(135deg, #f59e0b, #b45309);
+  color: #fff;
+}
+
+.lb-avatar {
+  font-size: 22px;
+  flex-shrink: 0;
+  width: 28px;
+  text-align: center;
+}
+
+.lb-info {
+  flex: 1;
+  min-width: 0;
+}
+
+.lb-name {
+  font-family: "Nunito", sans-serif;
+  font-size: 12.5px;
+  font-weight: 700;
+  color: rgb(var(--ink-rgb));
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.lb-meta {
+  font-family: "Nunito", sans-serif;
+  font-size: 10px;
+  color: rgba(var(--ink-rgb), 0.38);
+  margin-top: 1px;
+}
+
+.lb-peak {
+  font-family: "Nunito", sans-serif;
+  font-size: 17px;
+  font-weight: 800;
+  background: var(--accent-grad-2);
+  -webkit-background-clip: text;
+  background-clip: text;
+  color: transparent;
+  flex-shrink: 0;
+  text-align: right;
+}
+.lb-gold .lb-peak {
+  background: linear-gradient(135deg, #fbbf24, #f59e0b);
+  -webkit-background-clip: text;
+  background-clip: text;
+}
+
+.lb-bar {
+  height: 3px;
+  border-radius: 2px;
+  background: rgba(var(--ink-rgb), 0.06);
+  margin-top: 4px;
+  overflow: hidden;
+}
+.lb-bar-fill {
+  height: 100%;
+  border-radius: 2px;
+  background: var(--accent-grad-2);
+  transition: width 0.6s ease;
+}
+
+.lb-actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
+}
+
+.lb-save-btn { font-size: 13px; }
+
+.lb-new { animation: lb-slide-in 0.5s cubic-bezier(0.2, 0.9, 0.3, 1.2); }
+@keyframes lb-slide-in {
+  from { transform: translateX(-20px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
 /* ---------- กติกา ---------- */
 .rules {
   border: 1px solid var(--card-border);
@@ -794,6 +975,12 @@ h1 span {
   .chip { width: 50px; height: 50px; font-size: 13px; }
   .btn { padding: 10px 13px; font-size: 13px; }
   .stats-grid { grid-template-columns: repeat(2, 1fr); }
+  .lb-entry { gap: 8px; padding: 10px 10px; }
+  .lb-avatar { font-size: 18px; width: 22px; }
+  .lb-peak { font-size: 14px; }
+  .lb-rank { width: 26px; height: 26px; font-size: 11px; }
+  .lb-name { font-size: 11.5px; }
+  .lb-trophy { font-size: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -807,4 +994,6 @@ h1 span {
   .bet-chip { animation: none; }
   .confetti { display: none; }
   .toast { animation: none; }
+  .lb-trophy { animation: none; }
+  .lb-new { animation: none; }
 }

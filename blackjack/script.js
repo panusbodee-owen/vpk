@@ -23,6 +23,8 @@
   var BROKE_BONUS = 500;
   var MIN_CHIP = 25; // ชิปที่เล็กที่สุดบนโต๊ะ — ถ้าเงินเหลือน้อยกว่านี้ถือว่าเล่นต่อไม่ไหวแล้ว
   var STORE_KEY = "vpk-blackjack-v1";
+  var LB_KEY = "vpk-blackjack-lb-v1";
+  var LB_MAX = 10;
 
   var SPEEDS = {
     slow: { label: "ช้า", deal: 420, dealer: 780 },
@@ -205,6 +207,7 @@
     "speedToggle", "history", "statHands", "statWinRate", "statStreak", "statPeak",
     "statBj", "statBiggest", "badges", "badgeCount", "resetBtn",
     "fxLayer", "toastLayer", "betStack", "dealerMood", "streakFlame", "gameTable", "fxToggle",
+    "leaderboard", "lbCount", "saveLbBtn", "clearLbBtn",
   ].forEach(function (id) { els[id] = document.getElementById(id); });
 
   // ---------- จังหวะเวลา ----------
@@ -427,6 +430,67 @@
     split: "แยกไพ่",
     surrender: "ยอมแพ้",
   };
+
+  // ---------- ลีดเดอร์บอร์ด ----------
+  function loadLeaderboard() {
+    try {
+      var raw = localStorage.getItem(LB_KEY);
+      if (!raw) return [];
+      var parsed = JSON.parse(raw);
+      return Array.isArray(parsed) ? parsed.slice(0, LB_MAX) : [];
+    } catch (e) { return []; }
+  }
+
+  function saveLeaderboard(entries) {
+    try { localStorage.setItem(LB_KEY, JSON.stringify(entries)); } catch (e) {}
+  }
+
+  function captureSession() {
+    var s = state.stats;
+    if (s.rounds === 0) return null;
+    var decided = s.wins + s.losses;
+    return {
+      id: Date.now(),
+      peak: s.peak,
+      bankroll: state.bankroll,
+      rounds: s.rounds,
+      wins: s.wins,
+      losses: s.losses,
+      winRate: decided > 0 ? Math.round((s.wins / decided) * 100) : 0,
+      bestStreak: s.bestStreak,
+      blackjacks: s.blackjacks,
+      biggestWin: s.biggestWin,
+      date: new Date().toISOString(),
+    };
+  }
+
+  function addToLeaderboard(entry) {
+    if (!entry) return false;
+    var entries = loadLeaderboard();
+    // ถ้ามีครบ LB_MAX แล้ว ต้องเช็คว่าเข้าอันดับได้ไหม
+    entries.push(entry);
+    entries.sort(function (a, b) { return b.peak - a.peak; });
+    if (entries.length > LB_MAX) entries = entries.slice(0, LB_MAX);
+    saveLeaderboard(entries);
+    return true;
+  }
+
+  function lbAvatar(peak) {
+    if (peak >= 10000) return "👑";
+    if (peak >= 5000) return "💎";
+    if (peak >= 3000) return "🏆";
+    if (peak >= 2000) return "🎯";
+    if (peak >= 1000) return "🃏";
+    return "🎲";
+  }
+
+  function lbDate(iso) {
+    try {
+      var d = new Date(iso);
+      var months = ["ม.ค.", "ก.พ.", "มี.ค.", "เม.ย.", "พ.ค.", "มิ.ย.", "ก.ค.", "ส.ค.", "ก.ย.", "ต.ค.", "พ.ย.", "ธ.ค."];
+      return d.getDate() + " " + months[d.getMonth()] + " " + (d.getFullYear() + 543);
+    } catch (e) { return ""; }
+  }
 
   // ---------- ตัวช่วยแสดงผล ----------
   function money(amount) {
@@ -788,6 +852,86 @@
       els.badges.appendChild(el);
     });
     els.badgeCount.textContent = "(" + unlocked + "/" + BADGES.length + ")";
+  }
+
+  function renderLeaderboard() {
+    if (!els.leaderboard) return;
+    els.leaderboard.innerHTML = "";
+    var entries = loadLeaderboard();
+    if (els.lbCount) els.lbCount.textContent = "(" + entries.length + "/" + LB_MAX + ")";
+
+    if (!entries.length) {
+      var empty = document.createElement("div");
+      empty.className = "lb-empty";
+      empty.textContent = "ยังไม่มีสถิติ — เล่นแล้วกดบันทึกเซสชันเพื่อติดอันดับ 🏆";
+      els.leaderboard.appendChild(empty);
+      return;
+    }
+
+    var topPeak = entries[0].peak || 1;
+    entries.forEach(function (entry, i) {
+      var row = document.createElement("div");
+      var tierClass = i === 0 ? " lb-gold" : i === 1 ? " lb-silver" : i === 2 ? " lb-bronze" : "";
+      row.className = "lb-entry" + tierClass;
+
+      var rank = document.createElement("div");
+      rank.className = "lb-rank";
+      rank.textContent = i + 1;
+
+      var avatar = document.createElement("div");
+      avatar.className = "lb-avatar";
+      avatar.textContent = lbAvatar(entry.peak);
+
+      var info = document.createElement("div");
+      info.className = "lb-info";
+
+      var name = document.createElement("div");
+      name.className = "lb-name";
+      name.textContent = entry.rounds + " ตา · ชนะ " + entry.winRate + "% · สตรีค " + entry.bestStreak;
+      info.appendChild(name);
+
+      var meta = document.createElement("div");
+      meta.className = "lb-meta";
+      meta.textContent = lbDate(entry.date) + " · BJ " + entry.blackjacks + " · ชนะรวดเดียว " + money(entry.biggestWin);
+      info.appendChild(meta);
+
+      // แถบวัดเทียบกับอันดับ 1
+      var bar = document.createElement("div");
+      bar.className = "lb-bar";
+      var fill = document.createElement("div");
+      fill.className = "lb-bar-fill";
+      fill.style.width = Math.round((entry.peak / topPeak) * 100) + "%";
+      bar.appendChild(fill);
+      info.appendChild(bar);
+
+      var peak = document.createElement("div");
+      peak.className = "lb-peak";
+      peak.textContent = money(entry.peak);
+
+      row.appendChild(rank);
+      row.appendChild(avatar);
+      row.appendChild(info);
+      row.appendChild(peak);
+      els.leaderboard.appendChild(row);
+    });
+  }
+
+  function saveCurrentSession() {
+    var entry = captureSession();
+    if (!entry) {
+      showToast("❌", "ไม่มีข้อมูล", "ต้องเล่นอย่างน้อย 1 ตาก่อนบันทึก");
+      return;
+    }
+    addToLeaderboard(entry);
+    SFX.badge();
+    showToast("💾", "บันทึกแล้ว!", "เงินสูงสุด " + money(entry.peak) + " ขึ้นลีดเดอร์บอร์ดเรียบร้อย");
+    renderLeaderboard();
+  }
+
+  function clearLeaderboard() {
+    if (!window.confirm("ล้างลีดเดอร์บอร์ดทั้งหมด แน่ใจไหม?")) return;
+    try { localStorage.removeItem(LB_KEY); } catch (e) {}
+    renderLeaderboard();
   }
 
   function renderSettings() {
@@ -1261,6 +1405,12 @@
 
   function resetAll() {
     if (!window.confirm("ล้างเงิน สถิติ และเหรียญทั้งหมด แล้วเริ่มใหม่จาก " + money(STARTING_BANKROLL) + " ใช่ไหม?")) return;
+    // บันทึกเซสชันปัจจุบันลงลีดเดอร์บอร์ดก่อนล้าง
+    var entry = captureSession();
+    if (entry) {
+      addToLeaderboard(entry);
+      showToast("💾", "เซสชันขึ้นลีดเดอร์บอร์ดแล้ว", "เงินสูงสุด " + money(entry.peak));
+    }
     clearTimers();
     try { localStorage.removeItem(STORE_KEY); } catch (e) {}
     state.bankroll = STARTING_BANKROLL;
@@ -1294,6 +1444,7 @@
     renderStats();
     renderBadges();
     renderHistory();
+    renderLeaderboard();
   }
 
   // ---------- ปุ่มและแป้นลัด ----------
@@ -1314,6 +1465,8 @@
   els.splitBtn.addEventListener("click", split);
   els.surrenderBtn.addEventListener("click", surrender);
   els.resetBtn.addEventListener("click", resetAll);
+  els.saveLbBtn.addEventListener("click", saveCurrentSession);
+  els.clearLbBtn.addEventListener("click", clearLeaderboard);
 
   els.soundToggle.addEventListener("click", function () {
     state.settings.sound = !state.settings.sound;
@@ -1378,4 +1531,5 @@
   renderStats();
   renderBadges();
   renderHistory();
+  renderLeaderboard();
 })();
