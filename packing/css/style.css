@@ -265,3 +265,12 @@ body {
     margin-bottom: 1.5rem !important;
   }
 }
+
+/* Mobile tap targets (40px+) */
+@media screen and (max-width: 768px) {
+  button.duration-chip, button.city-chip { min-height: 40px; }
+  #btn-theme-palette, #btn-theme-dark-toggle, #btn-reset-trip { width: 40px; height: 40px; }
+  #btn-open-history, #btn-export-options { min-height: 40px; min-width: 40px; justify-content: center; }
+  a.no-print.w-full { min-height: 40px; display: flex; align-items: center; justify-content: center; }
+  footer a, footer button { display: inline-flex; align-items: center; min-height: 40px; }
+}
