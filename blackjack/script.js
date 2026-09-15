@@ -34,6 +34,7 @@
   var SPEED_ORDER = ["slow", "normal", "fast"];
   var FLIP_MS = 430; // เวลาพลิกไพ่คว่ำ — ต้องรอให้พลิกจบก่อนค่อยวาดหน้าใหม่ทับ
   var CHIP_DENOMS = [1000, 500, 100, 25];
+  var MAX_PILE = 5; // ชิปที่วาดต่อหนึ่งกอง — เกินนี้กองจะสูงล้นวงเดิมพัน
 
   var BADGES = [
     { id: "first_bj", emoji: "🃏", label: "แบล็คแจ็คแรก" },
@@ -767,15 +768,40 @@
     }
   }
 
-  function renderBetStack() {
-    els.betStack.innerHTML = "";
-    if (state.phase !== "betting" || !state.betChips.length) return;
-    state.betChips.forEach(function (value) {
-      var chip = document.createElement("span");
-      chip.className = "bet-chip chip-" + value;
-      chip.textContent = value >= 1000 ? (value / 1000) + "K" : value;
-      els.betStack.appendChild(chip);
+  /** จัดชิปเป็นกองตามหน้าชิปแบบโต๊ะจริง เรียงหน้าใหญ่ไว้ซ้าย กองละไม่เกิน MAX_PILE ใบ */
+  function chipPiles(chips) {
+    var count = {};
+    chips.forEach(function (value) { count[value] = (count[value] || 0) + 1; });
+    return Object.keys(count)
+      .map(Number)
+      .sort(function (a, b) { return b - a; })
+      .map(function (value) {
+        return { value: value, count: Math.min(count[value], MAX_PILE) };
+      });
+  }
+
+  /** วาดกองชิปซ้อนตั้งลงใน container — ใบล่างสุดอยู่ก้นกอง ใบบนสุดบังใบล่าง */
+  function paintChipStack(container, chips, chipClass) {
+    container.innerHTML = "";
+    chipPiles(chips).forEach(function (pile) {
+      var el = document.createElement("span");
+      el.className = "chip-pile";
+      for (var i = 0; i < pile.count; i++) {
+        var chip = document.createElement("span");
+        chip.className = chipClass + " chip-" + pile.value;
+        chip.textContent = pile.value >= 1000 ? (pile.value / 1000) + "K" : pile.value;
+        el.appendChild(chip);
+      }
+      container.appendChild(el);
     });
+  }
+
+  function renderBetStack() {
+    if (state.phase !== "betting" || !state.betChips.length) {
+      els.betStack.innerHTML = "";
+      return;
+    }
+    paintChipStack(els.betStack, state.betChips, "bet-chip");
   }
 
   /** กองชิปบนวงเดิมพันกลางโต๊ะ — ให้เห็นว่าเงินวางอยู่บนโต๊ะจริงๆ ไม่ใช่แค่ตัวเลขใน HUD */
@@ -785,16 +811,9 @@
     var amount = betting ? state.bet : state.roundWagered;
     var chips = betting ? state.betChips : chipsFor(amount);
 
-    els.feltBetStack.innerHTML = "";
     els.feltBetAmount.textContent = amount > 0 ? money(amount) : "";
     if (els.feltMarkings) els.feltMarkings.classList.toggle("has-bet", amount > 0);
-
-    chips.forEach(function (value) {
-      var chip = document.createElement("span");
-      chip.className = "felt-bet-chip chip-" + value;
-      chip.textContent = value >= 1000 ? (value / 1000) + "K" : value;
-      els.feltBetStack.appendChild(chip);
-    });
+    paintChipStack(els.feltBetStack, chips, "felt-bet-chip");
   }
 
   function renderCoach() {

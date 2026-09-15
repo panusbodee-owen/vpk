@@ -310,8 +310,9 @@ h1 span {
 
 .felt-bet-stack {
   display: flex;
-  align-items: center;
+  align-items: flex-end;
   justify-content: center;
+  gap: 4px;
 }
 
 .felt-bet-amount {
@@ -1148,16 +1149,24 @@ h1 span {
 .bet-stack {
   display: flex;
   justify-content: center;
-  align-items: center;
+  align-items: flex-end;
+  gap: 7px;
   min-height: 30px;
   margin-bottom: 10px;
 }
 .bet-stack:empty { min-height: 0; margin-bottom: 0; }
 
+/* กองชิปซ้อนตั้ง — column-reverse ทำให้ใบแรกอยู่ก้นกอง ใบหลังซ้อนทับขึ้นไป */
+.chip-pile {
+  display: flex;
+  flex-direction: column-reverse;
+  align-items: center;
+}
+
 .bet-chip {
   width: 30px;
   height: 30px;
-  margin-left: -11px;
+  margin-bottom: -24px;
   border-radius: 50%;
   border: 2px dashed rgba(255, 255, 255, 0.75);
   display: flex;
@@ -1170,7 +1179,7 @@ h1 span {
   box-shadow: 0 3px 8px rgba(0, 0, 0, 0.3);
   animation: chip-drop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4);
 }
-.bet-chip:first-child { margin-left: 0; }
+.bet-chip:first-child { margin-bottom: 0; }
 @keyframes chip-drop {
   from { transform: translateY(-22px) scale(0.6); opacity: 0; }
   to { transform: translateY(0) scale(1); opacity: 1; }
@@ -1180,7 +1189,7 @@ h1 span {
 .felt-bet-chip {
   width: 22px;
   height: 22px;
-  margin-left: -15px;
+  margin-bottom: -18px;
   border-radius: 50%;
   border: 1.5px dashed rgba(255, 255, 255, 0.7);
   display: flex;
@@ -1193,7 +1202,7 @@ h1 span {
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.55);
   animation: chip-drop 0.35s cubic-bezier(0.2, 0.9, 0.3, 1.4);
 }
-.felt-bet-chip:first-child { margin-left: 0; }
+.felt-bet-chip:first-child { margin-bottom: 0; }
 
 /* ---------- กำหนดเดิมพันเอง ---------- */
 .bet-custom {
@@ -1326,7 +1335,8 @@ h1 span {
   .felt-arc { left: 8%; right: 8%; }
   .felt-spot { width: 38px; height: 38px; bottom: 12%; }
   .felt-bet { width: 38px; height: 38px; bottom: 12%; gap: 2px; }
-  .felt-bet-chip { width: 17px; height: 17px; margin-left: -12px; font-size: 6px; }
+  .felt-bet-chip { width: 17px; height: 17px; margin-bottom: -14px; font-size: 6px; }
+  .felt-bet-chip:first-child { margin-bottom: 0; }
   .felt-bet-amount { font-size: 8.5px; }
   .chip-tray { width: 55px; height: 8px; top: 3%; }
   .bet-input { width: 120px; font-size: 14px; }
@@ -1356,7 +1366,7 @@ h1 span {
   .hud-value.is-flash, .badge.is-new { animation: none; }
   .table.is-shaking, .dealer-mood.is-reacting, .streak-flame { animation: none; }
   .hand-stamp { animation: none; transform: translateY(-50%) rotate(-14deg); }
-  .bet-chip { animation: none; }
+  .bet-chip, .felt-bet-chip { animation: none; }
   .confetti { display: none; }
   .toast { animation: none; }
   .lb-trophy { animation: none; }
