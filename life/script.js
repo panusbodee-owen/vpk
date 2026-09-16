@@ -120,9 +120,9 @@ function render(birthdateStr, lifespanYears) {
   const percent = Math.min(100, (weeksLived / totalWeeks) * 100);
   const weeksLeft = Math.max(0, totalWeeks - weeksLived);
 
-  statLivedEl.textContent = weeksLived.toLocaleString("th-TH");
+  statLivedEl.textContent = weeksLived.toLocaleString(document.documentElement.lang);
   statPercentEl.textContent = `${percent.toFixed(1)}%`;
-  statLeftEl.textContent = weeksLeft.toLocaleString("th-TH");
+  statLeftEl.textContent = weeksLeft.toLocaleString(document.documentElement.lang);
 
   const fortune = getFortune(birthdate);
   fortuneDayEl.textContent = `วัน${fortune.dayOfWeek.name} (${fortune.dayOfWeek.color})`;
