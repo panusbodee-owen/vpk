@@ -122,8 +122,8 @@ export class WeatherService {
 
         dailyList.push({
           date: dateStr,
-          dayName: dateObj.toLocaleDateString('th-TH', { weekday: 'short' }),
-          formattedDate: dateObj.toLocaleDateString('th-TH', { day: 'numeric', month: 'short' }),
+          dayName: dateObj.toLocaleDateString(document.documentElement.lang, { weekday: 'short' }),
+          formattedDate: dateObj.toLocaleDateString(document.documentElement.lang, { day: 'numeric', month: 'short' }),
           minTemp,
           maxTemp,
           rainProb,
