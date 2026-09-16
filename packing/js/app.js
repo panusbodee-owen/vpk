@@ -200,7 +200,7 @@ class SmartPackingApp {
   formatDateThai(dateStr) {
     if (!dateStr) return '';
     const d = new Date(dateStr);
-    return d.toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+    return d.toLocaleDateString(document.documentElement.lang, { day: 'numeric', month: 'short', year: 'numeric' });
   }
 
   init() {
@@ -889,7 +889,7 @@ class SmartPackingApp {
     `;
 
     this.dom.weatherDateRangeText.textContent = rangeText;
-    this.dom.weatherLastUpdated.textContent = `อัปเดต: ${new Date().toLocaleTimeString('th-TH', { hour: '2-digit', minute: '2-digit' })} น.`;
+    this.dom.weatherLastUpdated.textContent = `อัปเดต: ${new Date().toLocaleTimeString(document.documentElement.lang, { hour: '2-digit', minute: '2-digit' })} น.`;
     this.dom.weatherForecastDaysLabel.textContent = `${days} วัน`;
 
     // Print metadata
@@ -1585,7 +1585,7 @@ class SmartPackingApp {
         
         const packed = trip.items ? trip.items.filter(i => i.checked).length : 0;
         const total = trip.items ? trip.items.length : 0;
-        const dateFormatted = new Date(trip.savedAt).toLocaleDateString('th-TH', { day: 'numeric', month: 'short', year: 'numeric' });
+        const dateFormatted = new Date(trip.savedAt).toLocaleDateString(document.documentElement.lang, { day: 'numeric', month: 'short', year: 'numeric' });
         const dateRangeInfo = (trip.startDate && trip.endDate) ? `${this.formatDateThai(trip.startDate)} - ${this.formatDateThai(trip.endDate)}` : `${trip.days} วัน`;
         const weightInfo = trip.baggage ? ` • ⚖️ ${trip.baggage.totalKg || 0} kg` : '';
         const budgetInfo = trip.budget ? ` • 💰 ${trip.budget.totalTHB?.toLocaleString() || 0} ฿` : '';
@@ -1653,7 +1653,7 @@ class SmartPackingApp {
       return;
     }
 
-    navigator.clipboard.writeText(text).then(() => {
+    navigator.clipboard.writeText(text.split('\n').map(window.vpkT).join('\n')).then(() => {
       this.showToast('คัดลอกรายการและงบประมาณลงคลิปบอร์ดแล้ว!', 'success');
       this.dom.modalExport.classList.add('hidden');
     }).catch(err => {
