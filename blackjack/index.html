@@ -35,181 +35,176 @@
   <link rel="stylesheet" href="styles.css" />
   <script src="../theme.js" defer></script>
 </head>
-<body>
-  <div class="particles" aria-hidden="true">
-    <span class="particle" style="--x:5%; --size:22px; --dur:26s; --delay:-6s; --drift:20px; --opacity:0.2;">🃏</span>
-    <span class="particle" style="--x:14%; --size:16px; --dur:21s; --delay:-13s; --drift:-14px; --opacity:0.18;">♠️</span>
-    <span class="particle" style="--x:23%; --size:24px; --dur:31s; --delay:-3s; --drift:24px; --opacity:0.15;">💰</span>
-    <span class="particle" style="--x:32%; --size:18px; --dur:23s; --delay:-17s; --drift:-18px; --opacity:0.2;">♦️</span>
-    <span class="particle" style="--x:41%; --size:20px; --dur:28s; --delay:-9s; --drift:16px; --opacity:0.16;">🎰</span>
-    <span class="particle" style="--x:50%; --size:15px; --dur:19s; --delay:-22s; --drift:-22px; --opacity:0.24;">♣️</span>
-    <span class="particle" style="--x:59%; --size:25px; --dur:33s; --delay:-4s; --drift:14px; --opacity:0.14;">🃏</span>
-    <span class="particle" style="--x:68%; --size:17px; --dur:22s; --delay:-15s; --drift:-16px; --opacity:0.2;">♥️</span>
-    <span class="particle" style="--x:77%; --size:21px; --dur:29s; --delay:-8s; --drift:22px; --opacity:0.17;">🪙</span>
-    <span class="particle" style="--x:86%; --size:16px; --dur:24s; --delay:-19s; --drift:-12px; --opacity:0.22;">♠️</span>
-    <span class="particle" style="--x:94%; --size:19px; --dur:27s; --delay:-5s; --drift:18px; --opacity:0.16;">💵</span>
-    <span class="particle" style="--x:9%; --size:14px; --dur:20s; --delay:-11s; --drift:-20px; --opacity:0.2;">♦️</span>
-    <span class="particle" style="--x:64%; --size:13px; --dur:18s; --delay:-7s; --drift:-8px; --opacity:0.25;">♣️</span>
-  </div>
-
-  <div class="big-objects">
-    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
-      style="--bx:5%; --by:16%; --bsize:76px;" data-depth="0.025" data-emojis="🃏,🎴,♠️,♥️">🃏</button>
-    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
-      style="--bx:95%; --by:22%; --bsize:64px;" data-depth="0.018" data-emojis="💰,🪙,💵,💸">💰</button>
-    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
-      style="--bx:6%; --by:84%; --bsize:70px;" data-depth="0.03" data-emojis="🎰,🎲,🀄,🎯">🎰</button>
-    <button type="button" class="big-object" tabindex="-1" aria-hidden="true"
-      style="--bx:93%; --by:82%; --bsize:80px;" data-depth="0.02" data-emojis="😈,🤑,😎,🥶">😈</button>
-  </div>
-
-  <a class="back-link" href="../" title="กลับหน้ารวมโปรเจกต์">← Panusbodee's Lab</a>
-
+<body class="bj">
   <div id="fxLayer" class="fx-layer" aria-hidden="true"></div>
   <div id="toastLayer" class="toast-layer" aria-hidden="true"></div>
 
-  <main>
-    <header class="intro">
-      <p class="kicker">BLACKJACK TABLE</p>
-      <h1>เจ้ามือ<span>ใจร้าย</span></h1>
-      <p class="sub">
-        แบล็คแจ็คครบเครื่องแบบโต๊ะจริง — วางชิป ดับเบิลดาวน์ แยกไพ่ ซื้อประกัน ยอมแพ้ได้ครบ
-        พร้อมโค้ชบอกทางเล่นตามตำรา ระบบนับไพ่ Hi-Lo สถิติ และเหรียญรางวัลให้เก็บ
-      </p>
+  <div class="room">
+    <header class="topbar">
+      <a class="back-link" href="../" title="กลับหน้ารวมโปรเจกต์" aria-label="กลับหน้ารวมโปรเจกต์">
+        <span class="back-arrow" aria-hidden="true">&larr;</span><span class="back-text">Panusbodee's Lab</span>
+      </a>
+      <h1 class="brand">เจ้ามือ<span>ใจร้าย</span></h1>
+
+      <div class="hud">
+        <div class="hud-item">
+          <span class="hud-label">เงินคงเหลือ</span>
+          <span id="bankroll" class="hud-value">฿0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">เดิมพันตานี้</span>
+          <span id="betDisplay" class="hud-value">฿0</span>
+        </div>
+        <div class="hud-item">
+          <span class="hud-label">กำไร/ขาดทุนสุทธิ</span>
+          <span id="netDisplay" class="hud-value">฿0</span>
+        </div>
+      </div>
+
+      <button type="button" id="menuBtn" class="menu-btn" aria-expanded="false" aria-controls="drawer">
+        <span class="menu-icon" aria-hidden="true"></span><span class="menu-text">เมนู</span>
+      </button>
     </header>
 
-    <div class="hud">
-      <div class="hud-item">
-        <span class="hud-label">เงินคงเหลือ</span>
-        <span id="bankroll" class="hud-value">฿0</span>
-      </div>
-      <div class="hud-item">
-        <span class="hud-label">เดิมพันตานี้</span>
-        <span id="betDisplay" class="hud-value">฿0</span>
-      </div>
-      <div class="hud-item">
-        <span class="hud-label">กำไร/ขาดทุนสุทธิ</span>
-        <span id="netDisplay" class="hud-value">฿0</span>
-      </div>
-    </div>
-
-    <p id="streakFlame" class="streak-flame" hidden></p>
-
-    <div class="casino-scene">
-      <div class="table-rail">
-        <section id="gameTable" class="table" aria-label="โต๊ะไพ่">
-          <div class="felt-texture" aria-hidden="true"></div>
-          <div class="felt-markings" aria-hidden="true">
-            <span class="felt-text felt-pays">BLACKJACK PAYS 3 TO 2</span>
-            <span class="felt-text felt-suits">♠ ♥ ♦ ♣</span>
-            <span class="felt-text felt-rule">DEALER MUST STAND ON ALL 17s</span>
-            <span class="felt-arc"></span>
-            <span class="felt-text felt-insurance">INSURANCE PAYS 2 TO 1</span>
-            <span class="felt-spot felt-spot-l"></span>
-            <span class="felt-spot felt-spot-c"></span>
-            <span class="felt-spot felt-spot-r"></span>
-          </div>
-          <div id="feltBet" class="felt-bet" aria-hidden="true">
-            <div id="feltBetStack" class="felt-bet-stack"></div>
-            <span id="feltBetAmount" class="felt-bet-amount"></span>
-          </div>
-          <div class="table-spotlight" aria-hidden="true"></div>
-          <div class="chip-tray" aria-hidden="true"></div>
-          <div class="table-inner">
-            <div class="seat seat-dealer">
-              <div class="seat-label">
-                <span><span id="dealerMood" class="dealer-mood">😈</span> เจ้ามือ</span>
-                <span id="dealerScore" class="seat-score"></span>
-              </div>
-              <div id="dealerCards" class="cards-row"></div>
+    <main class="stage">
+      <div class="casino-scene">
+        <p id="streakFlame" class="streak-flame" hidden></p>
+        <div class="table-rail">
+          <section id="gameTable" class="table" aria-label="โต๊ะไพ่">
+            <div class="felt-texture" aria-hidden="true"></div>
+            <div class="felt-markings" aria-hidden="true">
+              <span class="felt-text felt-pays">BLACKJACK PAYS 3 TO 2</span>
+              <span class="felt-text felt-suits">♠ ♥ ♦ ♣</span>
+              <span class="felt-text felt-rule">DEALER MUST STAND ON ALL 17s</span>
+              <span class="felt-arc"></span>
+              <span class="felt-text felt-insurance">INSURANCE PAYS 2 TO 1</span>
+              <span class="felt-spot felt-spot-l"></span>
+              <span class="felt-spot felt-spot-c"></span>
+              <span class="felt-spot felt-spot-r"></span>
             </div>
+            <div id="feltBet" class="felt-bet" aria-hidden="true">
+              <div id="feltBetStack" class="felt-bet-stack"></div>
+              <span id="feltBetAmount" class="felt-bet-amount"></span>
+            </div>
+            <div class="table-spotlight" aria-hidden="true"></div>
+            <div class="chip-tray" aria-hidden="true"></div>
+            <div class="table-inner">
+              <div class="seat seat-dealer">
+                <div class="seat-label">
+                  <span><span id="dealerMood" class="dealer-mood">😈</span> เจ้ามือ</span>
+                  <span id="dealerScore" class="seat-score"></span>
+                </div>
+                <div id="dealerCards" class="cards-row"></div>
+              </div>
 
-            <div class="table-divider"><span id="shoeInfo" class="shoe-info"></span></div>
+              <div class="table-divider"><span id="shoeInfo" class="shoe-info"></span></div>
 
-            <div id="playerSeats" class="player-seats"></div>
+              <div id="playerSeats" class="player-seats"></div>
 
-            <p id="message" class="table-message" role="status" aria-live="polite"></p>
+              <p id="message" class="table-message" role="status" aria-live="polite"></p>
+            </div>
+          </section>
+        </div>
+      </div>
+
+      <div class="dock">
+        <div class="assist">
+          <p id="coachTip" class="coach-tip" hidden></p>
+          <p id="countInfo" class="count-info" hidden></p>
+        </div>
+
+        <div id="bettingPanel" class="panel panel-bet">
+          <div class="panel-label sr-only">วางเดิมพัน</div>
+          <div class="bet-controls">
+            <div id="chipRow" class="chip-row" role="group" aria-label="เลือกชิป">
+              <button type="button" class="chip chip-25" data-chip="25">25</button>
+              <button type="button" class="chip chip-100" data-chip="100">100</button>
+              <button type="button" class="chip chip-500" data-chip="500">500</button>
+              <button type="button" class="chip chip-1000" data-chip="1000">1K</button>
+            </div>
+            <div id="betStack" class="bet-stack" aria-hidden="true"></div>
+
+            <div class="bet-custom">
+              <label class="bet-custom-label sr-only" for="betInput">หรือกำหนดเอง</label>
+              <div class="bet-custom-row">
+                <span class="bet-input-wrap">
+                  <span class="bet-input-prefix" aria-hidden="true">฿</span>
+                  <input type="number" id="betInput" class="bet-input" min="25" step="25"
+                         inputmode="numeric" placeholder="0" aria-label="จำนวนเงินเดิมพัน">
+                </span>
+                <button type="button" id="setBetBtn" class="btn btn-set">ลง</button>
+              </div>
+              <div class="bet-quick" role="group" aria-label="ปรับเดิมพันแบบเร็ว">
+                <button type="button" class="btn-quick" data-bet-mult="0.5">½</button>
+                <button type="button" class="btn-quick" data-bet-mult="2">×2</button>
+                <button type="button" class="btn-quick" data-bet-pct="0.25">25% ทุน</button>
+                <button type="button" class="btn-quick" data-bet-pct="0.5">50% ทุน</button>
+              </div>
+            </div>
           </div>
-        </section>
-      </div>
-    </div>
 
-    <div id="bettingPanel" class="panel">
-      <div class="panel-label">วางเดิมพัน</div>
-      <div id="chipRow" class="chip-row" role="group" aria-label="เลือกชิป">
-        <button type="button" class="chip chip-25" data-chip="25">25</button>
-        <button type="button" class="chip chip-100" data-chip="100">100</button>
-        <button type="button" class="chip chip-500" data-chip="500">500</button>
-        <button type="button" class="chip chip-1000" data-chip="1000">1K</button>
-      </div>
-      <div id="betStack" class="bet-stack" aria-hidden="true"></div>
-
-      <div class="bet-custom">
-        <label class="bet-custom-label" for="betInput">หรือกำหนดเอง</label>
-        <div class="bet-custom-row">
-          <span class="bet-input-wrap">
-            <span class="bet-input-prefix" aria-hidden="true">฿</span>
-            <input type="number" id="betInput" class="bet-input" min="25" step="25"
-                   inputmode="numeric" placeholder="0" aria-label="จำนวนเงินเดิมพัน">
-          </span>
-          <button type="button" id="setBetBtn" class="btn btn-set">ลง</button>
+          <div class="panel-actions">
+            <button type="button" id="clearBetBtn" class="btn btn-ghost">ล้างชิป</button>
+            <button type="button" id="rebetBtn" class="btn btn-ghost">เดิมพันซ้ำ</button>
+            <button type="button" id="allInBtn" class="btn btn-ghost">หมดหน้าตัก</button>
+            <button type="button" id="dealBtn" class="btn btn-primary btn-deal">แจกไพ่</button>
+          </div>
+          <button type="button" id="brokeBtn" class="btn btn-ghost broke-btn" hidden>เงินไม่พอวางชิปแล้ว — ขอเจ้ามืออีก ฿500</button>
         </div>
-        <div class="bet-quick" role="group" aria-label="ปรับเดิมพันแบบเร็ว">
-          <button type="button" class="btn-quick" data-bet-mult="0.5">½</button>
-          <button type="button" class="btn-quick" data-bet-mult="2">×2</button>
-          <button type="button" class="btn-quick" data-bet-pct="0.25">25% ทุน</button>
-          <button type="button" class="btn-quick" data-bet-pct="0.5">50% ทุน</button>
+
+        <div id="insurancePanel" class="panel panel-insurance" hidden>
+          <div class="panel-label">เจ้ามือเปิดเอซ — ซื้อประกันไหม? (จ่ายครึ่งเดิมพัน ได้คืน 2:1 ถ้าเจ้ามือแบล็คแจ็ค)</div>
+          <div class="panel-actions">
+            <button type="button" id="insuranceYesBtn" class="btn btn-primary">ซื้อประกัน <span id="insuranceCost"></span></button>
+            <button type="button" id="insuranceNoBtn" class="btn btn-ghost">ไม่เอา</button>
+          </div>
+        </div>
+
+        <div id="actionPanel" class="panel panel-action" hidden>
+          <div class="panel-label sr-only">ตาของคุณ</div>
+          <div class="panel-actions">
+            <button type="button" id="hitBtn" class="btn btn-act" data-key="H">ขอเพิ่ม <kbd>H</kbd></button>
+            <button type="button" id="standBtn" class="btn btn-act" data-key="S">พอแล้ว <kbd>S</kbd></button>
+            <button type="button" id="doubleBtn" class="btn btn-act" data-key="D">ดับเบิล <kbd>D</kbd></button>
+            <button type="button" id="splitBtn" class="btn btn-act" data-key="P">แยกไพ่ <kbd>P</kbd></button>
+            <button type="button" id="surrenderBtn" class="btn btn-act" data-key="R">ยอมแพ้ <kbd>R</kbd></button>
+          </div>
         </div>
       </div>
+    </main>
+  </div>
 
-      <div class="panel-actions">
-        <button type="button" id="clearBetBtn" class="btn btn-ghost">ล้างชิป</button>
-        <button type="button" id="rebetBtn" class="btn btn-ghost">เดิมพันซ้ำ</button>
-        <button type="button" id="allInBtn" class="btn btn-ghost">หมดหน้าตัก</button>
-        <button type="button" id="dealBtn" class="btn btn-primary">🃏 แจกไพ่</button>
+  <div id="drawerScrim" class="drawer-scrim" hidden></div>
+  <aside id="drawer" class="drawer" aria-label="เมนู" aria-hidden="true" inert>
+    <div class="drawer-head">
+      <span class="drawer-title">เมนู</span>
+      <button type="button" id="drawerClose" class="drawer-close" aria-label="ปิดเมนู">&times;</button>
+    </div>
+
+    <p class="sub">
+      แบล็คแจ็คครบเครื่องแบบโต๊ะจริง — วางชิป ดับเบิลดาวน์ แยกไพ่ ซื้อประกัน ยอมแพ้ได้ครบ
+      พร้อมโค้ชบอกทางเล่นตามตำรา ระบบนับไพ่ Hi-Lo สถิติ และเหรียญรางวัลให้เก็บ
+    </p>
+
+    <section class="drawer-section" aria-label="ตั้งค่า">
+      <div class="section-title">ตั้งค่า</div>
+      <div class="settings" role="group" aria-label="ตั้งค่า">
+        <button type="button" id="soundToggle" class="toggle">เสียง: เปิด</button>
+        <button type="button" id="coachToggle" class="toggle">โค้ช: ปิด</button>
+        <button type="button" id="countToggle" class="toggle">นับไพ่: ปิด</button>
+        <button type="button" id="speedToggle" class="toggle">ความเร็ว: ปกติ</button>
+        <button type="button" id="fxToggle" class="toggle">เอฟเฟกต์: เปิด</button>
       </div>
-      <button type="button" id="brokeBtn" class="btn btn-ghost broke-btn" hidden>😭 เงินไม่พอวางชิปแล้ว — ขอเจ้ามืออีก ฿500</button>
-    </div>
+      <div class="widget-slot" data-widget-slot></div>
+    </section>
 
-    <div id="insurancePanel" class="panel" hidden>
-      <div class="panel-label">🛡️ เจ้ามือเปิดเอซ — ซื้อประกันไหม? (จ่ายครึ่งเดิมพัน ได้คืน 2:1 ถ้าเจ้ามือแบล็คแจ็ค)</div>
-      <div class="panel-actions">
-        <button type="button" id="insuranceYesBtn" class="btn btn-primary">ซื้อประกัน <span id="insuranceCost"></span></button>
-        <button type="button" id="insuranceNoBtn" class="btn btn-ghost">ไม่เอา</button>
-      </div>
-    </div>
-
-    <div id="actionPanel" class="panel" hidden>
-      <div class="panel-label">ตาของคุณ</div>
-      <div class="panel-actions">
-        <button type="button" id="hitBtn" class="btn" data-key="H">🖐️ ขอเพิ่ม <kbd>H</kbd></button>
-        <button type="button" id="standBtn" class="btn" data-key="S">✋ พอแล้ว <kbd>S</kbd></button>
-        <button type="button" id="doubleBtn" class="btn" data-key="D">💥 ดับเบิล <kbd>D</kbd></button>
-        <button type="button" id="splitBtn" class="btn" data-key="P">✌️ แยกไพ่ <kbd>P</kbd></button>
-        <button type="button" id="surrenderBtn" class="btn" data-key="R">🏳️ ยอมแพ้ <kbd>R</kbd></button>
-      </div>
-    </div>
-
-    <div class="assist">
-      <p id="coachTip" class="coach-tip" hidden></p>
-      <p id="countInfo" class="count-info" hidden></p>
-    </div>
-
-    <div class="settings" role="group" aria-label="ตั้งค่า">
-      <button type="button" id="soundToggle" class="toggle">🔊 เสียง: เปิด</button>
-      <button type="button" id="coachToggle" class="toggle">🎓 โค้ช: ปิด</button>
-      <button type="button" id="countToggle" class="toggle">🧮 นับไพ่: ปิด</button>
-      <button type="button" id="speedToggle" class="toggle">⏱️ ความเร็ว: ปกติ</button>
-      <button type="button" id="fxToggle" class="toggle">✨ เอฟเฟกต์: เปิด</button>
-    </div>
-
-    <div class="history-wrap">
-      <span class="history-label">10 ตาล่าสุด:</span>
+    <section class="drawer-section history-wrap" aria-label="10 ตาล่าสุด">
+      <span class="history-label section-title">10 ตาล่าสุด:</span>
       <div id="history" class="history"></div>
-    </div>
+    </section>
 
-    <section class="stats-card" aria-label="สถิติการเล่น">
-      <div class="stats-title">📊 สถิติของคุณ</div>
+    <section class="drawer-section stats-card" aria-label="สถิติการเล่น">
+      <div class="stats-title section-title">สถิติของคุณ</div>
       <div class="stats-grid">
         <div class="stat"><div id="statHands" class="stat-value">0</div><div class="stat-label">ตาที่เล่น</div></div>
         <div class="stat"><div id="statWinRate" class="stat-value">0%</div><div class="stat-label">อัตราชนะ</div></div>
@@ -218,31 +213,25 @@
         <div class="stat"><div id="statBj" class="stat-value">0</div><div class="stat-label">แบล็คแจ็คที่ได้</div></div>
         <div class="stat"><div id="statBiggest" class="stat-value">฿0</div><div class="stat-label">ชนะรวดเดียวสูงสุด</div></div>
       </div>
-      <button type="button" id="resetBtn" class="btn btn-ghost reset-btn">♻️ เริ่มใหม่ทั้งหมด (ล้างเงินและสถิติ)</button>
     </section>
 
-    <section class="stats-card" aria-label="เหรียญรางวัล">
-      <div class="stats-title">🏅 เหรียญรางวัล <span id="badgeCount" class="badge-count"></span></div>
+    <section class="drawer-section stats-card" aria-label="เหรียญรางวัล">
+      <div class="stats-title section-title">เหรียญรางวัล <span id="badgeCount" class="badge-count"></span></div>
       <div id="badges" class="badges"></div>
     </section>
 
-    <section class="stats-card leaderboard-card" aria-label="ลีดเดอร์บอร์ด">
-      <div class="lb-header">
-        <div class="lb-trophy">🏆</div>
-        <div class="lb-header-text">
-          <div class="stats-title" style="margin-bottom:0;">ลีดเดอร์บอร์ด</div>
-          <div class="lb-subtitle">สถิติที่ดีที่สุดของคุณ <span id="lbCount" class="badge-count"></span></div>
-        </div>
-      </div>
+    <section class="drawer-section stats-card leaderboard-card" aria-label="ลีดเดอร์บอร์ด">
+      <div class="stats-title section-title">ลีดเดอร์บอร์ด <span id="lbCount" class="badge-count"></span></div>
+      <div class="lb-subtitle">สถิติที่ดีที่สุดของคุณ</div>
       <div id="leaderboard" class="leaderboard"></div>
       <div class="lb-actions">
-        <button type="button" id="saveLbBtn" class="btn btn-primary lb-save-btn">💾 บันทึกเซสชันนี้</button>
-        <button type="button" id="clearLbBtn" class="btn btn-ghost">🗑️ ล้างลีดเดอร์บอร์ด</button>
+        <button type="button" id="saveLbBtn" class="btn btn-primary lb-save-btn">บันทึกเซสชันนี้</button>
+        <button type="button" id="clearLbBtn" class="btn btn-ghost">ล้างลีดเดอร์บอร์ด</button>
       </div>
     </section>
 
-    <details class="rules">
-      <summary>📜 กติกาโต๊ะนี้ &amp; แป้นลัด</summary>
+    <details class="drawer-section rules">
+      <summary>กติกาโต๊ะนี้ &amp; แป้นลัด</summary>
       <ul>
         <li>ใช้ไพ่ 6 สำรับ สับใหม่เมื่อจ่ายไปแล้วประมาณ 75% ของกอง</li>
         <li>แบล็คแจ็ค (21 จากสองใบแรก) จ่าย <b>3:2</b> · ชนะปกติจ่าย <b>1:1</b> · เสมอได้เดิมพันคืน</li>
@@ -255,7 +244,9 @@
         <li>เงิน สถิติ และเหรียญทั้งหมดเก็บไว้ในเครื่องคุณเอง (localStorage) ไม่ได้ส่งไปที่ไหน — และเป็นเงินปลอมล้วนๆ ไว้เล่นสนุกเท่านั้น</li>
       </ul>
     </details>
-  </main>
+
+    <button type="button" id="resetBtn" class="btn btn-ghost reset-btn">เริ่มใหม่ทั้งหมด (ล้างเงินและสถิติ)</button>
+  </aside>
 
   <script src="script.js"></script>
 </body>

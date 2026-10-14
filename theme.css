@@ -127,8 +127,16 @@
 .theme-widget__swatch:hover { transform: scale(1.14); }
 .theme-widget__swatch.is-active { border-color: rgb(var(--ink-rgb)); }
 
+/* Docked into a page's menu instead of floating over the content */
+.theme-widget.is-docked {
+  position: static;
+  align-self: flex-start;
+  backdrop-filter: none;
+}
+.theme-widget.is-docked .theme-widget__swatches { display: flex; }
+
 @media (max-width: 480px) {
-  .theme-widget { right: 10px; bottom: 10px; padding: 4px; gap: 4px; }
+  .theme-widget:not(.is-docked) { right: 10px; bottom: 10px; padding: 4px; gap: 4px; }
   .theme-widget__toggle { width: 40px; height: 40px; font-size: 17px; }
   /* 15px dots are too small to tap and widen the floating bar over content; accent stays as last chosen */
   .theme-widget__swatches { display: none; }

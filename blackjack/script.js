@@ -738,7 +738,7 @@
       els.clearBetBtn.disabled = state.bet <= 0;
       els.allInBtn.disabled = state.bankroll <= 0;
       els.brokeBtn.hidden = !(state.bankroll < MIN_CHIP && state.bet <= 0);
-      els.dealBtn.textContent = state.stats.rounds > 0 ? "🃏 แจกไพ่ตาใหม่" : "🃏 แจกไพ่";
+      els.dealBtn.textContent = state.stats.rounds > 0 ? "แจกไพ่ตาใหม่" : "แจกไพ่";
 
       els.setBetBtn.disabled = state.bankroll < MIN_CHIP;
       els.betQuick.querySelectorAll("button[data-bet-mult]").forEach(function (btn) {
@@ -823,7 +823,7 @@
 
     var legal = legalMoves(hand);
     var action = strategyAction(hand.cards, dealerUpValue(), legal);
-    els.coachTip.textContent = "🎓 ตำราแนะนำ: " + (ACTION_LABEL[action] || action) +
+    els.coachTip.textContent = "ตำราแนะนำ: " + (ACTION_LABEL[action] || action) +
       " (มือคุณ " + scoreText(hand.cards) + " · เจ้ามือเปิด " + state.dealer[0].rank + ")";
 
     var btnFor = { hit: els.hitBtn, stand: els.standBtn, double: els.doubleBtn, split: els.splitBtn, surrender: els.surrenderBtn };
@@ -840,7 +840,7 @@
       : "ยังกลางๆ เดิมพันตามปกติ";
     els.countInfo.innerHTML = "";
     var line = document.createElement("span");
-    line.textContent = "🧮 Hi-Lo running " + (state.count > 0 ? "+" : "") + state.count +
+    line.textContent = "Hi-Lo running " + (state.count > 0 ? "+" : "") + state.count +
       " · true " + (tc > 0 ? "+" : "") + tc.toFixed(1) +
       " · เหลือ " + decksLeft().toFixed(1) + " สำรับ — ";
     var tip = document.createElement("b");
@@ -981,14 +981,14 @@
   }
 
   function renderSettings() {
-    els.soundToggle.textContent = "🔊 เสียง: " + (state.settings.sound ? "เปิด" : "ปิด");
+    els.soundToggle.textContent = "เสียง: " + (state.settings.sound ? "เปิด" : "ปิด");
     els.soundToggle.classList.toggle("is-on", state.settings.sound);
-    els.coachToggle.textContent = "🎓 โค้ช: " + (state.settings.coach ? "เปิด" : "ปิด");
+    els.coachToggle.textContent = "โค้ช: " + (state.settings.coach ? "เปิด" : "ปิด");
     els.coachToggle.classList.toggle("is-on", state.settings.coach);
-    els.countToggle.textContent = "🧮 นับไพ่: " + (state.settings.count ? "เปิด" : "ปิด");
+    els.countToggle.textContent = "นับไพ่: " + (state.settings.count ? "เปิด" : "ปิด");
     els.countToggle.classList.toggle("is-on", state.settings.count);
-    els.speedToggle.textContent = "⏱️ ความเร็ว: " + speed().label;
-    els.fxToggle.textContent = "✨ เอฟเฟกต์: " + (state.settings.fx ? "เปิด" : "ปิด");
+    els.speedToggle.textContent = "ความเร็ว: " + speed().label;
+    els.fxToggle.textContent = "เอฟเฟกต์: " + (state.settings.fx ? "เปิด" : "ปิด");
     els.fxToggle.classList.toggle("is-on", state.settings.fx);
   }
 
@@ -1590,8 +1590,33 @@
     save();
   });
 
+  // ---------- ลิ้นชักเมนู (สถิติ / ตั้งค่า / กติกา) ----------
+  var drawer = document.getElementById("drawer");
+  var drawerScrim = document.getElementById("drawerScrim");
+  var menuBtn = document.getElementById("menuBtn");
+
+  function drawerOpen() { return drawer.classList.contains("is-open"); }
+
+  function setDrawer(open) {
+    drawer.classList.toggle("is-open", open);
+    drawer.setAttribute("aria-hidden", open ? "false" : "true");
+    drawer.inert = !open;
+    drawerScrim.hidden = !open;
+    menuBtn.setAttribute("aria-expanded", open ? "true" : "false");
+    if (open) document.getElementById("drawerClose").focus();
+    else menuBtn.focus();
+  }
+
+  menuBtn.addEventListener("click", function () { setDrawer(!drawerOpen()); });
+  document.getElementById("drawerClose").addEventListener("click", function () { setDrawer(false); });
+  drawerScrim.addEventListener("click", function () { setDrawer(false); });
+
   document.addEventListener("keydown", function (e) {
     if (e.metaKey || e.ctrlKey || e.altKey) return;
+    if (drawerOpen()) {
+      if (e.key === "Escape") { e.preventDefault(); setDrawer(false); }
+      return; // แป้นลัดของเกมพักไว้ระหว่างเปิดเมนู
+    }
     var tag = (e.target && e.target.tagName) || "";
     if (tag === "INPUT" || tag === "TEXTAREA" || tag === "SELECT") return;
 
