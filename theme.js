@@ -94,7 +94,10 @@
 
     wrap.appendChild(toggleBtn);
     wrap.appendChild(swatchWrap);
-    document.body.appendChild(wrap);
+    // หน้าแบบเต็มจอวางช่อง [data-widget-slot] ไว้ในเมนู — ไม่งั้นลอยมุมจอเหมือนเดิม
+    var slot = document.querySelector("[data-widget-slot]");
+    if (slot) wrap.classList.add("is-docked");
+    (slot || document.body).appendChild(wrap);
   }
 
   if (document.readyState === "loading") {
